@@ -1,0 +1,673 @@
+---
+title: "Assignment 3: Mucking up a Visualization"
+author: "John Cambareri"
+date: "2025-02-17"
+categories: [news, code, analysis]
+image: "image.jpg"
+jupyter: python3
+format:
+  html:
+    code-fold: true
+editor: visual
+---
+
+This downloads University of Idaho research expenditure data from the National Science Foundation (NSF) and the National Institutes of Health (NIH). Then, this creates a visualization, and finally, this intentionally makes it bad.
+
+# Combining NSF and NIH Data
+
+### Step 1: Collecting the NSF Data
+
+```{python}
+import requests
+from datetime import datetime
+import pandas as pd
+import re
+import numpy as np
+import json
+```
+
+### Initialize variables for the NSF data
+
+```{python}
+base_url = "https://www.research.gov/awardapi-service/v1/awards.json?awardeeName=%22regents+of+the+university+of+idaho%22"
+
+printFields = "rpp,offset,id,agency,awardeeCity,awardeeCountryCode,awardeeDistrictCode,awardeeName,\
+                awardeeStateCode,awardeeZipCode,cfdaNumber,coPDPI,date,startDate,expDate,estimatedTotalAmt,\
+                fundsObligatedAmt,ueiNumber,fundProgramName,parentUeiNumber,pdPIName,perfCity,perfCountryCode,\
+                perfDistrictCode,perfLocation,perfStateCode,perfZipCode,poName,primaryProgram,transType,title,\
+                awardee,poPhone,poEmail,awardeeAddress,perfAddress,publicationResearch,publicationConference,\
+                fundAgencyCode,awardAgencyCode,projectOutComesReport,abstractText,piFirstName,piMiddeInitial,\
+                piLastName,piEmail"
+
+# Initialize an empty DataFrame to store results
+all_awards = pd.DataFrame()
+
+# Number of results per page (as per API settings)
+results_per_page = 25
+
+# Variable to keep track of the current page number
+current_page = 1
+
+# Variable to control the loop
+keep_going = True
+```
+
+### Extract data from the NSF website
+
+```{python echo=TRUE, results='hide'}
+
+while keep_going:
+    # Calculate the offset for the current page
+    offset = (current_page - 1) * results_per_page + 1
+
+    # Construct the full URL with offset
+    url = f"{base_url}&offset={offset}&printFields={printFields}"
+
+    # Make the API call
+    response = requests.get(url)
+
+    # Check if the call was successful
+    if response.status_code == 200:
+        # Extract and parse the JSON data
+        parsed_data = response.json()
+
+        # Extract the 'award' data and add to the all_awards DataFrame
+        awards_data = pd.json_normalize(parsed_data['response']['award'])
+        all_awards = pd.concat([all_awards, awards_data], ignore_index=True)
+
+        # Debug: Print the current page number and number of awards fetched
+        print(f"Page: {current_page} - Awards fetched: {len(awards_data['id'])}")
+
+        # Check if the current page has less than results_per_page awards, then it's the last page
+        if len(awards_data['id']) < results_per_page:
+            keep_going = False
+        else:
+            current_page += 1
+    else:
+        print(f"Failed to fetch data: Status code {response.status_code}")
+        keep_going = False
+```
+
+### Save data into csv file
+
+Optional: Uncomment the 'to_csv' command by removing the '\#' to save the result of the extraction to a CSV file. If you want to load the data from the CSV file instead of redoing the NSF extraction, uncomment the read_csv command and run it as well.
+
+```{python}
+#all_awards.to_csv("UINSF.csv", index=False)
+#all_awards = pd.read_csv("UINSF.csv")
+```
+
+If we print out the resulting dataframe now, there is a lot of data - too much, in fact.
+
+```{python}
+all_awards
+```
+
+We will reduce the amount of columns, by only grabbing the relevant ones.
+
+```{python}
+reducedCols = all_awards[["cfdaNumber", "estimatedTotalAmt", "fundsObligatedAmt", "fundProgramName",\
+                          "id", "pdPIName", "piFirstName", "piMiddeInitial", "piLastName", "poName",\
+                          "date", "startDate", "expDate", "title", "coPDPI"]].copy()
+```
+
+Now we clean up the columns a bit.
+
+```{python}
+#change formatting of monetary data from int to float
+reducedCols["estimatedTotalAmt"] = reducedCols["estimatedTotalAmt"].astype(float)
+
+#turn dates into pandas dates
+reducedCols["date"] = pd.to_datetime(reducedCols["date"])
+reducedCols["startDate"] = pd.to_datetime(reducedCols["startDate"])
+reducedCols["expDate"] = pd.to_datetime(reducedCols["expDate"])
+
+#only grab recent articles
+currentData = reducedCols[reducedCols["expDate"] > pd.to_datetime("2019-01-01")].copy()
+
+#remove Nulls/NAs from the Co-PI column
+currentData['coPDPI'] = [ [] if x is np.nan else x for x in currentData['coPDPI']]
+
+#rename dataframe
+NSFPIData = currentData
+```
+
+### Co-PI Information
+
+In this dataframe, some of the PIs have 1 or more Co-PIs associated with them.
+
+Here we shall create a new dataframe from the PI dataframe; only those with at least one Co-PI are kept.
+
+```{python}
+NSFcoPIData = currentData[currentData["coPDPI"].str.len() > 0]
+```
+
+Next, we will make it so that each element in the list gets seperated into a different row. This is done using the explode() function.
+
+```{python}
+NSFcoPIData = NSFcoPIData.explode("coPDPI")
+```
+
+# Step 2: NIH Data
+
+Attaining the NIH data is a little different than attaining the NSF data, so a slightly different method will need to be used here. The code block below will use an API request to request the information from the NSF website. The result will then be saved into a JSON file, from which we will extract the data from into a dataframe.
+
+```{python}
+#| results: 'hide'
+
+# Define the current year and calculate the starting fiscal year (6 years ago; 2019)
+current_year = datetime.now().year
+start_fiscal_year = current_year - 6
+
+# Define the API URL and endpoint
+url = "https://api.reporter.nih.gov/v2/projects/search"
+
+# Define the API request payload
+payload = {
+    "criteria": {
+        "org_names": ["UNIVERSITY OF IDAHO"],  # Filter for the University of Idaho
+        "fiscal_years": list(range(start_fiscal_year, current_year + 1)),  # Last 5 years
+        "newly_added_projects_only": False  # Include all projects, not just newly added ones
+    },
+    "include_fields": [
+        "ApplId", "SubprojectId", "FiscalYear", "ProjectNum", "ProjectSerialNum",
+        "Organization", "OrganizationType", "AwardType", "ActivityCode", "AwardAmount",
+        "ProjectNumSplit", "PrincipalInvestigators", "ProgramOfficers", "AgencyIcAdmin",
+        "AgencyIcFundings", "CongDist", "ProjectStartDate", "ProjectEndDate", "FullFoa",
+        "FullStudySection", "AwardNoticeDate", "CoreProjectNum", "PrefTerms", "ProjectTitle",
+        "PhrText", "SpendingCategoriesDesc", "ArraFunded", "BudgetStart", "BudgetEnd",
+        "CfdaCode", "FundingMechanism", "DirectCostAmt", "IndirectCostAmt"
+    ],
+    "offset": 0,  # Start from the first record
+    "limit": 500,  # Number of records to fetch per request, can be adjusted
+    "sort_field": "project_start_date",
+    "sort_order": "desc"
+}
+
+# Make the API request
+response = requests.post(url, headers={"Content-Type": "application/json"}, data=json.dumps(payload))
+ 
+# Check for a successful response
+if response.status_code == 200:
+    data = response.json()  # Parse the JSON response
+    with open('university_of_idaho_awards_last_5_years.json', 'w') as f:
+        json.dump(data, f, indent=4)
+    print("Data successfully downloaded and saved to 'university_of_idaho_awards_2019_2024.json'")
+else:
+    print(f"Failed to retrieve data: {response.status_code} - {response.text}")
+```
+
+```{python}
+# Load the JSON data from the file, replace the name with whatever file you want to load from
+with open('university_of_idaho_awards_last_5_years.json', 'r') as f:
+    data = json.load(f)
+    
+# Extract relevant fields and create a list of dictionaries
+awards_data = []
+for project in data.get('results', []):
+    org_name = project.get('organization', {}).get('org_name', '')
+    project_num = project.get('project_num', '')
+    project_title = project.get('project_title', '')
+   
+    # Principal Investigators (concatenating names if more than one PI)
+    principal_investigators = ", ".join(
+        [pi.get('full_name', '') for pi in project.get('principal_investigators', [])]
+    )
+    
+    # Extract First Names and Last Names for ease of use later
+    principal_investigators_first_name = ", ".join(
+        [pi.get('first_name', '') for pi in project.get('principal_investigators', [])]
+    )
+    
+    principal_investigators_last_name = ", ".join(
+        [pi.get('last_name', '') for pi in project.get('principal_investigators', [])]
+    )
+   
+    direct_cost_amt = project.get('direct_cost_amt', 0)
+   
+    awards_data.append({
+        "Organization": org_name,
+        "ProjectNum": project_num,
+        "ProjectTitle": project_title,
+        "PrincipalInvestigators": principal_investigators,
+        "PrincipalInvestigatorsFirstName": principal_investigators_first_name,
+        "PrincipalInvestigatorsLastName": principal_investigators_last_name,
+        "DirectCostAmt": direct_cost_amt
+    })
+    
+df = pd.DataFrame(awards_data)
+```
+
+### Split columns
+
+Unlike in the NSF data, NIH data can list multiple PIs. Therefore, each of the relevant columns need to be split in case there is more than one present.
+
+```{python}
+df["PrincipalInvestigators"] = df["PrincipalInvestigators"].str.split(',')
+df["PrincipalInvestigatorsFirstName"] = df["PrincipalInvestigatorsFirstName"].str.split(',')
+df["PrincipalInvestigatorsLastName"] = df["PrincipalInvestigatorsLastName"].str.split(',')
+```
+
+The explode() function sees use again here.
+
+```{python}
+NIHData = df.explode(["PrincipalInvestigators", "PrincipalInvestigatorsFirstName", \
+                      "PrincipalInvestigatorsLastName"])
+```
+
+Typecast relevant information from int to float
+
+```{python}
+NIHData["DirectCostAmt"] = NIHData["DirectCostAmt"].astype(float)
+```
+
+# Step 3: Name Cleanup
+
+Since NIH and NSF display their names differently, simply combining the two databases together can result in some of the data for faculty being split up across the two in the event that they submitted a research grant for both institutions.
+
+First, we shall define a couple of helper functions that will use regular expressions to help sort out inconsistencies.
+
+```{python}
+#Sometimes a middle name is shown in the name tab in the Co-PI table, which is unwanted here.
+def removeMiddleName(name):
+    parts = name.split()
+    if len(parts) <= 2:
+        return name
+    return parts[0] + " " + parts[-1]
+
+NSFcoPIData["coPIFullName"] = NSFcoPIData["coPDPI"].apply(removeMiddleName)
+
+#remove whitespace from start of the name
+def removeInitialSpace(name):
+    regex = r"^\s"
+    while re.match(regex, name):
+        name = name[1:]
+        
+    return name
+        
+NIHData["PrincipalInvestigatorsFirstName"] = NIHData["PrincipalInvestigatorsFirstName"].apply(removeInitialSpace)
+NIHData["PrincipalInvestigatorsLastName"] = NIHData["PrincipalInvestigatorsLastName"].apply(removeInitialSpace)
+```
+
+### Add Full Name column
+
+For the NSF PI data and the NIH data, middle names are applied inconsistently. Thus, instead of using the removeMiddleName() function as done above, we simply take the first and last name columns and add them together.
+
+Capitalization is also an inconsistency between the two institutions. To fix this, all names will be capitalized.
+
+```{python}
+NSFPIData["piFullName"] = NSFPIData["piFirstName"] + " " + NSFPIData["piLastName"]
+NIHData["PIName"] = NIHData["PrincipalInvestigatorsFirstName"] + " " + NIHData["PrincipalInvestigatorsLastName"]
+
+NSFPIData["piFullName"] = NSFPIData["piFullName"].str.upper()
+NSFcoPIData["coPIFullName"] = NSFcoPIData["coPIFullName"].str.upper()
+NIHData["PIName"] = NIHData["PIName"].str.upper()
+```
+
+A few exceptions still remain, so these have to be fixed manually.
+
+```{python}
+NSFcoPIData.loc[NSFcoPIData["coPIFullName"] == "TERESA COHN", "coPIFullName"] = "TERESA CAVAZOS COHN"
+NSFcoPIData.loc[NSFcoPIData["coPIFullName"] == "JAGDISH PATEL", "coPIFullName"] = "JAGDISH SURESH PATEL"
+```
+
+# Step 4: Making the Plot
+
+Now that all of the data is ready to go, it's time to create a graph that will visualize the data.
+
+The NIH and NSF PI data combine together nicely, but the Co-PI data does not work well when added cumulatively with the PI data. Therefore, one solution is to make two graphs - a bar graph with the PI data, and a scatter/circle plot for the NSF data.
+
+We will use plotly's graph function as follows. First we import plotly's graph_objects library. Since we want to make two plots, we can also use plotly's subplot library as well.
+
+```{python}
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+```
+
+Now we define the overall structure of the subplot. Each parameter will be as follows:
+
+We want the plots to be side-by-side, so we want 1 row and 2 columns.
+
+We want the data points on the y axis (in this case, it's the PI/Co-PI's names) to be the same across the subplots, and we can implement this with the shared_yaxes parameter.
+
+Horizontal spacing just ensures that the space between the two halves of the overall plot are minimized.
+
+Note that in this code block below, the code is commented. This is on purpose, to avoid the plot information from being displayed too early.
+
+```{python}
+#| results: 'hide'
+
+'''
+NIH_NSF = make_subplots(
+    rows = 1,
+    cols = 2,
+    shared_yaxes = True,
+    horizontal_spacing = 0.02
+)
+'''
+```
+
+First, We will add the NSF PI data to the graph. This will be a bar function.
+
+We use x for the total money amount, and y for the names of the PIs.
+
+The 'text' parameter will cause the bar to display a value on the bar itself; in this case we want the same as the x axis (the total money amount). "Inside" means that it will be positioned in the bar itself, not directly above or to the side of the bar.
+
+Setting orientation to 'h' lets plotly know that its a sideways plot; the bar graphs will be coming from left-to-right instead of bottom-to-top.
+
+Finally, we set a 'customdata' field. This is used with the hovertemplate directly below, in order to display data when the graph is moused over. \<br\> tags will cause a line break, and the \$.2s field causes the money to be rounded to the nearest 2 significant digits.
+
+Finally, the row and column position of the bar graph in the overall graph is displayed.
+
+```{python}
+#| results: 'hide'
+
+'''
+NIH_NSF.add_trace(go.Bar(
+    x = NSFPIData["estimatedTotalAmt"],
+    y = NSFPIData["piFullName"],
+    text = NSFPIData["estimatedTotalAmt"],
+    textposition = "inside",
+    name = "Estimated Total Amount (As PI (NSF))",
+    orientation = "h",
+    customdata = NSFPIData[["title", "coPDPI"]],
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Title: %{customdata[0]} <br> CoPIs: %{customdata[1]}"
+), row = 1, col = 1)
+'''
+```
+
+Next, we do the same thing, but with the NIH data instead. A couple of things to note here:
+
+First, This will be in the same row and column as the NSF data.
+
+Second, the NIH data does not provide co-PI information, so the customdata parameter here is not as large.
+
+```{python}
+#| results: 'hide'
+
+'''
+NIH_NSF.add_trace(go.Bar(
+    x = NIHData["DirectCostAmt"],
+    y = NIHData["PIName"],
+    text = NIHData["DirectCostAmt"],
+    textposition = "inside",
+    name = "Direct Cost Amount (As PI (NIH))",
+    orientation = "h",
+    customdata = NIHData["ProjectTitle"],
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Title: %{customdata}"
+), row = 1, col = 1)
+'''
+```
+
+Here we update the graph to show the horizontal axis on the bar chart itself, to make readability better and to make it easier to associate items on the bar chart side of the graph with the items on the scatter plot side of the graph.
+
+```{python}
+#| results: 'hide'
+
+'''
+NIH_NSF.update_yaxes(showgrid = True)
+NIH_NSF.update_traces(texttemplate = '%{text:.2s}')
+'''
+```
+
+Lastly, we implement the Scatter plot portion of the graph. This has a few different parameters than the bar graph; in this case, we see the mode of "markers".
+
+In this case, we want the size of the scatter plot/bubble to be directly proportional to how much money the co-PI is responsible for, but we also want to set a cap on how large the bubbles can be, so there is a max() function in the sizeref() parameter as part of the marker parameter.
+
+Finally, to ensure it's not on the same part of the graph as the bar charts, this is placed in column 2.
+
+```{python}
+#| results: 'hide'
+
+'''
+NIH_NSF.add_trace(go.Scatter(
+    x = NSFcoPIData["estimatedTotalAmt"],
+    y = NSFcoPIData["coPIFullName"],
+    name = "Estimated Total Amount (As CoPI (NSF))",
+    mode = 'markers',
+    marker = dict(
+        size = NSFcoPIData["estimatedTotalAmt"],
+        sizemode = 'area',
+        sizeref = 2.*max(NSFcoPIData["estimatedTotalAmt"])/(60**2),
+        sizemin = 4
+    ),
+    customdata = NSFcoPIData[["title", "pdPIName"]],
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Title: %{customdata[0]} <br> PI: %{customdata[1]}"
+), row = 1, col = 2)
+'''
+```
+
+Now we do one final update to the plot's layout.
+
+The height function measures how large the graph will show. This size might not fit on everyone's page; adjust this if needed.
+
+Setting the barmode to 'stack' causes the two bar graphs (the NIH and NSF PI data) to stack on top of each other instead of being fitted side-to-side.
+
+With the y axis being in 'total descending', this means that the data will be generally ordered from highest contribution to lowest. However, there is a bug with plotly that causes not all the data to be in the right order when grouped in a subplot.
+
+```{python}
+#| results: 'hide'
+
+'''
+NIH_NSF.update_layout(
+    height = 1250,
+    barmode = "stack",
+    yaxis = {'categoryorder' : 'total descending'},
+    title_text = "NIH and NSF Data"
+)
+'''
+```
+
+This command will create the plot.
+
+```{python}
+#| results: 'hide'
+
+'''
+NIH_NSF.show()
+'''
+```
+
+Combining all the code snippets will create the plot. In this plot, you can do the following:
+
+Mousing over any datapoint (bar graph/scatter plot) will show you data regarding that particular grant, including PI, money allocated, title, associated co-PI or PI if they exist, etc.
+
+If the data is too small to read properly, you can click and hold on the graph itself to draw an area on the graph; releasing the mouse will zoom in on the area that you selected. Double-click the graph to return it to regular size.
+
+```{python}
+#|column: page
+
+import plotly.io as pio
+pio.renderers.default = "iframe"
+
+NIH_NSF = make_subplots(
+    rows = 1,
+    cols = 2,
+    shared_yaxes = True,
+    horizontal_spacing = 0.02
+)
+
+NIH_NSF.add_trace(go.Bar(
+    x = NSFPIData["estimatedTotalAmt"],
+    y = NSFPIData["piFullName"],
+    text = NSFPIData["estimatedTotalAmt"],
+    textposition = "inside",
+    name = "Estimated Total Amount (As PI (NSF))",
+    orientation = "h",
+    customdata = NSFPIData[["title", "coPDPI"]],
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Title: %{customdata[0]} <br> CoPIs: %{customdata[1]}"
+), row = 1, col = 1)
+
+NIH_NSF.add_trace(go.Bar(
+    x = NIHData["DirectCostAmt"],
+    y = NIHData["PIName"],
+    text = NIHData["DirectCostAmt"],
+    textposition = "inside",
+    name = "Direct Cost Amount (As PI (NIH))",
+    orientation = "h",
+    customdata = NIHData["ProjectTitle"],
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Title: %{customdata}"
+), row = 1, col = 1)
+
+NIH_NSF.update_yaxes(showgrid = True)
+NIH_NSF.update_traces(texttemplate = '%{text:.2s}')
+
+NIH_NSF.add_trace(go.Scatter(
+    x = NSFcoPIData["estimatedTotalAmt"],
+    y = NSFcoPIData["coPIFullName"],
+    name = "Estimated Total Amount (As CoPI (NSF))",
+    mode = 'markers',
+    marker = dict(
+        size = NSFcoPIData["estimatedTotalAmt"],
+        sizemode = 'area',
+        sizeref = 2.*max(NSFcoPIData["estimatedTotalAmt"])/(60**2),
+        sizemin = 4
+    ),
+    customdata = NSFcoPIData[["title", "pdPIName"]],
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Title: %{customdata[0]} <br> PI: %{customdata[1]}"
+), row = 1, col = 2)
+
+NIH_NSF.update_layout(
+    height = 1250,
+    barmode = "stack",
+    yaxis = {'categoryorder' : 'total descending'},
+    title_text = "NIH and NSF Data"
+)
+
+NIH_NSF.show()
+```
+
+# Mucking up the visualization
+
+Now that we have a graph, it's now time to intentionally mess it up. This can be done by obscuring the differences between the NIH and NSF data. We can do this by intentionally making the marker_color of both the NIH and NSF data blue. To make it so that there is a difference, the opacity of the NIH data will be set to 0.75. Therefore, there will be a difference between the two, but it won't be as obvious.
+
+Zoom into the graph by dragging an area over the left side of the graph to see this in action.
+
+```{python}
+#|column: page
+
+NIH_NSF_bad = make_subplots(
+    rows = 1,
+    cols = 2,
+    shared_yaxes = True,
+    horizontal_spacing = 0.02
+)
+
+NIH_NSF_bad.add_trace(go.Bar(
+    x = NSFPIData["estimatedTotalAmt"],
+    y = NSFPIData["piFullName"],
+    text = NSFPIData["estimatedTotalAmt"],
+    textposition = "inside",
+    name = "Estimated Total Amount (As PI (NSF))",
+    orientation = "h",
+    customdata = NSFPIData[["title", "coPDPI"]],
+    marker_color = "blue",
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Title: %{customdata[0]} <br> CoPIs: %{customdata[1]}"
+), row = 1, col = 1)
+
+NIH_NSF_bad.add_trace(go.Bar(
+    x = NIHData["DirectCostAmt"],
+    y = NIHData["PIName"],
+    text = NIHData["DirectCostAmt"],
+    textposition = "inside",
+    name = "Direct Cost Amount (As PI (NIH))",
+    orientation = "h",
+    customdata = NIHData["ProjectTitle"],
+    marker_color = "blue",
+    opacity = 0.75,
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Title: %{customdata}"
+), row = 1, col = 1)
+
+NIH_NSF_bad.update_yaxes(showgrid = True)
+NIH_NSF_bad.update_traces(texttemplate = '%{text:.2s}')
+
+NIH_NSF_bad.add_trace(go.Scatter(
+    x = NSFcoPIData["estimatedTotalAmt"],
+    y = NSFcoPIData["coPIFullName"],
+    name = "Estimated Total Amount (As CoPI (NSF))",
+    mode = 'markers',
+    marker = dict(
+        size = NSFcoPIData["estimatedTotalAmt"],
+        sizemode = 'area',
+        sizeref = 2.*max(NSFcoPIData["estimatedTotalAmt"])/(60**2),
+        sizemin = 4
+    ),
+    customdata = NSFcoPIData[["title", "pdPIName"]],
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Title: %{customdata[0]} <br> PI: %{customdata[1]}"
+), row = 1, col = 2)
+
+NIH_NSF_bad.update_layout(
+    height = 1250,
+    barmode = "stack",
+    yaxis = {'categoryorder' : 'total descending'},
+    title_text = "NIH and NSF Data (bad, opacity)"
+)
+
+NIH_NSF_bad.show()
+```
+
+Now, we do a second example. In this case, instead of reducing the opacity, we instead make similar patterns in the bars themselves. In this example, we give the NSF data a forward slash '/' pattern, and the NIH data a backward slash '\\' pattern. Like before, this intentionally obfuscates the distinction between the two different institutions that provide the research funding.
+
+```{python}
+#|column: page
+
+NIH_NSF_bad2 = make_subplots(
+    rows = 1,
+    cols = 2,
+    shared_yaxes = True,
+    horizontal_spacing = 0.02
+)
+
+NIH_NSF_bad2.add_trace(go.Bar(
+    x = NSFPIData["estimatedTotalAmt"],
+    y = NSFPIData["piFullName"],
+    text = NSFPIData["estimatedTotalAmt"],
+    textposition = "inside",
+    name = "Estimated Total Amount (As PI (NSF))",
+    orientation = "h",
+    customdata = NSFPIData[["title", "coPDPI"]],
+    marker_color = "blue",
+    marker_pattern_shape = "/",
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Title: %{customdata[0]} <br> CoPIs: %{customdata[1]}"
+), row = 1, col = 1)
+
+NIH_NSF_bad2.add_trace(go.Bar(
+    x = NIHData["DirectCostAmt"],
+    y = NIHData["PIName"],
+    text = NIHData["DirectCostAmt"],
+    textposition = "inside",
+    name = "Direct Cost Amount (As PI (NIH))",
+    orientation = "h",
+    customdata = NIHData["ProjectTitle"],
+    marker_color = "blue",
+    marker_pattern_shape = "\\",
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Title: %{customdata}"
+), row = 1, col = 1)
+
+NIH_NSF_bad2.update_yaxes(showgrid = True)
+NIH_NSF_bad2.update_traces(texttemplate = '%{text:.2s}')
+
+NIH_NSF_bad2.add_trace(go.Scatter(
+    x = NSFcoPIData["estimatedTotalAmt"],
+    y = NSFcoPIData["coPIFullName"],
+    name = "Estimated Total Amount (As CoPI (NSF))",
+    mode = 'markers',
+    marker = dict(
+        size = NSFcoPIData["estimatedTotalAmt"],
+        sizemode = 'area',
+        sizeref = 2.*max(NSFcoPIData["estimatedTotalAmt"])/(60**2),
+        sizemin = 4
+    ),
+    customdata = NSFcoPIData[["title", "pdPIName"]],
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Title: %{customdata[0]} <br> PI: %{customdata[1]}"
+), row = 1, col = 2)
+
+NIH_NSF_bad2.update_layout(
+    height = 1250,
+    barmode = "stack",
+    yaxis = {'categoryorder' : 'total descending'},
+    title_text = "NIH and NSF Data (bad, bar patterns)"
+)
+
+NIH_NSF_bad2.show()
+```
