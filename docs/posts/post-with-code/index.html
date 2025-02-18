@@ -1,0 +1,1644 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="John Cambareri">
+<meta name="dcterms.date" content="2025-02-17">
+
+<title>Assignment 3: Mucking up a Visualization – BCB520 Blog - John Cambareri</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">BCB520 Blog - John Cambareri</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Assignment 3: Mucking up a Visualization</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">news</div>
+                <div class="quarto-category">code</div>
+                <div class="quarto-category">analysis</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>John Cambareri </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">February 17, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
+
+
+
+
+
+<p>This downloads University of Idaho research expenditure data from the National Science Foundation (NSF) and the National Institutes of Health (NIH). Then, this creates a visualization, and finally, this intentionally makes it bad.</p>
+<section id="combining-nsf-and-nih-data" class="level1">
+<h1>Combining NSF and NIH Data</h1>
+<section id="step-1-collecting-the-nsf-data" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-collecting-the-nsf-data">Step 1: Collecting the NSF Data</h3>
+<div id="cb27bb6f" class="cell" data-execution_count="1">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> datetime</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="initialize-variables-for-the-nsf-data" class="level3">
+<h3 class="anchored" data-anchor-id="initialize-variables-for-the-nsf-data">Initialize variables for the NSF data</h3>
+<div id="54e84a98" class="cell" data-execution_count="2">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>base_url <span class="op">=</span> <span class="st">"https://www.research.gov/awardapi-service/v1/awards.json?awardeeName=</span><span class="sc">%22r</span><span class="st">egents+of+the+university+of+idaho%22"</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>printFields <span class="op">=</span> <span class="st">"rpp,offset,id,agency,awardeeCity,awardeeCountryCode,awardeeDistrictCode,awardeeName,</span><span class="ch">\</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="st">                awardeeStateCode,awardeeZipCode,cfdaNumber,coPDPI,date,startDate,expDate,estimatedTotalAmt,</span><span class="ch">\</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="st">                fundsObligatedAmt,ueiNumber,fundProgramName,parentUeiNumber,pdPIName,perfCity,perfCountryCode,</span><span class="ch">\</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="st">                perfDistrictCode,perfLocation,perfStateCode,perfZipCode,poName,primaryProgram,transType,title,</span><span class="ch">\</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="st">                awardee,poPhone,poEmail,awardeeAddress,perfAddress,publicationResearch,publicationConference,</span><span class="ch">\</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="st">                fundAgencyCode,awardAgencyCode,projectOutComesReport,abstractText,piFirstName,piMiddeInitial,</span><span class="ch">\</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="st">                piLastName,piEmail"</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize an empty DataFrame to store results</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>all_awards <span class="op">=</span> pd.DataFrame()</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of results per page (as per API settings)</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>results_per_page <span class="op">=</span> <span class="dv">25</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Variable to keep track of the current page number</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>current_page <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Variable to control the loop</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>keep_going <span class="op">=</span> <span class="va">True</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="extract-data-from-the-nsf-website" class="level3">
+<h3 class="anchored" data-anchor-id="extract-data-from-the-nsf-website">Extract data from the NSF website</h3>
+<div id="ed9e79b6" class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> keep_going:</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate the offset for the current page</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    offset <span class="op">=</span> (current_page <span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> results_per_page <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Construct the full URL with offset</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    url <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>base_url<span class="sc">}</span><span class="ss">&amp;offset=</span><span class="sc">{</span>offset<span class="sc">}</span><span class="ss">&amp;printFields=</span><span class="sc">{</span>printFields<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Make the API call</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    response <span class="op">=</span> requests.get(url)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check if the call was successful</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> response.status_code <span class="op">==</span> <span class="dv">200</span>:</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Extract and parse the JSON data</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        parsed_data <span class="op">=</span> response.json()</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Extract the 'award' data and add to the all_awards DataFrame</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        awards_data <span class="op">=</span> pd.json_normalize(parsed_data[<span class="st">'response'</span>][<span class="st">'award'</span>])</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        all_awards <span class="op">=</span> pd.concat([all_awards, awards_data], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Debug: Print the current page number and number of awards fetched</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Page: </span><span class="sc">{</span>current_page<span class="sc">}</span><span class="ss"> - Awards fetched: </span><span class="sc">{</span><span class="bu">len</span>(awards_data[<span class="st">'id'</span>])<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Check if the current page has less than results_per_page awards, then it's the last page</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">len</span>(awards_data[<span class="st">'id'</span>]) <span class="op">&lt;</span> results_per_page:</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>            keep_going <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>            current_page <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Failed to fetch data: Status code </span><span class="sc">{</span>response<span class="sc">.</span>status_code<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>        keep_going <span class="op">=</span> <span class="va">False</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Page: 1 - Awards fetched: 25
+Page: 2 - Awards fetched: 25
+Page: 3 - Awards fetched: 25
+Page: 4 - Awards fetched: 25
+Page: 5 - Awards fetched: 25
+Page: 6 - Awards fetched: 25
+Page: 7 - Awards fetched: 25
+Page: 8 - Awards fetched: 25
+Page: 9 - Awards fetched: 25
+Page: 10 - Awards fetched: 25
+Page: 11 - Awards fetched: 25
+Page: 12 - Awards fetched: 25
+Page: 13 - Awards fetched: 25
+Page: 14 - Awards fetched: 25
+Page: 15 - Awards fetched: 25
+Page: 16 - Awards fetched: 25
+Page: 17 - Awards fetched: 25
+Page: 18 - Awards fetched: 25
+Page: 19 - Awards fetched: 25
+Page: 20 - Awards fetched: 25
+Page: 21 - Awards fetched: 25
+Page: 22 - Awards fetched: 25
+Page: 23 - Awards fetched: 25
+Page: 24 - Awards fetched: 25
+Page: 25 - Awards fetched: 3</code></pre>
+</div>
+</div>
+</section>
+<section id="save-data-into-csv-file" class="level3">
+<h3 class="anchored" data-anchor-id="save-data-into-csv-file">Save data into csv file</h3>
+<p>Optional: Uncomment the ‘to_csv’ command by removing the ‘#’ to save the result of the extraction to a CSV file. If you want to load the data from the CSV file instead of redoing the NSF extraction, uncomment the read_csv command and run it as well.</p>
+<div id="4f0a734f" class="cell" data-execution_count="4">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#all_awards.to_csv("UINSF.csv", index=False)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#all_awards = pd.read_csv("UINSF.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>If we print out the resulting dataframe now, there is a lot of data - too much, in fact.</p>
+<div id="cbcd8270" class="cell" data-execution_count="5">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>all_awards</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="33">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">abstractText</th>
+<th data-quarto-table-cell-role="th">agency</th>
+<th data-quarto-table-cell-role="th">awardAgencyCode</th>
+<th data-quarto-table-cell-role="th">awardeeAddress</th>
+<th data-quarto-table-cell-role="th">awardeeCity</th>
+<th data-quarto-table-cell-role="th">awardeeCountryCode</th>
+<th data-quarto-table-cell-role="th">awardeeDistrictCode</th>
+<th data-quarto-table-cell-role="th">awardeeName</th>
+<th data-quarto-table-cell-role="th">awardeeStateCode</th>
+<th data-quarto-table-cell-role="th">awardeeZipCode</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">startDate</th>
+<th data-quarto-table-cell-role="th">expDate</th>
+<th data-quarto-table-cell-role="th">title</th>
+<th data-quarto-table-cell-role="th">transType</th>
+<th data-quarto-table-cell-role="th">awardee</th>
+<th data-quarto-table-cell-role="th">coPDPI</th>
+<th data-quarto-table-cell-role="th">piMiddeInitial</th>
+<th data-quarto-table-cell-role="th">publicationResearch</th>
+<th data-quarto-table-cell-role="th">projectOutComesReport</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>To improve the information processing of a sud...</td>
+<td>NSF</td>
+<td>4900</td>
+<td>875 PERIMETER DR</td>
+<td>MOSCOW</td>
+<td>US</td>
+<td>ID01</td>
+<td>Regents of the University of Idaho</td>
+<td>ID</td>
+<td>838449803</td>
+<td>...</td>
+<td>11/22/2024</td>
+<td>01/01/2025</td>
+<td>12/31/2026</td>
+<td>EPSCoR Research Fellows: NSF: Modeling Human P...</td>
+<td>Standard Grant</td>
+<td>REGENTS OF THE UNIVERSITY OF IDAHO</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Commercial semiconductor chips and their packa...</td>
+<td>NSF</td>
+<td>4900</td>
+<td>875 PERIMETER DR</td>
+<td>MOSCOW</td>
+<td>US</td>
+<td>ID01</td>
+<td>Regents of the University of Idaho</td>
+<td>ID</td>
+<td>838449803</td>
+<td>...</td>
+<td>09/10/2024</td>
+<td>01/01/2025</td>
+<td>12/31/2026</td>
+<td>EPSCoR Research Fellows: NSF: Heterogeneous In...</td>
+<td>Standard Grant</td>
+<td>REGENTS OF THE UNIVERSITY OF IDAHO</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>The goal of this fellowship project is to enha...</td>
+<td>NSF</td>
+<td>4900</td>
+<td>875 PERIMETER DR</td>
+<td>MOSCOW</td>
+<td>US</td>
+<td>ID01</td>
+<td>Regents of the University of Idaho</td>
+<td>ID</td>
+<td>838449803</td>
+<td>...</td>
+<td>12/02/2024</td>
+<td>01/01/2025</td>
+<td>12/31/2026</td>
+<td>EPSCoR Research Fellows: NSF: Incorporating Kn...</td>
+<td>Standard Grant</td>
+<td>REGENTS OF THE UNIVERSITY OF IDAHO</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Changing climates are a major challenge for hu...</td>
+<td>NSF</td>
+<td>4900</td>
+<td>875 PERIMETER DR</td>
+<td>MOSCOW</td>
+<td>US</td>
+<td>ID01</td>
+<td>Regents of the University of Idaho</td>
+<td>ID</td>
+<td>838449803</td>
+<td>...</td>
+<td>07/19/2024</td>
+<td>12/01/2024</td>
+<td>11/30/2027</td>
+<td>Collaborative Research: ORCC: Integrating evol...</td>
+<td>Continuing Grant</td>
+<td>REGENTS OF THE UNIVERSITY OF IDAHO</td>
+<td>[James J Nagler, Alexandra K Fraik]</td>
+<td>A</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>This award supports research in relativity and...</td>
+<td>NSF</td>
+<td>4900</td>
+<td>875 PERIMETER DR</td>
+<td>MOSCOW</td>
+<td>US</td>
+<td>ID01</td>
+<td>Regents of the University of Idaho</td>
+<td>ID</td>
+<td>838449803</td>
+<td>...</td>
+<td>11/12/2024</td>
+<td>11/15/2024</td>
+<td>09/30/2025</td>
+<td>Boosting Algorithmic Efficiency: Numerical Rel...</td>
+<td>Standard Grant</td>
+<td>REGENTS OF THE UNIVERSITY OF IDAHO</td>
+<td>NaN</td>
+<td>B</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">598</td>
+<td>NaN</td>
+<td>NSF</td>
+<td>4900</td>
+<td>875 PERIMETER DR</td>
+<td>MOSCOW</td>
+<td>US</td>
+<td>ID01</td>
+<td>Regents of the University of Idaho</td>
+<td>ID</td>
+<td>838449803</td>
+<td>...</td>
+<td>03/15/1974</td>
+<td>03/15/1974</td>
+<td>08/31/1975</td>
+<td>An Implementation Project in Elementary School...</td>
+<td>Standard Grant</td>
+<td>REGENTS OF THE UNIVERSITY OF IDAHO</td>
+<td>NaN</td>
+<td>G</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">599</td>
+<td>NaN</td>
+<td>NSF</td>
+<td>4900</td>
+<td>875 PERIMETER DR</td>
+<td>MOSCOW</td>
+<td>US</td>
+<td>ID01</td>
+<td>Regents of the University of Idaho</td>
+<td>ID</td>
+<td>838449803</td>
+<td>...</td>
+<td>07/24/1973</td>
+<td>09/01/1973</td>
+<td>08/31/1976</td>
+<td>Submicron Particle Collection By Beds of Small...</td>
+<td>Standard Grant</td>
+<td>REGENTS OF THE UNIVERSITY OF IDAHO</td>
+<td>NaN</td>
+<td>L</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">600</td>
+<td>NaN</td>
+<td>NSF</td>
+<td>4900</td>
+<td>875 PERIMETER DR</td>
+<td>MOSCOW</td>
+<td>US</td>
+<td>ID01</td>
+<td>Regents of the University of Idaho</td>
+<td>ID</td>
+<td>838449803</td>
+<td>...</td>
+<td>02/09/1973</td>
+<td>03/15/1973</td>
+<td>08/31/1976</td>
+<td>Ecology of the Leopard</td>
+<td>Standard Grant</td>
+<td>REGENTS OF THE UNIVERSITY OF IDAHO</td>
+<td>NaN</td>
+<td>G</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">601</td>
+<td>NaN</td>
+<td>NSF</td>
+<td>4900</td>
+<td>875 PERIMETER DR</td>
+<td>MOSCOW</td>
+<td>US</td>
+<td>ID01</td>
+<td>Regents of the University of Idaho</td>
+<td>ID</td>
+<td>838449803</td>
+<td>...</td>
+<td>05/18/1972</td>
+<td>06/01/1972</td>
+<td>05/31/1975</td>
+<td>Ecology of the Greater Sandhill Crane</td>
+<td>Continuing Grant</td>
+<td>REGENTS OF THE UNIVERSITY OF IDAHO</td>
+<td>[George Lauff, Jochen Kummerow, DATA NOT A...</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">602</td>
+<td>NaN</td>
+<td>NSF</td>
+<td>4900</td>
+<td>875 PERIMETER DR</td>
+<td>MOSCOW</td>
+<td>US</td>
+<td>ID01</td>
+<td>Regents of the University of Idaho</td>
+<td>ID</td>
+<td>838449803</td>
+<td>...</td>
+<td>06/25/1968</td>
+<td>06/25/1968</td>
+<td>06/30/1968</td>
+<td>1968 Institutional Grants For Science</td>
+<td>Standard Grant</td>
+<td>REGENTS OF THE UNIVERSITY OF IDAHO</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+</tbody>
+</table>
+
+<p>603 rows × 43 columns</p>
+</div>
+</div>
+</div>
+<p>We will reduce the amount of columns, by only grabbing the relevant ones.</p>
+<div id="f640a695" class="cell" data-execution_count="6">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>reducedCols <span class="op">=</span> all_awards[[<span class="st">"cfdaNumber"</span>, <span class="st">"estimatedTotalAmt"</span>, <span class="st">"fundsObligatedAmt"</span>, <span class="st">"fundProgramName"</span>,<span class="op">\</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                          <span class="st">"id"</span>, <span class="st">"pdPIName"</span>, <span class="st">"piFirstName"</span>, <span class="st">"piMiddeInitial"</span>, <span class="st">"piLastName"</span>, <span class="st">"poName"</span>,<span class="op">\</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                          <span class="st">"date"</span>, <span class="st">"startDate"</span>, <span class="st">"expDate"</span>, <span class="st">"title"</span>, <span class="st">"coPDPI"</span>]].copy()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Now we clean up the columns a bit.</p>
+<div id="d2785446" class="cell" data-execution_count="7">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#change formatting of monetary data from int to float</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>reducedCols[<span class="st">"estimatedTotalAmt"</span>] <span class="op">=</span> reducedCols[<span class="st">"estimatedTotalAmt"</span>].astype(<span class="bu">float</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#turn dates into pandas dates</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>reducedCols[<span class="st">"date"</span>] <span class="op">=</span> pd.to_datetime(reducedCols[<span class="st">"date"</span>])</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>reducedCols[<span class="st">"startDate"</span>] <span class="op">=</span> pd.to_datetime(reducedCols[<span class="st">"startDate"</span>])</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>reducedCols[<span class="st">"expDate"</span>] <span class="op">=</span> pd.to_datetime(reducedCols[<span class="st">"expDate"</span>])</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#only grab recent articles</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>currentData <span class="op">=</span> reducedCols[reducedCols[<span class="st">"expDate"</span>] <span class="op">&gt;</span> pd.to_datetime(<span class="st">"2019-01-01"</span>)].copy()</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co">#remove Nulls/NAs from the Co-PI column</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>currentData[<span class="st">'coPDPI'</span>] <span class="op">=</span> [ [] <span class="cf">if</span> x <span class="kw">is</span> np.nan <span class="cf">else</span> x <span class="cf">for</span> x <span class="kw">in</span> currentData[<span class="st">'coPDPI'</span>]]</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co">#rename dataframe</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>NSFPIData <span class="op">=</span> currentData</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="co-pi-information" class="level3">
+<h3 class="anchored" data-anchor-id="co-pi-information">Co-PI Information</h3>
+<p>In this dataframe, some of the PIs have 1 or more Co-PIs associated with them.</p>
+<p>Here we shall create a new dataframe from the PI dataframe; only those with at least one Co-PI are kept.</p>
+<div id="abdcc4ff" class="cell" data-execution_count="8">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>NSFcoPIData <span class="op">=</span> currentData[currentData[<span class="st">"coPDPI"</span>].<span class="bu">str</span>.<span class="bu">len</span>() <span class="op">&gt;</span> <span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Next, we will make it so that each element in the list gets seperated into a different row. This is done using the explode() function.</p>
+<div id="0ff34e83" class="cell" data-execution_count="9">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>NSFcoPIData <span class="op">=</span> NSFcoPIData.explode(<span class="st">"coPDPI"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="step-2-nih-data" class="level1">
+<h1>Step 2: NIH Data</h1>
+<p>Attaining the NIH data is a little different than attaining the NSF data, so a slightly different method will need to be used here. The code block below will use an API request to request the information from the NSF website. The result will then be saved into a JSON file, from which we will extract the data from into a dataframe.</p>
+<div id="61736cd6" class="cell" data-results="hide" data-execution_count="10">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the current year and calculate the starting fiscal year (6 years ago; 2019)</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>current_year <span class="op">=</span> datetime.now().year</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>start_fiscal_year <span class="op">=</span> current_year <span class="op">-</span> <span class="dv">6</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the API URL and endpoint</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://api.reporter.nih.gov/v2/projects/search"</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the API request payload</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>payload <span class="op">=</span> {</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"criteria"</span>: {</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">"org_names"</span>: [<span class="st">"UNIVERSITY OF IDAHO"</span>],  <span class="co"># Filter for the University of Idaho</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">"fiscal_years"</span>: <span class="bu">list</span>(<span class="bu">range</span>(start_fiscal_year, current_year <span class="op">+</span> <span class="dv">1</span>)),  <span class="co"># Last 5 years</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">"newly_added_projects_only"</span>: <span class="va">False</span>  <span class="co"># Include all projects, not just newly added ones</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"include_fields"</span>: [</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">"ApplId"</span>, <span class="st">"SubprojectId"</span>, <span class="st">"FiscalYear"</span>, <span class="st">"ProjectNum"</span>, <span class="st">"ProjectSerialNum"</span>,</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Organization"</span>, <span class="st">"OrganizationType"</span>, <span class="st">"AwardType"</span>, <span class="st">"ActivityCode"</span>, <span class="st">"AwardAmount"</span>,</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">"ProjectNumSplit"</span>, <span class="st">"PrincipalInvestigators"</span>, <span class="st">"ProgramOfficers"</span>, <span class="st">"AgencyIcAdmin"</span>,</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">"AgencyIcFundings"</span>, <span class="st">"CongDist"</span>, <span class="st">"ProjectStartDate"</span>, <span class="st">"ProjectEndDate"</span>, <span class="st">"FullFoa"</span>,</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>        <span class="st">"FullStudySection"</span>, <span class="st">"AwardNoticeDate"</span>, <span class="st">"CoreProjectNum"</span>, <span class="st">"PrefTerms"</span>, <span class="st">"ProjectTitle"</span>,</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>        <span class="st">"PhrText"</span>, <span class="st">"SpendingCategoriesDesc"</span>, <span class="st">"ArraFunded"</span>, <span class="st">"BudgetStart"</span>, <span class="st">"BudgetEnd"</span>,</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>        <span class="st">"CfdaCode"</span>, <span class="st">"FundingMechanism"</span>, <span class="st">"DirectCostAmt"</span>, <span class="st">"IndirectCostAmt"</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">"offset"</span>: <span class="dv">0</span>,  <span class="co"># Start from the first record</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">"limit"</span>: <span class="dv">500</span>,  <span class="co"># Number of records to fetch per request, can be adjusted</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sort_field"</span>: <span class="st">"project_start_date"</span>,</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sort_order"</span>: <span class="st">"desc"</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Make the API request</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> requests.post(url, headers<span class="op">=</span>{<span class="st">"Content-Type"</span>: <span class="st">"application/json"</span>}, data<span class="op">=</span>json.dumps(payload))</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for a successful response</span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> response.status_code <span class="op">==</span> <span class="dv">200</span>:</span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> response.json()  <span class="co"># Parse the JSON response</span></span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(<span class="st">'university_of_idaho_awards_last_5_years.json'</span>, <span class="st">'w'</span>) <span class="im">as</span> f:</span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>        json.dump(data, f, indent<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Data successfully downloaded and saved to 'university_of_idaho_awards_2019_2024.json'"</span>)</span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Failed to retrieve data: </span><span class="sc">{</span>response<span class="sc">.</span>status_code<span class="sc">}</span><span class="ss"> - </span><span class="sc">{</span>response<span class="sc">.</span>text<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Data successfully downloaded and saved to 'university_of_idaho_awards_2019_2024.json'</code></pre>
+</div>
+</div>
+<div id="4fdf8970" class="cell" data-execution_count="11">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the JSON data from the file, replace the name with whatever file you want to load from</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'university_of_idaho_awards_last_5_years.json'</span>, <span class="st">'r'</span>) <span class="im">as</span> f:</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> json.load(f)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract relevant fields and create a list of dictionaries</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>awards_data <span class="op">=</span> []</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> project <span class="kw">in</span> data.get(<span class="st">'results'</span>, []):</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    org_name <span class="op">=</span> project.get(<span class="st">'organization'</span>, {}).get(<span class="st">'org_name'</span>, <span class="st">''</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    project_num <span class="op">=</span> project.get(<span class="st">'project_num'</span>, <span class="st">''</span>)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    project_title <span class="op">=</span> project.get(<span class="st">'project_title'</span>, <span class="st">''</span>)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>   </span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Principal Investigators (concatenating names if more than one PI)</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    principal_investigators <span class="op">=</span> <span class="st">", "</span>.join(</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>        [pi.get(<span class="st">'full_name'</span>, <span class="st">''</span>) <span class="cf">for</span> pi <span class="kw">in</span> project.get(<span class="st">'principal_investigators'</span>, [])]</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Extract First Names and Last Names for ease of use later</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    principal_investigators_first_name <span class="op">=</span> <span class="st">", "</span>.join(</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>        [pi.get(<span class="st">'first_name'</span>, <span class="st">''</span>) <span class="cf">for</span> pi <span class="kw">in</span> project.get(<span class="st">'principal_investigators'</span>, [])]</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    principal_investigators_last_name <span class="op">=</span> <span class="st">", "</span>.join(</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>        [pi.get(<span class="st">'last_name'</span>, <span class="st">''</span>) <span class="cf">for</span> pi <span class="kw">in</span> project.get(<span class="st">'principal_investigators'</span>, [])]</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>   </span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>    direct_cost_amt <span class="op">=</span> project.get(<span class="st">'direct_cost_amt'</span>, <span class="dv">0</span>)</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>   </span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>    awards_data.append({</span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Organization"</span>: org_name,</span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>        <span class="st">"ProjectNum"</span>: project_num,</span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>        <span class="st">"ProjectTitle"</span>: project_title,</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>        <span class="st">"PrincipalInvestigators"</span>: principal_investigators,</span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>        <span class="st">"PrincipalInvestigatorsFirstName"</span>: principal_investigators_first_name,</span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>        <span class="st">"PrincipalInvestigatorsLastName"</span>: principal_investigators_last_name,</span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>        <span class="st">"DirectCostAmt"</span>: direct_cost_amt</span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(awards_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="split-columns" class="level3">
+<h3 class="anchored" data-anchor-id="split-columns">Split columns</h3>
+<p>Unlike in the NSF data, NIH data can list multiple PIs. Therefore, each of the relevant columns need to be split in case there is more than one present.</p>
+<div id="f20c9ea7" class="cell" data-execution_count="12">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"PrincipalInvestigators"</span>] <span class="op">=</span> df[<span class="st">"PrincipalInvestigators"</span>].<span class="bu">str</span>.split(<span class="st">','</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"PrincipalInvestigatorsFirstName"</span>] <span class="op">=</span> df[<span class="st">"PrincipalInvestigatorsFirstName"</span>].<span class="bu">str</span>.split(<span class="st">','</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"PrincipalInvestigatorsLastName"</span>] <span class="op">=</span> df[<span class="st">"PrincipalInvestigatorsLastName"</span>].<span class="bu">str</span>.split(<span class="st">','</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The explode() function sees use again here.</p>
+<div id="23adb507" class="cell" data-execution_count="13">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>NIHData <span class="op">=</span> df.explode([<span class="st">"PrincipalInvestigators"</span>, <span class="st">"PrincipalInvestigatorsFirstName"</span>, <span class="op">\</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"PrincipalInvestigatorsLastName"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Typecast relevant information from int to float</p>
+<div id="f6dc426d" class="cell" data-execution_count="14">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>NIHData[<span class="st">"DirectCostAmt"</span>] <span class="op">=</span> NIHData[<span class="st">"DirectCostAmt"</span>].astype(<span class="bu">float</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="step-3-name-cleanup" class="level1">
+<h1>Step 3: Name Cleanup</h1>
+<p>Since NIH and NSF display their names differently, simply combining the two databases together can result in some of the data for faculty being split up across the two in the event that they submitted a research grant for both institutions.</p>
+<p>First, we shall define a couple of helper functions that will use regular expressions to help sort out inconsistencies.</p>
+<div id="f6a61574" class="cell" data-execution_count="15">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Sometimes a middle name is shown in the name tab in the Co-PI table, which is unwanted here.</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> removeMiddleName(name):</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    parts <span class="op">=</span> name.split()</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(parts) <span class="op">&lt;=</span> <span class="dv">2</span>:</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> name</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> parts[<span class="dv">0</span>] <span class="op">+</span> <span class="st">" "</span> <span class="op">+</span> parts[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>NSFcoPIData[<span class="st">"coPIFullName"</span>] <span class="op">=</span> NSFcoPIData[<span class="st">"coPDPI"</span>].<span class="bu">apply</span>(removeMiddleName)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co">#remove whitespace from start of the name</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> removeInitialSpace(name):</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    regex <span class="op">=</span> <span class="vs">r"^\s"</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> re.match(regex, name):</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>        name <span class="op">=</span> name[<span class="dv">1</span>:]</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> name</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>NIHData[<span class="st">"PrincipalInvestigatorsFirstName"</span>] <span class="op">=</span> NIHData[<span class="st">"PrincipalInvestigatorsFirstName"</span>].<span class="bu">apply</span>(removeInitialSpace)</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>NIHData[<span class="st">"PrincipalInvestigatorsLastName"</span>] <span class="op">=</span> NIHData[<span class="st">"PrincipalInvestigatorsLastName"</span>].<span class="bu">apply</span>(removeInitialSpace)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="add-full-name-column" class="level3">
+<h3 class="anchored" data-anchor-id="add-full-name-column">Add Full Name column</h3>
+<p>For the NSF PI data and the NIH data, middle names are applied inconsistently. Thus, instead of using the removeMiddleName() function as done above, we simply take the first and last name columns and add them together.</p>
+<p>Capitalization is also an inconsistency between the two institutions. To fix this, all names will be capitalized.</p>
+<div id="176b613a" class="cell" data-execution_count="16">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>NSFPIData[<span class="st">"piFullName"</span>] <span class="op">=</span> NSFPIData[<span class="st">"piFirstName"</span>] <span class="op">+</span> <span class="st">" "</span> <span class="op">+</span> NSFPIData[<span class="st">"piLastName"</span>]</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>NIHData[<span class="st">"PIName"</span>] <span class="op">=</span> NIHData[<span class="st">"PrincipalInvestigatorsFirstName"</span>] <span class="op">+</span> <span class="st">" "</span> <span class="op">+</span> NIHData[<span class="st">"PrincipalInvestigatorsLastName"</span>]</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>NSFPIData[<span class="st">"piFullName"</span>] <span class="op">=</span> NSFPIData[<span class="st">"piFullName"</span>].<span class="bu">str</span>.upper()</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>NSFcoPIData[<span class="st">"coPIFullName"</span>] <span class="op">=</span> NSFcoPIData[<span class="st">"coPIFullName"</span>].<span class="bu">str</span>.upper()</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>NIHData[<span class="st">"PIName"</span>] <span class="op">=</span> NIHData[<span class="st">"PIName"</span>].<span class="bu">str</span>.upper()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>A few exceptions still remain, so these have to be fixed manually.</p>
+<div id="13cd93d9" class="cell" data-execution_count="17">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>NSFcoPIData.loc[NSFcoPIData[<span class="st">"coPIFullName"</span>] <span class="op">==</span> <span class="st">"TERESA COHN"</span>, <span class="st">"coPIFullName"</span>] <span class="op">=</span> <span class="st">"TERESA CAVAZOS COHN"</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>NSFcoPIData.loc[NSFcoPIData[<span class="st">"coPIFullName"</span>] <span class="op">==</span> <span class="st">"JAGDISH PATEL"</span>, <span class="st">"coPIFullName"</span>] <span class="op">=</span> <span class="st">"JAGDISH SURESH PATEL"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="step-4-making-the-plot" class="level1 page-columns page-full">
+<h1>Step 4: Making the Plot</h1>
+<p>Now that all of the data is ready to go, it’s time to create a graph that will visualize the data.</p>
+<p>The NIH and NSF PI data combine together nicely, but the Co-PI data does not work well when added cumulatively with the PI data. Therefore, one solution is to make two graphs - a bar graph with the PI data, and a scatter/circle plot for the NSF data.</p>
+<p>We will use plotly’s graph function as follows. First we import plotly’s graph_objects library. Since we want to make two plots, we can also use plotly’s subplot library as well.</p>
+<div id="f648d5b6" class="cell" data-execution_count="18">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plotly.subplots <span class="im">import</span> make_subplots</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Now we define the overall structure of the subplot. Each parameter will be as follows:</p>
+<p>We want the plots to be side-by-side, so we want 1 row and 2 columns.</p>
+<p>We want the data points on the y axis (in this case, it’s the PI/Co-PI’s names) to be the same across the subplots, and we can implement this with the shared_yaxes parameter.</p>
+<p>Horizontal spacing just ensures that the space between the two halves of the overall plot are minimized.</p>
+<p>Note that in this code block below, the code is commented. This is on purpose, to avoid the plot information from being displayed too early.</p>
+<div id="2f1dc581" class="cell" data-results="hide" data-execution_count="19">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">'''</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co">NIH_NSF = make_subplots(</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co">    rows = 1,</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co">    cols = 2,</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co">    shared_yaxes = True,</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co">    horizontal_spacing = 0.02</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co">)</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="co">'''</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="47">
+<pre><code>'\nNIH_NSF = make_subplots(\n    rows = 1,\n    cols = 2,\n    shared_yaxes = True,\n    horizontal_spacing = 0.02\n)\n'</code></pre>
+</div>
+</div>
+<p>First, We will add the NSF PI data to the graph. This will be a bar function.</p>
+<p>We use x for the total money amount, and y for the names of the PIs.</p>
+<p>The ‘text’ parameter will cause the bar to display a value on the bar itself; in this case we want the same as the x axis (the total money amount). “Inside” means that it will be positioned in the bar itself, not directly above or to the side of the bar.</p>
+<p>Setting orientation to ‘h’ lets plotly know that its a sideways plot; the bar graphs will be coming from left-to-right instead of bottom-to-top.</p>
+<p>Finally, we set a ‘customdata’ field. This is used with the hovertemplate directly below, in order to display data when the graph is moused over. &lt;br&gt; tags will cause a line break, and the $.2s field causes the money to be rounded to the nearest 2 significant digits.</p>
+<p>Finally, the row and column position of the bar graph in the overall graph is displayed.</p>
+<div id="93fea5bd" class="cell" data-results="hide" data-execution_count="20">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">'''</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co">NIH_NSF.add_trace(go.Bar(</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co">    x = NSFPIData["estimatedTotalAmt"],</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co">    y = NSFPIData["piFullName"],</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co">    text = NSFPIData["estimatedTotalAmt"],</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="co">    textposition = "inside",</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co">    name = "Estimated Total Amount (As PI (NSF))",</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="co">    orientation = "h",</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="co">    customdata = NSFPIData[["title", "coPDPI"]],</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="co">    hovertemplate = "Name: %{y} &lt;br&gt; Amount: %{x:$.2s} &lt;br&gt; Title: %{customdata[0]} &lt;br&gt; CoPIs: %{customdata[1]}"</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="co">), row = 1, col = 1)</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="co">'''</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="48">
+<pre><code>'\nNIH_NSF.add_trace(go.Bar(\n    x = NSFPIData["estimatedTotalAmt"],\n    y = NSFPIData["piFullName"],\n    text = NSFPIData["estimatedTotalAmt"],\n    textposition = "inside",\n    name = "Estimated Total Amount (As PI (NSF))",\n    orientation = "h",\n    customdata = NSFPIData[["title", "coPDPI"]],\n    hovertemplate = "Name: %{y} &lt;br&gt; Amount: %{x:$.2s} &lt;br&gt; Title: %{customdata[0]} &lt;br&gt; CoPIs: %{customdata[1]}"\n), row = 1, col = 1)\n'</code></pre>
+</div>
+</div>
+<p>Next, we do the same thing, but with the NIH data instead. A couple of things to note here:</p>
+<p>First, This will be in the same row and column as the NSF data.</p>
+<p>Second, the NIH data does not provide co-PI information, so the customdata parameter here is not as large.</p>
+<div id="27a5ff6d" class="cell" data-results="hide" data-execution_count="21">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">'''</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="co">NIH_NSF.add_trace(go.Bar(</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co">    x = NIHData["DirectCostAmt"],</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co">    y = NIHData["PIName"],</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co">    text = NIHData["DirectCostAmt"],</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co">    textposition = "inside",</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co">    name = "Direct Cost Amount (As PI (NIH))",</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="co">    orientation = "h",</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="co">    customdata = NIHData["ProjectTitle"],</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co">    hovertemplate = "Name: %{y} &lt;br&gt; Amount: %{x:$.2s} &lt;br&gt; Title: %{customdata}"</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="co">), row = 1, col = 1)</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="co">'''</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="49">
+<pre><code>'\nNIH_NSF.add_trace(go.Bar(\n    x = NIHData["DirectCostAmt"],\n    y = NIHData["PIName"],\n    text = NIHData["DirectCostAmt"],\n    textposition = "inside",\n    name = "Direct Cost Amount (As PI (NIH))",\n    orientation = "h",\n    customdata = NIHData["ProjectTitle"],\n    hovertemplate = "Name: %{y} &lt;br&gt; Amount: %{x:$.2s} &lt;br&gt; Title: %{customdata}"\n), row = 1, col = 1)\n'</code></pre>
+</div>
+</div>
+<p>Here we update the graph to show the horizontal axis on the bar chart itself, to make readability better and to make it easier to associate items on the bar chart side of the graph with the items on the scatter plot side of the graph.</p>
+<div id="4dbbc3ee" class="cell" data-results="hide" data-execution_count="22">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">'''</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co">NIH_NSF.update_yaxes(showgrid = True)</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co">NIH_NSF.update_traces(texttemplate = '%{text:.2s}')</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co">'''</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="50">
+<pre><code>"\nNIH_NSF.update_yaxes(showgrid = True)\nNIH_NSF.update_traces(texttemplate = '%{text:.2s}')\n"</code></pre>
+</div>
+</div>
+<p>Lastly, we implement the Scatter plot portion of the graph. This has a few different parameters than the bar graph; in this case, we see the mode of “markers”.</p>
+<p>In this case, we want the size of the scatter plot/bubble to be directly proportional to how much money the co-PI is responsible for, but we also want to set a cap on how large the bubbles can be, so there is a max() function in the sizeref() parameter as part of the marker parameter.</p>
+<p>Finally, to ensure it’s not on the same part of the graph as the bar charts, this is placed in column 2.</p>
+<div id="c5478c0b" class="cell" data-results="hide" data-execution_count="23">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">'''</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co">NIH_NSF.add_trace(go.Scatter(</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co">    x = NSFcoPIData["estimatedTotalAmt"],</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co">    y = NSFcoPIData["coPIFullName"],</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co">    name = "Estimated Total Amount (As CoPI (NSF))",</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="co">    mode = 'markers',</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co">    marker = dict(</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="co">        size = NSFcoPIData["estimatedTotalAmt"],</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="co">        sizemode = 'area',</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="co">        sizeref = 2.*max(NSFcoPIData["estimatedTotalAmt"])/(60**2),</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="co">        sizemin = 4</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="co">    ),</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="co">    customdata = NSFcoPIData[["title", "pdPIName"]],</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="co">    hovertemplate = "Name: %{y} &lt;br&gt; Amount: %{x:$.2s} &lt;br&gt; Title: %{customdata[0]} &lt;br&gt; PI: %{customdata[1]}"</span></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a><span class="co">), row = 1, col = 2)</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a><span class="co">'''</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="51">
+<pre><code>'\nNIH_NSF.add_trace(go.Scatter(\n    x = NSFcoPIData["estimatedTotalAmt"],\n    y = NSFcoPIData["coPIFullName"],\n    name = "Estimated Total Amount (As CoPI (NSF))",\n    mode = \'markers\',\n    marker = dict(\n        size = NSFcoPIData["estimatedTotalAmt"],\n        sizemode = \'area\',\n        sizeref = 2.*max(NSFcoPIData["estimatedTotalAmt"])/(60**2),\n        sizemin = 4\n    ),\n    customdata = NSFcoPIData[["title", "pdPIName"]],\n    hovertemplate = "Name: %{y} &lt;br&gt; Amount: %{x:$.2s} &lt;br&gt; Title: %{customdata[0]} &lt;br&gt; PI: %{customdata[1]}"\n), row = 1, col = 2)\n'</code></pre>
+</div>
+</div>
+<p>Now we do one final update to the plot’s layout.</p>
+<p>The height function measures how large the graph will show. This size might not fit on everyone’s page; adjust this if needed.</p>
+<p>Setting the barmode to ‘stack’ causes the two bar graphs (the NIH and NSF PI data) to stack on top of each other instead of being fitted side-to-side.</p>
+<p>With the y axis being in ‘total descending’, this means that the data will be generally ordered from highest contribution to lowest. However, there is a bug with plotly that causes not all the data to be in the right order when grouped in a subplot.</p>
+<div id="76f26d74" class="cell" data-results="hide" data-execution_count="24">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">'''</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="co">NIH_NSF.update_layout(</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co">    height = 1250,</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co">    barmode = "stack",</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="co">    yaxis = {'categoryorder' : 'total descending'},</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="co">    title_text = "NIH and NSF Data"</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="co">)</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="co">'''</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="52">
+<pre><code>'\nNIH_NSF.update_layout(\n    height = 1250,\n    barmode = "stack",\n    yaxis = {\'categoryorder\' : \'total descending\'},\n    title_text = "NIH and NSF Data"\n)\n'</code></pre>
+</div>
+</div>
+<p>This command will create the plot.</p>
+<div id="d6808d49" class="cell" data-results="hide" data-execution_count="25">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">'''</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="co">NIH_NSF.show()</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co">'''</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="53">
+<pre><code>'\nNIH_NSF.show()\n'</code></pre>
+</div>
+</div>
+<p>Combining all the code snippets will create the plot. In this plot, you can do the following:</p>
+<p>Mousing over any datapoint (bar graph/scatter plot) will show you data regarding that particular grant, including PI, money allocated, title, associated co-PI or PI if they exist, etc.</p>
+<p>If the data is too small to read properly, you can click and hold on the graph itself to draw an area on the graph; releasing the mouse will zoom in on the area that you selected. Double-click the graph to return it to regular size.</p>
+<div id="c0e13f0b" class="cell page-columns page-full" data-execution_count="26">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.io <span class="im">as</span> pio</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>pio.renderers.default <span class="op">=</span> <span class="st">"iframe"</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>NIH_NSF <span class="op">=</span> make_subplots(</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    rows <span class="op">=</span> <span class="dv">1</span>,</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    cols <span class="op">=</span> <span class="dv">2</span>,</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    shared_yaxes <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>    horizontal_spacing <span class="op">=</span> <span class="fl">0.02</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>NIH_NSF.add_trace(go.Bar(</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> NSFPIData[<span class="st">"estimatedTotalAmt"</span>],</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> NSFPIData[<span class="st">"piFullName"</span>],</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> NSFPIData[<span class="st">"estimatedTotalAmt"</span>],</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>    textposition <span class="op">=</span> <span class="st">"inside"</span>,</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>    name <span class="op">=</span> <span class="st">"Estimated Total Amount (As PI (NSF))"</span>,</span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">"h"</span>,</span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>    customdata <span class="op">=</span> NSFPIData[[<span class="st">"title"</span>, <span class="st">"coPDPI"</span>]],</span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>    hovertemplate <span class="op">=</span> <span class="st">"Name: %</span><span class="sc">{y}</span><span class="st"> &lt;br&gt; Amount: %{x:$.2s} &lt;br&gt; Title: %</span><span class="sc">{customdata[0]}</span><span class="st"> &lt;br&gt; CoPIs: %</span><span class="sc">{customdata[1]}</span><span class="st">"</span></span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>), row <span class="op">=</span> <span class="dv">1</span>, col <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>NIH_NSF.add_trace(go.Bar(</span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> NIHData[<span class="st">"DirectCostAmt"</span>],</span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> NIHData[<span class="st">"PIName"</span>],</span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> NIHData[<span class="st">"DirectCostAmt"</span>],</span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a>    textposition <span class="op">=</span> <span class="st">"inside"</span>,</span>
+<span id="cb35-27"><a href="#cb35-27" aria-hidden="true" tabindex="-1"></a>    name <span class="op">=</span> <span class="st">"Direct Cost Amount (As PI (NIH))"</span>,</span>
+<span id="cb35-28"><a href="#cb35-28" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">"h"</span>,</span>
+<span id="cb35-29"><a href="#cb35-29" aria-hidden="true" tabindex="-1"></a>    customdata <span class="op">=</span> NIHData[<span class="st">"ProjectTitle"</span>],</span>
+<span id="cb35-30"><a href="#cb35-30" aria-hidden="true" tabindex="-1"></a>    hovertemplate <span class="op">=</span> <span class="st">"Name: %</span><span class="sc">{y}</span><span class="st"> &lt;br&gt; Amount: %{x:$.2s} &lt;br&gt; Title: %</span><span class="sc">{customdata}</span><span class="st">"</span></span>
+<span id="cb35-31"><a href="#cb35-31" aria-hidden="true" tabindex="-1"></a>), row <span class="op">=</span> <span class="dv">1</span>, col <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb35-32"><a href="#cb35-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-33"><a href="#cb35-33" aria-hidden="true" tabindex="-1"></a>NIH_NSF.update_yaxes(showgrid <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb35-34"><a href="#cb35-34" aria-hidden="true" tabindex="-1"></a>NIH_NSF.update_traces(texttemplate <span class="op">=</span> <span class="st">'%</span><span class="sc">{text:.2s}</span><span class="st">'</span>)</span>
+<span id="cb35-35"><a href="#cb35-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-36"><a href="#cb35-36" aria-hidden="true" tabindex="-1"></a>NIH_NSF.add_trace(go.Scatter(</span>
+<span id="cb35-37"><a href="#cb35-37" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> NSFcoPIData[<span class="st">"estimatedTotalAmt"</span>],</span>
+<span id="cb35-38"><a href="#cb35-38" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> NSFcoPIData[<span class="st">"coPIFullName"</span>],</span>
+<span id="cb35-39"><a href="#cb35-39" aria-hidden="true" tabindex="-1"></a>    name <span class="op">=</span> <span class="st">"Estimated Total Amount (As CoPI (NSF))"</span>,</span>
+<span id="cb35-40"><a href="#cb35-40" aria-hidden="true" tabindex="-1"></a>    mode <span class="op">=</span> <span class="st">'markers'</span>,</span>
+<span id="cb35-41"><a href="#cb35-41" aria-hidden="true" tabindex="-1"></a>    marker <span class="op">=</span> <span class="bu">dict</span>(</span>
+<span id="cb35-42"><a href="#cb35-42" aria-hidden="true" tabindex="-1"></a>        size <span class="op">=</span> NSFcoPIData[<span class="st">"estimatedTotalAmt"</span>],</span>
+<span id="cb35-43"><a href="#cb35-43" aria-hidden="true" tabindex="-1"></a>        sizemode <span class="op">=</span> <span class="st">'area'</span>,</span>
+<span id="cb35-44"><a href="#cb35-44" aria-hidden="true" tabindex="-1"></a>        sizeref <span class="op">=</span> <span class="fl">2.</span><span class="op">*</span><span class="bu">max</span>(NSFcoPIData[<span class="st">"estimatedTotalAmt"</span>])<span class="op">/</span>(<span class="dv">60</span><span class="op">**</span><span class="dv">2</span>),</span>
+<span id="cb35-45"><a href="#cb35-45" aria-hidden="true" tabindex="-1"></a>        sizemin <span class="op">=</span> <span class="dv">4</span></span>
+<span id="cb35-46"><a href="#cb35-46" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb35-47"><a href="#cb35-47" aria-hidden="true" tabindex="-1"></a>    customdata <span class="op">=</span> NSFcoPIData[[<span class="st">"title"</span>, <span class="st">"pdPIName"</span>]],</span>
+<span id="cb35-48"><a href="#cb35-48" aria-hidden="true" tabindex="-1"></a>    hovertemplate <span class="op">=</span> <span class="st">"Name: %</span><span class="sc">{y}</span><span class="st"> &lt;br&gt; Amount: %{x:$.2s} &lt;br&gt; Title: %</span><span class="sc">{customdata[0]}</span><span class="st"> &lt;br&gt; PI: %</span><span class="sc">{customdata[1]}</span><span class="st">"</span></span>
+<span id="cb35-49"><a href="#cb35-49" aria-hidden="true" tabindex="-1"></a>), row <span class="op">=</span> <span class="dv">1</span>, col <span class="op">=</span> <span class="dv">2</span>)</span>
+<span id="cb35-50"><a href="#cb35-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-51"><a href="#cb35-51" aria-hidden="true" tabindex="-1"></a>NIH_NSF.update_layout(</span>
+<span id="cb35-52"><a href="#cb35-52" aria-hidden="true" tabindex="-1"></a>    height <span class="op">=</span> <span class="dv">1250</span>,</span>
+<span id="cb35-53"><a href="#cb35-53" aria-hidden="true" tabindex="-1"></a>    barmode <span class="op">=</span> <span class="st">"stack"</span>,</span>
+<span id="cb35-54"><a href="#cb35-54" aria-hidden="true" tabindex="-1"></a>    yaxis <span class="op">=</span> {<span class="st">'categoryorder'</span> : <span class="st">'total descending'</span>},</span>
+<span id="cb35-55"><a href="#cb35-55" aria-hidden="true" tabindex="-1"></a>    title_text <span class="op">=</span> <span class="st">"NIH and NSF Data"</span></span>
+<span id="cb35-56"><a href="#cb35-56" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb35-57"><a href="#cb35-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-58"><a href="#cb35-58" aria-hidden="true" tabindex="-1"></a>NIH_NSF.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display column-page">
+<iframe scrolling="no" width="100%" height="1270" src="iframe_figures/figure_54.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+</section>
+<section id="mucking-up-the-visualization" class="level1 page-columns page-full">
+<h1>Mucking up the visualization</h1>
+<p>Now that we have a graph, it’s now time to intentionally mess it up. This can be done by obscuring the differences between the NIH and NSF data. We can do this by intentionally making the marker_color of both the NIH and NSF data blue. To make it so that there is a difference, the opacity of the NIH data will be set to 0.75. Therefore, there will be a difference between the two, but it won’t be as obvious.</p>
+<p>Zoom into the graph by dragging an area over the left side of the graph to see this in action.</p>
+<div id="eba8179b" class="cell page-columns page-full" data-execution_count="27">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>NIH_NSF_bad <span class="op">=</span> make_subplots(</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    rows <span class="op">=</span> <span class="dv">1</span>,</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    cols <span class="op">=</span> <span class="dv">2</span>,</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    shared_yaxes <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    horizontal_spacing <span class="op">=</span> <span class="fl">0.02</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>NIH_NSF_bad.add_trace(go.Bar(</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> NSFPIData[<span class="st">"estimatedTotalAmt"</span>],</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> NSFPIData[<span class="st">"piFullName"</span>],</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> NSFPIData[<span class="st">"estimatedTotalAmt"</span>],</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>    textposition <span class="op">=</span> <span class="st">"inside"</span>,</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>    name <span class="op">=</span> <span class="st">"Estimated Total Amount (As PI (NSF))"</span>,</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">"h"</span>,</span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>    customdata <span class="op">=</span> NSFPIData[[<span class="st">"title"</span>, <span class="st">"coPDPI"</span>]],</span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>    marker_color <span class="op">=</span> <span class="st">"blue"</span>,</span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>    hovertemplate <span class="op">=</span> <span class="st">"Name: %</span><span class="sc">{y}</span><span class="st"> &lt;br&gt; Amount: %{x:$.2s} &lt;br&gt; Title: %</span><span class="sc">{customdata[0]}</span><span class="st"> &lt;br&gt; CoPIs: %</span><span class="sc">{customdata[1]}</span><span class="st">"</span></span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>), row <span class="op">=</span> <span class="dv">1</span>, col <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>NIH_NSF_bad.add_trace(go.Bar(</span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> NIHData[<span class="st">"DirectCostAmt"</span>],</span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> NIHData[<span class="st">"PIName"</span>],</span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> NIHData[<span class="st">"DirectCostAmt"</span>],</span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a>    textposition <span class="op">=</span> <span class="st">"inside"</span>,</span>
+<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a>    name <span class="op">=</span> <span class="st">"Direct Cost Amount (As PI (NIH))"</span>,</span>
+<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">"h"</span>,</span>
+<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a>    customdata <span class="op">=</span> NIHData[<span class="st">"ProjectTitle"</span>],</span>
+<span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a>    marker_color <span class="op">=</span> <span class="st">"blue"</span>,</span>
+<span id="cb36-29"><a href="#cb36-29" aria-hidden="true" tabindex="-1"></a>    opacity <span class="op">=</span> <span class="fl">0.75</span>,</span>
+<span id="cb36-30"><a href="#cb36-30" aria-hidden="true" tabindex="-1"></a>    hovertemplate <span class="op">=</span> <span class="st">"Name: %</span><span class="sc">{y}</span><span class="st"> &lt;br&gt; Amount: %{x:$.2s} &lt;br&gt; Title: %</span><span class="sc">{customdata}</span><span class="st">"</span></span>
+<span id="cb36-31"><a href="#cb36-31" aria-hidden="true" tabindex="-1"></a>), row <span class="op">=</span> <span class="dv">1</span>, col <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb36-32"><a href="#cb36-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-33"><a href="#cb36-33" aria-hidden="true" tabindex="-1"></a>NIH_NSF_bad.update_yaxes(showgrid <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb36-34"><a href="#cb36-34" aria-hidden="true" tabindex="-1"></a>NIH_NSF_bad.update_traces(texttemplate <span class="op">=</span> <span class="st">'%</span><span class="sc">{text:.2s}</span><span class="st">'</span>)</span>
+<span id="cb36-35"><a href="#cb36-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-36"><a href="#cb36-36" aria-hidden="true" tabindex="-1"></a>NIH_NSF_bad.add_trace(go.Scatter(</span>
+<span id="cb36-37"><a href="#cb36-37" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> NSFcoPIData[<span class="st">"estimatedTotalAmt"</span>],</span>
+<span id="cb36-38"><a href="#cb36-38" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> NSFcoPIData[<span class="st">"coPIFullName"</span>],</span>
+<span id="cb36-39"><a href="#cb36-39" aria-hidden="true" tabindex="-1"></a>    name <span class="op">=</span> <span class="st">"Estimated Total Amount (As CoPI (NSF))"</span>,</span>
+<span id="cb36-40"><a href="#cb36-40" aria-hidden="true" tabindex="-1"></a>    mode <span class="op">=</span> <span class="st">'markers'</span>,</span>
+<span id="cb36-41"><a href="#cb36-41" aria-hidden="true" tabindex="-1"></a>    marker <span class="op">=</span> <span class="bu">dict</span>(</span>
+<span id="cb36-42"><a href="#cb36-42" aria-hidden="true" tabindex="-1"></a>        size <span class="op">=</span> NSFcoPIData[<span class="st">"estimatedTotalAmt"</span>],</span>
+<span id="cb36-43"><a href="#cb36-43" aria-hidden="true" tabindex="-1"></a>        sizemode <span class="op">=</span> <span class="st">'area'</span>,</span>
+<span id="cb36-44"><a href="#cb36-44" aria-hidden="true" tabindex="-1"></a>        sizeref <span class="op">=</span> <span class="fl">2.</span><span class="op">*</span><span class="bu">max</span>(NSFcoPIData[<span class="st">"estimatedTotalAmt"</span>])<span class="op">/</span>(<span class="dv">60</span><span class="op">**</span><span class="dv">2</span>),</span>
+<span id="cb36-45"><a href="#cb36-45" aria-hidden="true" tabindex="-1"></a>        sizemin <span class="op">=</span> <span class="dv">4</span></span>
+<span id="cb36-46"><a href="#cb36-46" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb36-47"><a href="#cb36-47" aria-hidden="true" tabindex="-1"></a>    customdata <span class="op">=</span> NSFcoPIData[[<span class="st">"title"</span>, <span class="st">"pdPIName"</span>]],</span>
+<span id="cb36-48"><a href="#cb36-48" aria-hidden="true" tabindex="-1"></a>    hovertemplate <span class="op">=</span> <span class="st">"Name: %</span><span class="sc">{y}</span><span class="st"> &lt;br&gt; Amount: %{x:$.2s} &lt;br&gt; Title: %</span><span class="sc">{customdata[0]}</span><span class="st"> &lt;br&gt; PI: %</span><span class="sc">{customdata[1]}</span><span class="st">"</span></span>
+<span id="cb36-49"><a href="#cb36-49" aria-hidden="true" tabindex="-1"></a>), row <span class="op">=</span> <span class="dv">1</span>, col <span class="op">=</span> <span class="dv">2</span>)</span>
+<span id="cb36-50"><a href="#cb36-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-51"><a href="#cb36-51" aria-hidden="true" tabindex="-1"></a>NIH_NSF_bad.update_layout(</span>
+<span id="cb36-52"><a href="#cb36-52" aria-hidden="true" tabindex="-1"></a>    height <span class="op">=</span> <span class="dv">1250</span>,</span>
+<span id="cb36-53"><a href="#cb36-53" aria-hidden="true" tabindex="-1"></a>    barmode <span class="op">=</span> <span class="st">"stack"</span>,</span>
+<span id="cb36-54"><a href="#cb36-54" aria-hidden="true" tabindex="-1"></a>    yaxis <span class="op">=</span> {<span class="st">'categoryorder'</span> : <span class="st">'total descending'</span>},</span>
+<span id="cb36-55"><a href="#cb36-55" aria-hidden="true" tabindex="-1"></a>    title_text <span class="op">=</span> <span class="st">"NIH and NSF Data (bad, opacity)"</span></span>
+<span id="cb36-56"><a href="#cb36-56" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb36-57"><a href="#cb36-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-58"><a href="#cb36-58" aria-hidden="true" tabindex="-1"></a>NIH_NSF_bad.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display column-page">
+<iframe scrolling="no" width="100%" height="1270" src="iframe_figures/figure_55.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<p>Now, we do a second example. In this case, instead of reducing the opacity, we instead make similar patterns in the bars themselves. In this example, we give the NSF data a forward slash ‘/’ pattern, and the NIH data a backward slash ‘\’ pattern. Like before, this intentionally obfuscates the distinction between the two different institutions that provide the research funding.</p>
+<div id="d7bc4e4e" class="cell page-columns page-full" data-execution_count="28">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>NIH_NSF_bad2 <span class="op">=</span> make_subplots(</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    rows <span class="op">=</span> <span class="dv">1</span>,</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    cols <span class="op">=</span> <span class="dv">2</span>,</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    shared_yaxes <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    horizontal_spacing <span class="op">=</span> <span class="fl">0.02</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>NIH_NSF_bad2.add_trace(go.Bar(</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> NSFPIData[<span class="st">"estimatedTotalAmt"</span>],</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> NSFPIData[<span class="st">"piFullName"</span>],</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> NSFPIData[<span class="st">"estimatedTotalAmt"</span>],</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>    textposition <span class="op">=</span> <span class="st">"inside"</span>,</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>    name <span class="op">=</span> <span class="st">"Estimated Total Amount (As PI (NSF))"</span>,</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">"h"</span>,</span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>    customdata <span class="op">=</span> NSFPIData[[<span class="st">"title"</span>, <span class="st">"coPDPI"</span>]],</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>    marker_color <span class="op">=</span> <span class="st">"blue"</span>,</span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>    marker_pattern_shape <span class="op">=</span> <span class="st">"/"</span>,</span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>    hovertemplate <span class="op">=</span> <span class="st">"Name: %</span><span class="sc">{y}</span><span class="st"> &lt;br&gt; Amount: %{x:$.2s} &lt;br&gt; Title: %</span><span class="sc">{customdata[0]}</span><span class="st"> &lt;br&gt; CoPIs: %</span><span class="sc">{customdata[1]}</span><span class="st">"</span></span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>), row <span class="op">=</span> <span class="dv">1</span>, col <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>NIH_NSF_bad2.add_trace(go.Bar(</span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> NIHData[<span class="st">"DirectCostAmt"</span>],</span>
+<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> NIHData[<span class="st">"PIName"</span>],</span>
+<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> NIHData[<span class="st">"DirectCostAmt"</span>],</span>
+<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a>    textposition <span class="op">=</span> <span class="st">"inside"</span>,</span>
+<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a>    name <span class="op">=</span> <span class="st">"Direct Cost Amount (As PI (NIH))"</span>,</span>
+<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">"h"</span>,</span>
+<span id="cb37-28"><a href="#cb37-28" aria-hidden="true" tabindex="-1"></a>    customdata <span class="op">=</span> NIHData[<span class="st">"ProjectTitle"</span>],</span>
+<span id="cb37-29"><a href="#cb37-29" aria-hidden="true" tabindex="-1"></a>    marker_color <span class="op">=</span> <span class="st">"blue"</span>,</span>
+<span id="cb37-30"><a href="#cb37-30" aria-hidden="true" tabindex="-1"></a>    marker_pattern_shape <span class="op">=</span> <span class="st">"</span><span class="ch">\\</span><span class="st">"</span>,</span>
+<span id="cb37-31"><a href="#cb37-31" aria-hidden="true" tabindex="-1"></a>    hovertemplate <span class="op">=</span> <span class="st">"Name: %</span><span class="sc">{y}</span><span class="st"> &lt;br&gt; Amount: %{x:$.2s} &lt;br&gt; Title: %</span><span class="sc">{customdata}</span><span class="st">"</span></span>
+<span id="cb37-32"><a href="#cb37-32" aria-hidden="true" tabindex="-1"></a>), row <span class="op">=</span> <span class="dv">1</span>, col <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb37-33"><a href="#cb37-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-34"><a href="#cb37-34" aria-hidden="true" tabindex="-1"></a>NIH_NSF_bad2.update_yaxes(showgrid <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb37-35"><a href="#cb37-35" aria-hidden="true" tabindex="-1"></a>NIH_NSF_bad2.update_traces(texttemplate <span class="op">=</span> <span class="st">'%</span><span class="sc">{text:.2s}</span><span class="st">'</span>)</span>
+<span id="cb37-36"><a href="#cb37-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-37"><a href="#cb37-37" aria-hidden="true" tabindex="-1"></a>NIH_NSF_bad2.add_trace(go.Scatter(</span>
+<span id="cb37-38"><a href="#cb37-38" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> NSFcoPIData[<span class="st">"estimatedTotalAmt"</span>],</span>
+<span id="cb37-39"><a href="#cb37-39" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> NSFcoPIData[<span class="st">"coPIFullName"</span>],</span>
+<span id="cb37-40"><a href="#cb37-40" aria-hidden="true" tabindex="-1"></a>    name <span class="op">=</span> <span class="st">"Estimated Total Amount (As CoPI (NSF))"</span>,</span>
+<span id="cb37-41"><a href="#cb37-41" aria-hidden="true" tabindex="-1"></a>    mode <span class="op">=</span> <span class="st">'markers'</span>,</span>
+<span id="cb37-42"><a href="#cb37-42" aria-hidden="true" tabindex="-1"></a>    marker <span class="op">=</span> <span class="bu">dict</span>(</span>
+<span id="cb37-43"><a href="#cb37-43" aria-hidden="true" tabindex="-1"></a>        size <span class="op">=</span> NSFcoPIData[<span class="st">"estimatedTotalAmt"</span>],</span>
+<span id="cb37-44"><a href="#cb37-44" aria-hidden="true" tabindex="-1"></a>        sizemode <span class="op">=</span> <span class="st">'area'</span>,</span>
+<span id="cb37-45"><a href="#cb37-45" aria-hidden="true" tabindex="-1"></a>        sizeref <span class="op">=</span> <span class="fl">2.</span><span class="op">*</span><span class="bu">max</span>(NSFcoPIData[<span class="st">"estimatedTotalAmt"</span>])<span class="op">/</span>(<span class="dv">60</span><span class="op">**</span><span class="dv">2</span>),</span>
+<span id="cb37-46"><a href="#cb37-46" aria-hidden="true" tabindex="-1"></a>        sizemin <span class="op">=</span> <span class="dv">4</span></span>
+<span id="cb37-47"><a href="#cb37-47" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb37-48"><a href="#cb37-48" aria-hidden="true" tabindex="-1"></a>    customdata <span class="op">=</span> NSFcoPIData[[<span class="st">"title"</span>, <span class="st">"pdPIName"</span>]],</span>
+<span id="cb37-49"><a href="#cb37-49" aria-hidden="true" tabindex="-1"></a>    hovertemplate <span class="op">=</span> <span class="st">"Name: %</span><span class="sc">{y}</span><span class="st"> &lt;br&gt; Amount: %{x:$.2s} &lt;br&gt; Title: %</span><span class="sc">{customdata[0]}</span><span class="st"> &lt;br&gt; PI: %</span><span class="sc">{customdata[1]}</span><span class="st">"</span></span>
+<span id="cb37-50"><a href="#cb37-50" aria-hidden="true" tabindex="-1"></a>), row <span class="op">=</span> <span class="dv">1</span>, col <span class="op">=</span> <span class="dv">2</span>)</span>
+<span id="cb37-51"><a href="#cb37-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-52"><a href="#cb37-52" aria-hidden="true" tabindex="-1"></a>NIH_NSF_bad2.update_layout(</span>
+<span id="cb37-53"><a href="#cb37-53" aria-hidden="true" tabindex="-1"></a>    height <span class="op">=</span> <span class="dv">1250</span>,</span>
+<span id="cb37-54"><a href="#cb37-54" aria-hidden="true" tabindex="-1"></a>    barmode <span class="op">=</span> <span class="st">"stack"</span>,</span>
+<span id="cb37-55"><a href="#cb37-55" aria-hidden="true" tabindex="-1"></a>    yaxis <span class="op">=</span> {<span class="st">'categoryorder'</span> : <span class="st">'total descending'</span>},</span>
+<span id="cb37-56"><a href="#cb37-56" aria-hidden="true" tabindex="-1"></a>    title_text <span class="op">=</span> <span class="st">"NIH and NSF Data (bad, bar patterns)"</span></span>
+<span id="cb37-57"><a href="#cb37-57" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb37-58"><a href="#cb37-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-59"><a href="#cb37-59" aria-hidden="true" tabindex="-1"></a>NIH_NSF_bad2.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display column-page">
+<iframe scrolling="no" width="100%" height="1270" src="iframe_figures/figure_56.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

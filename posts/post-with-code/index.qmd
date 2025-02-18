@@ -54,7 +54,7 @@ keep_going = True
 
 ### Extract data from the NSF website
 
-```{python echo=TRUE, results='hide'}
+```{python, echo = T, results = 'hide'}
 
 while keep_going:
     # Calculate the offset for the current page
