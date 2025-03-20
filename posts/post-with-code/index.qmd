@@ -1,5 +1,5 @@
 ---
-title: "Assignment 3: Mucking up a Visualization"
+title: "Assignment 4: Mucking up a Visualization"
 author: "John Cambareri"
 date: "2025-02-17"
 categories: [news, code, analysis]

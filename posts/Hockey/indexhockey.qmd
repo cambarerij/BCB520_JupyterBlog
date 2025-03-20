@@ -1,0 +1,607 @@
+---
+title: "Assignment 5: The Hockey Awards"
+author: "John Cambareri"
+date: "2025-03-20"
+categories: [news, code, analysis]
+image: "NHLLogo.png"
+jupyter: python3
+format:
+  html:
+    code-fold: true
+editor: visual
+---
+
+In this assignment, I will go over a list of NHL hockey data, and use them to predict who will be the recipients of the end-of-season awards.
+
+First, we must import the data, consisiting of individual skater statistics, divided into whether they are a goalie or not, and also how well the team performs on the ice. These are then again split into whether or not the skaters are rookies, as there is a specific award that pertains only to them.
+
+```{python}
+import pandas as pd
+import numpy as np
+import plotly.graph_objects as go
+import plotly.express as px
+
+IndividualSkater = pd.read_csv("SkaterIndividualstats.csv")
+OnIce = pd.read_csv("SkaterOnIcestats.csv")
+Goalie = pd.read_csv("Goalies.csv")
+
+IndividualRookies = pd.read_csv("RookieSkaterIndividual.csv")
+OnIceRookies = pd.read_csv("RookieSkaterOnIce.csv")
+GoalieRookies = pd.read_csv("RookieGoalies.csv")
+```
+
+```{python}
+import plotly.io as pio
+pio.renderers.default = "iframe"
+```
+
+### Award 1: Vezina Trophy
+
+The first award I will attempt to predict is the Vezina Trophy, presented to the goaltender judged to be the best at their position.
+
+Plotting each goalie's save percentage against the number of saves each goalie got through the season provides the following:
+
+```{python}
+GoalieSavePercent = px.scatter(
+    Goalie, x = 'Saves', y = 'SV%', trendline = 'ols', hover_name = 'Player'
+)
+
+GoalieSavePercent.show()
+```
+
+We want the goalie that has the highest save percentage to recieve the award. However, doing this calculation right now is not recommended, as doing it this way will allow a skater with 1 save in 1 opportunity (with a 100% save opportunity) to be considered for the award over someone who could be far more deserving; i.e., someone who played for much more games but has a ~91% save percentage instead. Thus, we need to remove some of the data. In this case, we remove the data from those who haven't played for half of the season up to that point.
+
+```{python}
+reducedGoalie = Goalie[Goalie["GP"] > (Goalie["GP"].max() / 2)]
+```
+
+Now we create another graph, this time with only the 'qualified' goalies.
+
+```{python}
+
+ReducedGoalieSavePercent = px.scatter(
+    reducedGoalie, x = 'Saves', y = 'SV%', trendline = 'ols', hover_name = 'Player'
+)
+
+ReducedGoalieSavePercent.show()
+```
+
+We can look at the regression line posted on this graph, and use it to create an 'expected' save percentage. We then create new columns in the dataframe that have these values, and then sort them by the 'saves above expected' that we get.
+
+```{python}
+reducedGoalie["predictedSV%"] = (2.37528e-05 * reducedGoalie["Saves"]) + 0.882175
+reducedGoalie["predictedSaves"] = reducedGoalie["Shots Against"] * reducedGoalie["predictedSV%"]
+reducedGoalie["SavesAboveExpected"] = reducedGoalie["Saves"] - reducedGoalie["predictedSaves"]
+
+reducedGoalie.sort_values(by="SavesAboveExpected", inplace = True, ascending = False)
+```
+
+Now we create a bar chart listing these values.
+
+```{python}
+GoalieBar = px.bar(
+    reducedGoalie, x = 'SavesAboveExpected', y = 'Player'
+)
+
+GoalieBar.update_yaxes(categoryorder = 'total ascending')
+
+GoalieBar.show()
+```
+
+Printing out the top 5 gives us the following:
+
+```{python}
+print(reducedGoalie["Player"].head())
+```
+
+### Award 2: James Norris Memorial Trophy
+
+The James Norris Memorial Trophy is awarded to the defenseman who demonstrates the best all-around capabilities at that position. Since defenders don't usually score goals, we will instead look at a statistic called Corsi. Corsi is classified as any shot attempt while the player is on the ice (regardless if he made the shot or not), and can be divided into positive Corsi and negative Corsi, depending on which team made the shot attempt.
+
+First, we need to only look at the defensemen in the data.
+
+```{python}
+DefendersOnIce = OnIce[OnIce["Position"] == 'D'].copy()
+```
+
+Now, like before, we create a scatter plot. This time, we use that player's positive Corsi (labeled as CF here) compared to the percentage of positive Corsi events (CF%).
+
+```{python}
+DefenderCorsi = px.scatter(
+    DefendersOnIce, x = 'CF', y = 'CF%', trendline = 'ols', hover_name = 'Player'
+)
+
+DefenderCorsi.show()
+```
+
+Also, like before, we need to remove players who haven't played a full slate of games.
+
+```{python}
+QualifiedDefenders = DefendersOnIce[DefendersOnIce["GP"] > (DefendersOnIce["GP"].max() / 2)]
+
+QualifiedDefenderCorsi = px.scatter(
+    QualifiedDefenders, x = 'CF', y = 'CF%', trendline = 'ols', hover_name = 'Player'
+)
+
+QualifiedDefenderCorsi.show()
+```
+
+Once again, the equation of the regression line plotted will be approximated, and the resulting Corsi approximations will be compared to the Corsi that they actually recieved. The dataframe will then be sorted on this Corsi differentiation from largest Corsi above expected to lowest.
+
+```{python}
+QualifiedDefenders["predictedCF%"] = (0.00980842 * QualifiedDefenders["CF"]) + 38.3685
+QualifiedDefenders["predictedCorsi"] = (QualifiedDefenders["CF"] + QualifiedDefenders["CA"])\
+    * (QualifiedDefenders["predictedCF%"]/100)
+QualifiedDefenders["CorsiAboveExpected"] = QualifiedDefenders["CF"] - QualifiedDefenders["predictedCorsi"]
+
+QualifiedDefenders.sort_values(by="CorsiAboveExpected", inplace = True, ascending = False)
+```
+
+A bar chart will again be created to visualize this.
+
+```{python}
+DefenderBar = px.bar(
+    QualifiedDefenders, x = 'CorsiAboveExpected', y = 'Player'
+)
+
+DefenderBar.update_yaxes(categoryorder = 'total ascending')
+DefenderBar.show()
+```
+
+The top 5 players on this list, sorted by the Corsi above expected, will be my predicted top 5 for the James Norris Memorial Trophy.
+
+```{python}
+print(QualifiedDefenders["Player"].head())
+```
+
+### Award 3: Lady Bing Memorial Trophy
+
+This award is presented to the player who exhibits a high degree of sportmanship, or "gentlemanly conduct". This can be computed in a similar way to the previous two awards, but instead of using Corsi or Saves, we will be using a combination of total points (which includes goals and assists), and comparing them to the amount of penalties that player has recieved on the ice.
+
+```{python}
+Sportmanship = px.scatter(
+    IndividualSkater, x = 'Total Points', y = 'Total Penalties', trendline = 'ols', hover_name = 'Player'
+)
+
+Sportmanship.show()
+```
+
+Again, we remove the part-time players and revisualize.
+
+```{python}
+QualifiedSportmanship = IndividualSkater[IndividualSkater["GP"] > (IndividualSkater["GP"].max() / 2)]
+QualifiedSport = px.scatter(
+    QualifiedSportmanship, x = 'Total Points', y = 'Total Penalties', trendline = 'ols', hover_name = 'Player'
+)
+
+QualifiedSport.show()
+```
+
+Again, we compute the expected penalties compared to the penalties that were observed, and mark the differences. The difference is that we want the fewest penalties this time, so we sort in the opposite order here.
+
+```{python}
+QualifiedSportmanship["predictedPenalties"] = (0.0240891 * QualifiedSportmanship["Total Points"]) + 9.48568
+QualifiedSportmanship["penaltiesAboveExpected"] = QualifiedSportmanship["Total Penalties"]\
+    - QualifiedSportmanship["predictedPenalties"]
+
+QualifiedSportmanship.sort_values(by="penaltiesAboveExpected", inplace = True, ascending = True)
+
+SportmanBar = px.bar(
+    QualifiedSportmanship, x = 'penaltiesAboveExpected', y = 'Player'
+)
+
+SportmanBar.update_yaxes(categoryorder = 'total descending')
+SportmanBar.show()
+```
+
+We take the top five names in the sorted dataframe to get our top-five for this award:
+
+```{python}
+print(QualifiedSportmanship["Player"].head())
+```
+
+### Award 4: Frank J. Selke Trophy
+
+The Frank J. Selke Trophy is awarded to the forward who best excels in the defensive aspects of the game. In this case, a forward is considered to be a non-defenseman, so we filter out the defenders in a similar way to part 2:
+
+```{python}
+NonDefendersOnIce = OnIce[OnIce["Position"] != 'D'].copy()
+
+```
+
+Like before, an initial scatter plot is generated with all attacker information loaded. Since we're looking at the defensive capabilities of offense players, we are looking at Goals allowed (GA) by Expected Goals Allowed (xGA) in the plot.
+
+```{python}
+DefendingAttackers = px.scatter(
+    NonDefendersOnIce, x = 'GA', y = 'xGA', trendline = 'ols', hover_name = "Player"
+)
+
+DefendingAttackers.show()
+```
+
+Like before, we filter out the part time players so that their stats don't influence the others, and then replot.
+
+```{python}
+QualifiedDefendingAttackers = NonDefendersOnIce[NonDefendersOnIce["GP"] > (NonDefendersOnIce["GP"].max() / 2)]
+
+QualDefendingAttackers = px.scatter(
+    QualifiedDefendingAttackers, x = 'GA', y = 'xGA', trendline = 'ols', hover_name = "Player"
+)
+
+QualDefendingAttackers.show()
+```
+
+We don't need to approximate the expected goals this time using the regression line, as the expected goals allowed is already present. In addition, this time we are looking for the players who are the most below the mean, instead of above it.
+
+```{python}
+QualifiedDefendingAttackers["GABelowMean"] = QualifiedDefendingAttackers["GA"] - QualifiedDefendingAttackers["xGA"]
+QualifiedDefendingAttackers.sort_values(by="GABelowMean", inplace = True, ascending = True)
+
+DefAttackBar = px.bar(
+    QualifiedDefendingAttackers, x = 'GABelowMean', y = 'Player'
+)
+
+DefAttackBar.update_yaxes(categoryorder = 'total descending')
+DefAttackBar.show()
+```
+
+The top 5 in this list, after sorting, are my predicted recipients of the award.
+
+```{python}
+print(QualifiedDefendingAttackers["Player"].head())
+```
+
+### Award 5: Hart Memorial Trophy
+
+This award is awarded to effectively the MVP of the team. Two methods were used to try to figure this out, but one method did not work as well. I attempted to use Corsi, like with the defenders. However, unlike the defenders, Corsi isn't exclusively the end-all when if comes to defenders, as scoring goals and points is supreme when it comes to attackers. So, I used goals and total points instead as the paremeters.
+
+```{python}
+IndividualAttackers = IndividualSkater[IndividualSkater["Position"] != 'D']
+
+AttackerPoints = px.scatter(
+    IndividualAttackers, x = "Goals", y = "Total Points", trendline = "ols", hover_name = "Player"
+)
+
+AttackerPoints.show()
+
+```
+
+```{python}
+QualifiedAttackPoints = IndividualAttackers[IndividualAttackers["GP"] > (IndividualAttackers["GP"].max() / 2)]
+
+QualAttackerPoints = px.scatter(
+    QualifiedAttackPoints, x = "Goals", y = "Total Points", trendline = "ols", hover_name = "Player"
+)
+
+QualAttackerPoints.show()
+
+```
+
+I then looked at the total point situation with the attackers. In NHL, players get 1 point for scoring a goal directly, and also get a point for assisting in the goal. I created bar charts to visualize how much points each player got from goals vs how many they got for assists.
+
+```{python}
+QualAttackerBar = go.Figure()
+QualAttackerBar.add_trace(go.Bar(
+    x = QualifiedAttackPoints["Goals"],
+    y = QualifiedAttackPoints["Player"],
+    orientation = 'h',
+    name = "Points from Goals"
+))
+
+QualAttackerBar.add_trace(go.Bar(
+    x = QualifiedAttackPoints["Total Points"] - QualifiedAttackPoints["Goals"],
+    y = QualifiedAttackPoints["Player"],
+    orientation = 'h',
+    name = "Points from Assists"
+))
+
+QualAttackerBar.update_layout(
+    yaxis = {'categoryorder': 'total ascending'},
+    barmode = "stack",
+    height = 2000
+)
+
+QualAttackerBar.show()
+```
+
+Even with the filter, this is still a lot of data. So, i redid the graph, but only used the top 5 point getters this time.
+
+```{python}
+top5Attackers = QualifiedAttackPoints.head()
+
+miniQualAttackerBar = go.Figure()
+miniQualAttackerBar.add_trace(go.Bar(
+    x = top5Attackers["Goals"],
+    y = top5Attackers["Player"],
+    orientation = 'h',
+    name = "Points from Goals"
+))
+
+miniQualAttackerBar.add_trace(go.Bar(
+    x = top5Attackers["Total Points"] - top5Attackers["Goals"],
+    y = top5Attackers["Player"],
+    orientation = 'h',
+    name = "Points from Assists"
+))
+
+miniQualAttackerBar.update_layout(
+    yaxis = {'categoryorder': 'total ascending'},
+    barmode = "stack"
+)
+
+miniQualAttackerBar.show()
+```
+
+At this point, I realized that goals should probably be worth a bit more than assists when it comes to scoring points. Both are important, but scoring the goal itself should contribute a bit more that simply providing a lot of assists. Take Nathan MacKinnon in the above graph. He has slightly more points than Leon Draisaitl, but mainly because a huge portion of Nathan's points come from assists, whereas Leon has considerably more goals.
+
+At this point, I created another bar chart, but this time with goals being worth 1.5 points instead of just 1 point, to slightly emphasize goals more.
+
+```{python}
+QualifiedAttackPoints["Assists"] = QualifiedAttackPoints["Total Points"] - QualifiedAttackPoints["Goals"]
+QualifiedAttackPoints["AdjustedPoints"] = (1.5*QualifiedAttackPoints["Goals"]) + QualifiedAttackPoints["Assists"]
+QualifiedAttackPoints.sort_values(by="AdjustedPoints", inplace = True, ascending = False)
+```
+
+```{python}
+adjTop5Attackers = QualifiedAttackPoints.head()
+
+adjMiniQualAttackerBar = go.Figure()
+adjMiniQualAttackerBar.add_trace(go.Bar(
+    x = 1.5*adjTop5Attackers["Goals"],
+    y = adjTop5Attackers["Player"],
+    orientation = 'h',
+    name = "Adjusted Points from Goals"
+))
+
+adjMiniQualAttackerBar.add_trace(go.Bar(
+    x = adjTop5Attackers["Assists"],
+    y = adjTop5Attackers["Player"],
+    orientation = 'h',
+    name = "Points from Assists"
+))
+
+adjMiniQualAttackerBar.update_layout(
+    yaxis = {'categoryorder': 'total ascending'},
+    barmode = "stack"
+)
+
+adjMiniQualAttackerBar.show()
+```
+
+Now, Leon is ahead of Nathan in the rankings. These 5 players will be my predicted ballot for the Hart Memorial Trophy.
+
+### Award 6: Calder Memorial Trophy
+
+The final award I will predict is the Calder Memorial Trophy, which is basically NHL's Rookie of the Year award. I will be using a similar approach to this award like I did with the Hart Memorial Trophy, using goals and points to determine the winner.
+
+```{python}
+RookieAttackers = px.scatter(
+    IndividualRookies, x = "Goals", y = "Total Points", trendline = "ols", hover_name = "Player"
+)
+
+RookieAttackers.show()
+```
+
+```{python}
+QualifiedIndividualRookies = IndividualRookies[IndividualRookies["GP"] > (IndividualRookies["GP"].max() / 2)]
+QualifiedRookieAttackers = QualifiedIndividualRookies[QualifiedIndividualRookies["Position"] != 'D']
+
+QualifiedRookieAttackPoints= px.scatter(
+    QualifiedRookieAttackers, x = "Goals", y = "Total Points", trendline = "ols", hover_name = "Player"
+)
+
+QualifiedRookieAttackPoints.show()
+```
+
+Like before, I will create a bar chart showing the point distribution when divided into goals vs assists.
+
+```{python}
+QualRookieAttackerBar = go.Figure()
+QualRookieAttackerBar.add_trace(go.Bar(
+    x = QualifiedRookieAttackers["Goals"],
+    y = QualifiedRookieAttackers["Player"],
+    orientation = 'h',
+    name = "Points from Goals"
+))
+
+QualRookieAttackerBar.add_trace(go.Bar(
+    x = QualifiedRookieAttackers["Total Points"] - QualifiedRookieAttackers["Goals"],
+    y = QualifiedRookieAttackers["Player"],
+    orientation = 'h',
+    name = "Points from Assists"
+))
+
+QualRookieAttackerBar.update_layout(
+    yaxis = {'categoryorder': 'total ascending'},
+    barmode = "stack",
+    height = 750
+)
+
+QualRookieAttackerBar.show()
+```
+
+The top-5 point getters will be used in this second bar chart.
+
+```{python}
+
+top5RookieAttackers = QualifiedRookieAttackers.head()
+
+miniQualRookieAttackerBar = go.Figure()
+miniQualRookieAttackerBar.add_trace(go.Bar(
+    x = top5RookieAttackers["Goals"],
+    y = top5RookieAttackers["Player"],
+    orientation = 'h',
+    name = "Points from Goals"
+))
+
+miniQualRookieAttackerBar.add_trace(go.Bar(
+    x = top5RookieAttackers["Total Points"] - top5RookieAttackers["Goals"],
+    y = top5RookieAttackers["Player"],
+    orientation = 'h',
+    name = "Points from Assists"
+))
+
+miniQualRookieAttackerBar.update_layout(
+    yaxis = {'categoryorder': 'total ascending'},
+    barmode = "stack"
+)
+
+miniQualRookieAttackerBar.show()
+```
+
+Unlike the Hart Trophy, the top 5 point getters are more even with regards to points from goals vs points from assists. Nonetheless, I will still employ the adjusted 1.5x multiplier to the goal points to be consistent with the Hart award.
+
+```{python}
+QualifiedRookieAttackers["Assists"] = QualifiedRookieAttackers["Total Points"] - QualifiedRookieAttackers["Goals"]
+QualifiedRookieAttackers["AdjustedPoints"] = (1.5*QualifiedRookieAttackers["Goals"]) + QualifiedRookieAttackers["Assists"]
+QualifiedRookieAttackers.sort_values(by="AdjustedPoints", inplace = True, ascending = False)
+```
+
+```{python}
+adjTop5RookieAttackers = QualifiedRookieAttackers.head()
+
+adjMiniQualRookieAttackerBar = go.Figure()
+adjMiniQualRookieAttackerBar.add_trace(go.Bar(
+    x = 1.5*adjTop5RookieAttackers["Goals"],
+    y = adjTop5RookieAttackers["Player"],
+    orientation = 'h',
+    name = "Points from Goals"
+))
+
+adjMiniQualRookieAttackerBar.add_trace(go.Bar(
+    x = adjTop5RookieAttackers["Assists"],
+    y = adjTop5RookieAttackers["Player"],
+    orientation = 'h',
+    name = "Points from Assists"
+))
+
+adjMiniQualRookieAttackerBar.update_layout(
+    yaxis = {'categoryorder': 'total ascending'},
+    barmode = "stack"
+)
+
+adjMiniQualRookieAttackerBar.show()
+```
+
+Now, we need to consider rookies at other positions. In this case, we will also look at the rookie goalies. With them, goals allowed will be used as the key factor, much like what was done for the non-rookies.
+
+```{python}
+RookieGoalieSavePercent = px.scatter(
+    GoalieRookies, x = 'Saves', y = 'SV%', trendline = 'ols', hover_name = "Player"
+)
+
+RookieGoalieSavePercent.show()
+```
+
+```{python}
+reducedGoalieRookies = GoalieRookies[GoalieRookies["GP"] > (GoalieRookies["GP"].max() / 2)]
+ReducedRookieGoalieSavePercent = px.scatter(
+    reducedGoalieRookies, x = 'Saves', y = 'SV%', trendline = 'ols', hover_name = "Player"
+)
+
+ReducedRookieGoalieSavePercent.show()
+```
+
+The regression line will need to be calculated for this one, much like in part 1.
+
+```{python}
+reducedGoalieRookies["predictedSV%"] = (2.67334e-5 * reducedGoalieRookies["Saves"]) + 0.880078
+reducedGoalieRookies["predictedSaves"] = reducedGoalieRookies["Shots Against"] * reducedGoalieRookies["predictedSV%"]
+reducedGoalieRookies["SavesAboveExpected"] = reducedGoalieRookies["Saves"] - reducedGoalieRookies["predictedSaves"]
+
+reducedGoalieRookies.sort_values(by="SavesAboveExpected", inplace = True, ascending = False)
+```
+
+```{python}
+RookieGoalieBar = px.bar(
+    reducedGoalieRookies, x = 'SavesAboveExpected', y = 'Player'
+)
+
+RookieGoalieBar.update_yaxes(categoryorder = 'total ascending')
+
+RookieGoalieBar.show()
+```
+
+Comparing the rookie goalies to the rookie point-scorers is a bit tricky, as their values cannot be directly compared. Instead, we need to calculate how much each point-getter/goalie is above their mean, and determine how many standard deviations they are above said mean. This can then be used to compare between the two groups.
+
+A new column will be added to each group to store the standard deviations above the mean they are. For the attackers, the points above mean needs to be calculated as well.
+
+```{python}
+reducedGoalieRookies["SavesStandardDeviation"] = reducedGoalieRookies["SavesAboveExpected"]\
+    / reducedGoalieRookies["SavesAboveExpected"].std()
+    
+QualifiedRookieAttackers["PointsAboveMean"] = QualifiedRookieAttackers["AdjustedPoints"]\
+    - QualifiedRookieAttackers["AdjustedPoints"].mean()
+QualifiedRookieAttackers["PointsSTD"] = QualifiedRookieAttackers["PointsAboveMean"]\
+    / QualifiedRookieAttackers["AdjustedPoints"].std()
+    
+combinedRookieBar = go.Figure()
+combinedRookieBar.add_trace(go.Bar(
+    x = QualifiedRookieAttackers["PointsSTD"],
+    y = QualifiedRookieAttackers["Player"],
+    orientation = 'h',
+    name = 'Position Player'
+))
+
+combinedRookieBar.add_trace(go.Bar(
+    x = reducedGoalieRookies["SavesStandardDeviation"],
+    y = reducedGoalieRookies["Player"],
+    orientation = 'h',
+    name = 'Goalie'
+))
+
+combinedRookieBar.update_layout(
+    yaxis = {'categoryorder' : 'total ascending'},
+    xaxis_title = "Standard Deviations from the Mean",
+    height = 1250
+)
+
+combinedRookieBar.show()
+```
+
+Now, we look at the top 5 elements of this graph. We notice that Logan Thompson, a goalie, is ranked 4th among all rookies, and thus displaced the other attackers on this list. Thus the top 5 rookies on the Calder Memorial ballot I predict will be in this order: Kirill Marchenko, Wyatt Johnston, Marco Rossi, Logan Thompson, and Dylan Holloway.
+
+### Combining the results
+
+This section will combine the results of all three awards into a single dataframe. Each top-five section will be its own dataframe consisting of the player's name, award, and place.
+
+Each mini-dataframe will be combined into the larger dataframe one at a time.
+
+```{python}
+Vezina = {'Award': ["Vezina", "Vezina", "Vezina", "Vezina", "Vezina"], \
+         'Place': [1, 2, 3, 4, 5], \
+         'Player': ["Connor Hellebuyck", "Andrei Vasilevskiy", "Logan Thompson", "Jacob Markstrom", "Linus Ullmark"]}
+VezinaDF = pd.DataFrame(Vezina)
+
+JamesNorris = {'Award': ["James Norris", "James Norris", "James Norris", "James Norris", "James Norris"],\
+              'Place': [1,2,3,4,5],\
+              'Player': ["Shayne Gotisbehere", "Evan Bouchard", "Sean Walker", "Quinn Hughes", "Nate Schmidt"]}
+JamesNorrisDF = pd.DataFrame(JamesNorris)
+allAwards = pd.concat([VezinaDF, JamesNorrisDF], ignore_index = True)
+
+LadyBing = {'Award': ["Lady Bing", "Lady Bing", "Lady Bing", "Lady Bing", "Lady Bing"],\
+           'Place': [1,2,3,4,5],\
+           'Player': ["Brayed Point", "William Karlsson", "Cole Schwindt", "Anze Kopitar", "Jimmy Vesey"]}
+LadyBingDF = pd.DataFrame(LadyBing)
+allAwards = pd.concat([allAwards, LadyBingDF], ignore_index = True)
+
+FrankSelke = {'Award': ["Frank J. Selke", "Frank J. Selke", "Frank J. Selke", "Frank J. Selke", "Frank J. Selke"],\
+             'Place': [1,2,3,4,5],\
+             'Player': ["Jordan Martinook", "Fabian Zetterlund", "Nino Niederreiter", "Connor McMichael", "Timo Meier"]}
+FrankSelkeDF = pd.DataFrame(FrankSelke)
+allAwards = pd.concat([allAwards, FrankSelkeDF], ignore_index = True)
+
+Hart = {'Award': ["Hart", "Hart", "Hart", "Hart", "Hart"],\
+       'Place': [1,2,3,4,5],\
+       'Player': ["Leon Draisaitl", "Nathan MacKinnon", "Nikita Kucherov", "David Pastrnak", "Kyle Connor"]}
+HartDF = pd.DataFrame(Hart)
+allAwards = pd.concat([allAwards, HartDF], ignore_index = True)
+
+Calder = {'Award': ["Calder", "Calder", "Calder", "Calder", "Calder"],\
+         'Place': [1,2,3,4,5],
+         'Player': ["Kirill Machenko", "Wyatt Johnston", "Marco Rossi", "Logan Thompson", "Dylan Holloway"]}
+CalderDF = pd.DataFrame(Calder)
+allAwards = pd.concat([allAwards, CalderDF], ignore_index = True)
+
+allAwards
+```

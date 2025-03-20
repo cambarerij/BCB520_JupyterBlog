@@ -1,0 +1,1788 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="John Cambareri">
+<meta name="dcterms.date" content="2025-03-18">
+
+<title>Assignment 5: The Hockey Awards – BCB520 Blog - John Cambareri</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">BCB520 Blog - John Cambareri</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Assignment 5: The Hockey Awards</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">news</div>
+                <div class="quarto-category">code</div>
+                <div class="quarto-category">analysis</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>John Cambareri </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">March 18, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>In this assignment, I will go over a list of NHL hockey data, and use them to predict who will be the recipients of the end-of-season awards.</p>
+<p>First, we must import the data, consisiting of individual skater statistics, divided into whether they are a goalie or not, and also how well the team performs on the ice. These are then again split into whether or not the skaters are rookies, as there is a specific award that pertains only to them.</p>
+<div id="c0b6318a" class="cell" data-execution_count="1">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>IndividualSkater <span class="op">=</span> pd.read_csv(<span class="st">"SkaterIndividualstats.csv"</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>OnIce <span class="op">=</span> pd.read_csv(<span class="st">"SkaterOnIcestats.csv"</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>Goalie <span class="op">=</span> pd.read_csv(<span class="st">"Goalies.csv"</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>IndividualRookies <span class="op">=</span> pd.read_csv(<span class="st">"RookieSkaterIndividual.csv"</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>OnIceRookies <span class="op">=</span> pd.read_csv(<span class="st">"RookieSkaterOnIce.csv"</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>GoalieRookies <span class="op">=</span> pd.read_csv(<span class="st">"RookieGoalies.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="8f6a8a92" class="cell" data-execution_count="2">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.io <span class="im">as</span> pio</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>pio.renderers.default <span class="op">=</span> <span class="st">"iframe"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="award-1-vezina-trophy" class="level3">
+<h3 class="anchored" data-anchor-id="award-1-vezina-trophy">Award 1: Vezina Trophy</h3>
+<p>The first award I will attempt to predict is the Vezina Trophy, presented to the goaltender judged to be the best at their position.</p>
+<p>Plotting each goalie’s save percentage against the number of saves each goalie got through the season provides the following:</p>
+<div id="6a8bb803" class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>GoalieSavePercent <span class="op">=</span> px.scatter(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    Goalie, x <span class="op">=</span> <span class="st">'Saves'</span>, y <span class="op">=</span> <span class="st">'SV%'</span>, trendline <span class="op">=</span> <span class="st">'ols'</span>, hover_name <span class="op">=</span> <span class="st">'Player'</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>GoalieSavePercent.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_3.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<p>We want the goalie that has the highest save percentage to recieve the award. However, doing this calculation right now is not recommended, as doing it this way will allow a skater with 1 save in 1 opportunity (with a 100% save opportunity) to be considered for the award over someone who could be far more deserving; i.e., someone who played for much more games but has a ~91% save percentage instead. Thus, we need to remove some of the data. In this case, we remove the data from those who haven’t played for half of the season up to that point.</p>
+<div id="824bdc2a" class="cell" data-execution_count="4">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>reducedGoalie <span class="op">=</span> Goalie[Goalie[<span class="st">"GP"</span>] <span class="op">&gt;</span> (Goalie[<span class="st">"GP"</span>].<span class="bu">max</span>() <span class="op">/</span> <span class="dv">2</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Now we create another graph, this time with only the ‘qualified’ goalies.</p>
+<div id="634b28e2" class="cell" data-execution_count="5">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ReducedGoalieSavePercent <span class="op">=</span> px.scatter(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    reducedGoalie, x <span class="op">=</span> <span class="st">'Saves'</span>, y <span class="op">=</span> <span class="st">'SV%'</span>, trendline <span class="op">=</span> <span class="st">'ols'</span>, hover_name <span class="op">=</span> <span class="st">'Player'</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>ReducedGoalieSavePercent.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_5.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<p>We can look at the regression line posted on this graph, and use it to create an ‘expected’ save percentage. We then create new columns in the dataframe that have these values, and then sort them by the ‘saves above expected’ that we get.</p>
+<div id="c7c88261" class="cell" data-execution_count="6">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>reducedGoalie[<span class="st">"predictedSV%"</span>] <span class="op">=</span> (<span class="fl">2.37528e-05</span> <span class="op">*</span> reducedGoalie[<span class="st">"Saves"</span>]) <span class="op">+</span> <span class="fl">0.882175</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>reducedGoalie[<span class="st">"predictedSaves"</span>] <span class="op">=</span> reducedGoalie[<span class="st">"Shots Against"</span>] <span class="op">*</span> reducedGoalie[<span class="st">"predictedSV%"</span>]</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>reducedGoalie[<span class="st">"SavesAboveExpected"</span>] <span class="op">=</span> reducedGoalie[<span class="st">"Saves"</span>] <span class="op">-</span> reducedGoalie[<span class="st">"predictedSaves"</span>]</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>reducedGoalie.sort_values(by<span class="op">=</span><span class="st">"SavesAboveExpected"</span>, inplace <span class="op">=</span> <span class="va">True</span>, ascending <span class="op">=</span> <span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_22608/3599021705.py:1: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+
+/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_22608/3599021705.py:2: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+
+/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_22608/3599021705.py:3: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+
+/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_22608/3599021705.py:5: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+</code></pre>
+</div>
+</div>
+<p>Now we create a bar chart listing these values.</p>
+<div id="195578c7" class="cell" data-execution_count="7">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>GoalieBar <span class="op">=</span> px.bar(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    reducedGoalie, x <span class="op">=</span> <span class="st">'SavesAboveExpected'</span>, y <span class="op">=</span> <span class="st">'Player'</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>GoalieBar.update_yaxes(categoryorder <span class="op">=</span> <span class="st">'total ascending'</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>GoalieBar.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_7.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<p>Printing out the top 5 gives us the following:</p>
+<div id="22898268" class="cell" data-execution_count="8">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(reducedGoalie[<span class="st">"Player"</span>].head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>4      Connor Hellebuyck
+9     Andrei Vasilevskiy
+10        Logan Thompson
+16       Jacob Markstrom
+19         Linus Ullmark
+Name: Player, dtype: object</code></pre>
+</div>
+</div>
+</section>
+<section id="award-2-james-norris-memorial-trophy" class="level3">
+<h3 class="anchored" data-anchor-id="award-2-james-norris-memorial-trophy">Award 2: James Norris Memorial Trophy</h3>
+<p>The James Norris Memorial Trophy is awarded to the defenseman who demonstrates the best all-around capabilities at that position. Since defenders don’t usually score goals, we will instead look at a statistic called Corsi. Corsi is classified as any shot attempt while the player is on the ice (regardless if he made the shot or not), and can be divided into positive Corsi and negative Corsi, depending on which team made the shot attempt.</p>
+<p>First, we need to only look at the defensemen in the data.</p>
+<div id="2d01f048" class="cell" data-execution_count="9">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>DefendersOnIce <span class="op">=</span> OnIce[OnIce[<span class="st">"Position"</span>] <span class="op">==</span> <span class="st">'D'</span>].copy()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Now, like before, we create a scatter plot. This time, we use that player’s positive Corsi (labeled as CF here) compared to the percentage of positive Corsi events (CF%).</p>
+<div id="e25c1add" class="cell" data-execution_count="10">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>DefenderCorsi <span class="op">=</span> px.scatter(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    DefendersOnIce, x <span class="op">=</span> <span class="st">'CF'</span>, y <span class="op">=</span> <span class="st">'CF%'</span>, trendline <span class="op">=</span> <span class="st">'ols'</span>, hover_name <span class="op">=</span> <span class="st">'Player'</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>DefenderCorsi.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_10.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<p>Also, like before, we need to remove players who haven’t played a full slate of games.</p>
+<div id="ae22a662" class="cell" data-execution_count="11">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>QualifiedDefenders <span class="op">=</span> DefendersOnIce[DefendersOnIce[<span class="st">"GP"</span>] <span class="op">&gt;</span> (DefendersOnIce[<span class="st">"GP"</span>].<span class="bu">max</span>() <span class="op">/</span> <span class="dv">2</span>)]</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>QualifiedDefenderCorsi <span class="op">=</span> px.scatter(</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    QualifiedDefenders, x <span class="op">=</span> <span class="st">'CF'</span>, y <span class="op">=</span> <span class="st">'CF%'</span>, trendline <span class="op">=</span> <span class="st">'ols'</span>, hover_name <span class="op">=</span> <span class="st">'Player'</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>QualifiedDefenderCorsi.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_11.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<p>Once again, the equation of the regression line plotted will be approximated, and the resulting Corsi approximations will be compared to the Corsi that they actually recieved. The dataframe will then be sorted on this Corsi differentiation from largest Corsi above expected to lowest.</p>
+<div id="d3dc8d93" class="cell" data-execution_count="12">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>QualifiedDefenders[<span class="st">"predictedCF%"</span>] <span class="op">=</span> (<span class="fl">0.00980842</span> <span class="op">*</span> QualifiedDefenders[<span class="st">"CF"</span>]) <span class="op">+</span> <span class="fl">38.3685</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>QualifiedDefenders[<span class="st">"predictedCorsi"</span>] <span class="op">=</span> (QualifiedDefenders[<span class="st">"CF"</span>] <span class="op">+</span> QualifiedDefenders[<span class="st">"CA"</span>])<span class="op">\</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span> (QualifiedDefenders[<span class="st">"predictedCF%"</span>]<span class="op">/</span><span class="dv">100</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>QualifiedDefenders[<span class="st">"CorsiAboveExpected"</span>] <span class="op">=</span> QualifiedDefenders[<span class="st">"CF"</span>] <span class="op">-</span> QualifiedDefenders[<span class="st">"predictedCorsi"</span>]</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>QualifiedDefenders.sort_values(by<span class="op">=</span><span class="st">"CorsiAboveExpected"</span>, inplace <span class="op">=</span> <span class="va">True</span>, ascending <span class="op">=</span> <span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_22608/45191297.py:1: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+
+/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_22608/45191297.py:2: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+
+/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_22608/45191297.py:4: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+
+/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_22608/45191297.py:6: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+</code></pre>
+</div>
+</div>
+<p>A bar chart will again be created to visualize this.</p>
+<div id="e49a5b3a" class="cell" data-execution_count="13">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>DefenderBar <span class="op">=</span> px.bar(</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    QualifiedDefenders, x <span class="op">=</span> <span class="st">'CorsiAboveExpected'</span>, y <span class="op">=</span> <span class="st">'Player'</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>DefenderBar.update_yaxes(categoryorder <span class="op">=</span> <span class="st">'total ascending'</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>DefenderBar.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_13.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<p>The top 5 players on this list, sorted by the Corsi above expected, will be my predicted top 5 for the James Norris Memorial Trophy.</p>
+<div id="e8770574" class="cell" data-execution_count="14">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(QualifiedDefenders[<span class="st">"Player"</span>].head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>3     Shayne Gostisbehere
+14          Evan Bouchard
+36            Sean Walker
+29           Quinn Hughes
+55           Nate Schmidt
+Name: Player, dtype: object</code></pre>
+</div>
+</div>
+</section>
+<section id="award-3-lady-bing-memorial-trophy" class="level3">
+<h3 class="anchored" data-anchor-id="award-3-lady-bing-memorial-trophy">Award 3: Lady Bing Memorial Trophy</h3>
+<p>This award is presented to the player who exhibits a high degree of sportmanship, or “gentlemanly conduct”. This can be computed in a similar way to the previous two awards, but instead of using Corsi or Saves, we will be using a combination of total points (which includes goals and assists), and comparing them to the amount of penalties that player has recieved on the ice.</p>
+<div id="da6e202f" class="cell" data-execution_count="15">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>Sportmanship <span class="op">=</span> px.scatter(</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    IndividualSkater, x <span class="op">=</span> <span class="st">'Total Points'</span>, y <span class="op">=</span> <span class="st">'Total Penalties'</span>, trendline <span class="op">=</span> <span class="st">'ols'</span>, hover_name <span class="op">=</span> <span class="st">'Player'</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>Sportmanship.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_15.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<p>Again, we remove the part-time players and revisualize.</p>
+<div id="105e8cab" class="cell" data-execution_count="16">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>QualifiedSportmanship <span class="op">=</span> IndividualSkater[IndividualSkater[<span class="st">"GP"</span>] <span class="op">&gt;</span> (IndividualSkater[<span class="st">"GP"</span>].<span class="bu">max</span>() <span class="op">/</span> <span class="dv">2</span>)]</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>QualifiedSport <span class="op">=</span> px.scatter(</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    QualifiedSportmanship, x <span class="op">=</span> <span class="st">'Total Points'</span>, y <span class="op">=</span> <span class="st">'Total Penalties'</span>, trendline <span class="op">=</span> <span class="st">'ols'</span>, hover_name <span class="op">=</span> <span class="st">'Player'</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>QualifiedSport.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_16.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<p>Again, we compute the expected penalties compared to the penalties that were observed, and mark the differences. The difference is that we want the fewest penalties this time, so we sort in the opposite order here.</p>
+<div id="38578ac1" class="cell" data-execution_count="17">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>QualifiedSportmanship[<span class="st">"predictedPenalties"</span>] <span class="op">=</span> (<span class="fl">0.0240891</span> <span class="op">*</span> QualifiedSportmanship[<span class="st">"Total Points"</span>]) <span class="op">+</span> <span class="fl">9.48568</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>QualifiedSportmanship[<span class="st">"penaltiesAboveExpected"</span>] <span class="op">=</span> QualifiedSportmanship[<span class="st">"Total Penalties"</span>]<span class="op">\</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">-</span> QualifiedSportmanship[<span class="st">"predictedPenalties"</span>]</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>QualifiedSportmanship.sort_values(by<span class="op">=</span><span class="st">"penaltiesAboveExpected"</span>, inplace <span class="op">=</span> <span class="va">True</span>, ascending <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>SportmanBar <span class="op">=</span> px.bar(</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    QualifiedSportmanship, x <span class="op">=</span> <span class="st">'penaltiesAboveExpected'</span>, y <span class="op">=</span> <span class="st">'Player'</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>SportmanBar.update_yaxes(categoryorder <span class="op">=</span> <span class="st">'total descending'</span>)</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>SportmanBar.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_22608/1225953959.py:1: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+
+/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_22608/1225953959.py:2: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+
+/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_22608/1225953959.py:5: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_17.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<p>We take the top five names in the sorted dataframe to get our top-five for this award:</p>
+<div id="fb19f1ce" class="cell" data-execution_count="18">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(QualifiedSportmanship[<span class="st">"Player"</span>].head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>26        Brayden Point
+346    William Karlsson
+565       Cole Schwindt
+59         Anze Kopitar
+574         Jimmy Vesey
+Name: Player, dtype: object</code></pre>
+</div>
+</div>
+</section>
+<section id="award-4-frank-j.-selke-trophy" class="level3">
+<h3 class="anchored" data-anchor-id="award-4-frank-j.-selke-trophy">Award 4: Frank J. Selke Trophy</h3>
+<p>The Frank J. Selke Trophy is awarded to the forward who best excels in the defensive aspects of the game. In this case, a forward is considered to be a non-defenseman, so we filter out the defenders in a similar way to part 2:</p>
+<div id="6d1c5bfc" class="cell" data-execution_count="19">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>NonDefendersOnIce <span class="op">=</span> OnIce[OnIce[<span class="st">"Position"</span>] <span class="op">!=</span> <span class="st">'D'</span>].copy()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Like before, an initial scatter plot is generated with all attacker information loaded. Since we’re looking at the defensive capabilities of offense players, we are looking at Goals allowed (GA) by Expected Goals Allowed (xGA) in the plot.</p>
+<div id="00df17a3" class="cell" data-execution_count="20">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>DefendingAttackers <span class="op">=</span> px.scatter(</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    NonDefendersOnIce, x <span class="op">=</span> <span class="st">'GA'</span>, y <span class="op">=</span> <span class="st">'xGA'</span>, trendline <span class="op">=</span> <span class="st">'ols'</span>, hover_name <span class="op">=</span> <span class="st">"Player"</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>DefendingAttackers.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_20.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<p>Like before, we filter out the part time players so that their stats don’t influence the others, and then replot.</p>
+<div id="bea925e9" class="cell" data-execution_count="21">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>QualifiedDefendingAttackers <span class="op">=</span> NonDefendersOnIce[NonDefendersOnIce[<span class="st">"GP"</span>] <span class="op">&gt;</span> (NonDefendersOnIce[<span class="st">"GP"</span>].<span class="bu">max</span>() <span class="op">/</span> <span class="dv">2</span>)]</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>QualDefendingAttackers <span class="op">=</span> px.scatter(</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    QualifiedDefendingAttackers, x <span class="op">=</span> <span class="st">'GA'</span>, y <span class="op">=</span> <span class="st">'xGA'</span>, trendline <span class="op">=</span> <span class="st">'ols'</span>, hover_name <span class="op">=</span> <span class="st">"Player"</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>QualDefendingAttackers.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_21.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<p>We don’t need to approximate the expected goals this time using the regression line, as the expected goals allowed is already present. In addition, this time we are looking for the players who are the most below the mean, instead of above it.</p>
+<div id="97cdce51" class="cell" data-execution_count="22">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>QualifiedDefendingAttackers[<span class="st">"GABelowMean"</span>] <span class="op">=</span> QualifiedDefendingAttackers[<span class="st">"GA"</span>] <span class="op">-</span> QualifiedDefendingAttackers[<span class="st">"xGA"</span>]</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>QualifiedDefendingAttackers.sort_values(by<span class="op">=</span><span class="st">"GABelowMean"</span>, inplace <span class="op">=</span> <span class="va">True</span>, ascending <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>DefAttackBar <span class="op">=</span> px.bar(</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>    QualifiedDefendingAttackers, x <span class="op">=</span> <span class="st">'GABelowMean'</span>, y <span class="op">=</span> <span class="st">'Player'</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>DefAttackBar.update_yaxes(categoryorder <span class="op">=</span> <span class="st">'total descending'</span>)</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>DefAttackBar.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_22608/3627292158.py:1: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+
+/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_22608/3627292158.py:2: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_22.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<p>The top 5 in this list, after sorting, are my predicted recipients of the award.</p>
+<div id="48023da1" class="cell" data-execution_count="23">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(QualifiedDefendingAttackers[<span class="st">"Player"</span>].head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>236     Jordan Martinook
+396    Fabian Zetterlund
+237    Nino Niederreiter
+288     Connor McMichael
+105           Timo Meier
+Name: Player, dtype: object</code></pre>
+</div>
+</div>
+</section>
+<section id="award-5-hart-memorial-trophy" class="level3">
+<h3 class="anchored" data-anchor-id="award-5-hart-memorial-trophy">Award 5: Hart Memorial Trophy</h3>
+<p>This award is awarded to effectively the MVP of the team. Two methods were used to try to figure this out, but one method did not work as well. I attempted to use Corsi, like with the defenders. However, unlike the defenders, Corsi isn’t exclusively the end-all when if comes to defenders, as scoring goals and points is supreme when it comes to attackers. So, I used goals and total points instead as the paremeters.</p>
+<div id="9e0a1ea0" class="cell" data-execution_count="24">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>IndividualAttackers <span class="op">=</span> IndividualSkater[IndividualSkater[<span class="st">"Position"</span>] <span class="op">!=</span> <span class="st">'D'</span>]</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>AttackerPoints <span class="op">=</span> px.scatter(</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    IndividualAttackers, x <span class="op">=</span> <span class="st">"Goals"</span>, y <span class="op">=</span> <span class="st">"Total Points"</span>, trendline <span class="op">=</span> <span class="st">"ols"</span>, hover_name <span class="op">=</span> <span class="st">"Player"</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>AttackerPoints.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_24.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<div id="50f46b7b" class="cell" data-execution_count="25">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>QualifiedAttackPoints <span class="op">=</span> IndividualAttackers[IndividualAttackers[<span class="st">"GP"</span>] <span class="op">&gt;</span> (IndividualAttackers[<span class="st">"GP"</span>].<span class="bu">max</span>() <span class="op">/</span> <span class="dv">2</span>)]</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>QualAttackerPoints <span class="op">=</span> px.scatter(</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    QualifiedAttackPoints, x <span class="op">=</span> <span class="st">"Goals"</span>, y <span class="op">=</span> <span class="st">"Total Points"</span>, trendline <span class="op">=</span> <span class="st">"ols"</span>, hover_name <span class="op">=</span> <span class="st">"Player"</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>QualAttackerPoints.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_25.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<p>I then looked at the total point situation with the attackers. In NHL, players get 1 point for scoring a goal directly, and also get a point for assisting in the goal. I created bar charts to visualize how much points each player got from goals vs how many they got for assists.</p>
+<div id="84197e3c" class="cell" data-execution_count="26">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>QualAttackerBar <span class="op">=</span> go.Figure()</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>QualAttackerBar.add_trace(go.Bar(</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> QualifiedAttackPoints[<span class="st">"Goals"</span>],</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> QualifiedAttackPoints[<span class="st">"Player"</span>],</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">'h'</span>,</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    name <span class="op">=</span> <span class="st">"Points from Goals"</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>QualAttackerBar.add_trace(go.Bar(</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> QualifiedAttackPoints[<span class="st">"Total Points"</span>] <span class="op">-</span> QualifiedAttackPoints[<span class="st">"Goals"</span>],</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> QualifiedAttackPoints[<span class="st">"Player"</span>],</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">'h'</span>,</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>    name <span class="op">=</span> <span class="st">"Points from Assists"</span></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>QualAttackerBar.update_layout(</span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>    yaxis <span class="op">=</span> {<span class="st">'categoryorder'</span>: <span class="st">'total ascending'</span>},</span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>    barmode <span class="op">=</span> <span class="st">"stack"</span>,</span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>    height <span class="op">=</span> <span class="dv">2000</span></span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a>QualAttackerBar.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="2020" src="iframe_figures/figure_26.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<p>Even with the filter, this is still a lot of data. So, i redid the graph, but only used the top 5 point getters this time.</p>
+<div id="695d1cc5" class="cell" data-execution_count="27">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>top5Attackers <span class="op">=</span> QualifiedAttackPoints.head()</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>miniQualAttackerBar <span class="op">=</span> go.Figure()</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>miniQualAttackerBar.add_trace(go.Bar(</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> top5Attackers[<span class="st">"Goals"</span>],</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> top5Attackers[<span class="st">"Player"</span>],</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">'h'</span>,</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>    name <span class="op">=</span> <span class="st">"Points from Goals"</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>miniQualAttackerBar.add_trace(go.Bar(</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> top5Attackers[<span class="st">"Total Points"</span>] <span class="op">-</span> top5Attackers[<span class="st">"Goals"</span>],</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> top5Attackers[<span class="st">"Player"</span>],</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">'h'</span>,</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>    name <span class="op">=</span> <span class="st">"Points from Assists"</span></span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>miniQualAttackerBar.update_layout(</span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>    yaxis <span class="op">=</span> {<span class="st">'categoryorder'</span>: <span class="st">'total ascending'</span>},</span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>    barmode <span class="op">=</span> <span class="st">"stack"</span></span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>miniQualAttackerBar.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_27.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<p>At this point, I realized that goals should probably be worth a bit more than assists when it comes to scoring points. Both are important, but scoring the goal itself should contribute a bit more that simply providing a lot of assists. Take Nathan MacKinnon in the above graph. He has slightly more points than Leon Draisaitl, but mainly because a huge portion of Nathan’s points come from assists, whereas Leon has considerably more goals.</p>
+<p>At this point, I created another bar chart, but this time with goals being worth 1.5 points instead of just 1 point, to slightly emphasize goals more.</p>
+<div id="74dd13f6" class="cell" data-execution_count="28">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>QualifiedAttackPoints[<span class="st">"Assists"</span>] <span class="op">=</span> QualifiedAttackPoints[<span class="st">"Total Points"</span>] <span class="op">-</span> QualifiedAttackPoints[<span class="st">"Goals"</span>]</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>QualifiedAttackPoints[<span class="st">"AdjustedPoints"</span>] <span class="op">=</span> (<span class="fl">1.5</span><span class="op">*</span>QualifiedAttackPoints[<span class="st">"Goals"</span>]) <span class="op">+</span> QualifiedAttackPoints[<span class="st">"Assists"</span>]</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>QualifiedAttackPoints.sort_values(by<span class="op">=</span><span class="st">"AdjustedPoints"</span>, inplace <span class="op">=</span> <span class="va">True</span>, ascending <span class="op">=</span> <span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_22608/3808114363.py:1: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+
+/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_22608/3808114363.py:2: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+
+/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_22608/3808114363.py:3: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+</code></pre>
+</div>
+</div>
+<div id="79f4a71f" class="cell" data-execution_count="29">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>adjTop5Attackers <span class="op">=</span> QualifiedAttackPoints.head()</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>adjMiniQualAttackerBar <span class="op">=</span> go.Figure()</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>adjMiniQualAttackerBar.add_trace(go.Bar(</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="fl">1.5</span><span class="op">*</span>adjTop5Attackers[<span class="st">"Goals"</span>],</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> adjTop5Attackers[<span class="st">"Player"</span>],</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">'h'</span>,</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>    name <span class="op">=</span> <span class="st">"Adjusted Points from Goals"</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>adjMiniQualAttackerBar.add_trace(go.Bar(</span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> adjTop5Attackers[<span class="st">"Assists"</span>],</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> adjTop5Attackers[<span class="st">"Player"</span>],</span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">'h'</span>,</span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>    name <span class="op">=</span> <span class="st">"Points from Assists"</span></span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>adjMiniQualAttackerBar.update_layout(</span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>    yaxis <span class="op">=</span> {<span class="st">'categoryorder'</span>: <span class="st">'total ascending'</span>},</span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>    barmode <span class="op">=</span> <span class="st">"stack"</span></span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a>adjMiniQualAttackerBar.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_29.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<p>Now, Leon is ahead of Nathan in the rankings. These 5 players will be my predicted ballot for the Hart Memorial Trophy.</p>
+</section>
+<section id="award-6-calder-memorial-trophy" class="level3">
+<h3 class="anchored" data-anchor-id="award-6-calder-memorial-trophy">Award 6: Calder Memorial Trophy</h3>
+<p>The final award I will predict is the Calder Memorial Trophy, which is basically NHL’s Rookie of the Year award. I will be using a similar approach to this award like I did with the Hart Memorial Trophy, using goals and points to determine the winner.</p>
+<div id="fdf88c83" class="cell" data-execution_count="30">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>RookieAttackers <span class="op">=</span> px.scatter(</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>    IndividualRookies, x <span class="op">=</span> <span class="st">"Goals"</span>, y <span class="op">=</span> <span class="st">"Total Points"</span>, trendline <span class="op">=</span> <span class="st">"ols"</span>, hover_name <span class="op">=</span> <span class="st">"Player"</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>RookieAttackers.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_30.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<div id="0680748e" class="cell" data-execution_count="31">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>QualifiedIndividualRookies <span class="op">=</span> IndividualRookies[IndividualRookies[<span class="st">"GP"</span>] <span class="op">&gt;</span> (IndividualRookies[<span class="st">"GP"</span>].<span class="bu">max</span>() <span class="op">/</span> <span class="dv">2</span>)]</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>QualifiedRookieAttackers <span class="op">=</span> QualifiedIndividualRookies[QualifiedIndividualRookies[<span class="st">"Position"</span>] <span class="op">!=</span> <span class="st">'D'</span>]</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>QualifiedRookieAttackPoints<span class="op">=</span> px.scatter(</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>    QualifiedRookieAttackers, x <span class="op">=</span> <span class="st">"Goals"</span>, y <span class="op">=</span> <span class="st">"Total Points"</span>, trendline <span class="op">=</span> <span class="st">"ols"</span>, hover_name <span class="op">=</span> <span class="st">"Player"</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>QualifiedRookieAttackPoints.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_31.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<p>Like before, I will create a bar chart showing the point distribution when divided into goals vs assists.</p>
+<div id="2aaf408e" class="cell" data-execution_count="32">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>QualRookieAttackerBar <span class="op">=</span> go.Figure()</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>QualRookieAttackerBar.add_trace(go.Bar(</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> QualifiedRookieAttackers[<span class="st">"Goals"</span>],</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> QualifiedRookieAttackers[<span class="st">"Player"</span>],</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">'h'</span>,</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>    name <span class="op">=</span> <span class="st">"Points from Goals"</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>QualRookieAttackerBar.add_trace(go.Bar(</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> QualifiedRookieAttackers[<span class="st">"Total Points"</span>] <span class="op">-</span> QualifiedRookieAttackers[<span class="st">"Goals"</span>],</span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> QualifiedRookieAttackers[<span class="st">"Player"</span>],</span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">'h'</span>,</span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>    name <span class="op">=</span> <span class="st">"Points from Assists"</span></span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>QualRookieAttackerBar.update_layout(</span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>    yaxis <span class="op">=</span> {<span class="st">'categoryorder'</span>: <span class="st">'total ascending'</span>},</span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>    barmode <span class="op">=</span> <span class="st">"stack"</span>,</span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a>    height <span class="op">=</span> <span class="dv">750</span></span>
+<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a>QualRookieAttackerBar.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="770" src="iframe_figures/figure_32.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<p>The top-5 point getters will be used in this second bar chart.</p>
+<div id="087d9897" class="cell" data-execution_count="33">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>top5RookieAttackers <span class="op">=</span> QualifiedRookieAttackers.head()</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>miniQualRookieAttackerBar <span class="op">=</span> go.Figure()</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>miniQualRookieAttackerBar.add_trace(go.Bar(</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> top5RookieAttackers[<span class="st">"Goals"</span>],</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> top5RookieAttackers[<span class="st">"Player"</span>],</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">'h'</span>,</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>    name <span class="op">=</span> <span class="st">"Points from Goals"</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>miniQualRookieAttackerBar.add_trace(go.Bar(</span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> top5RookieAttackers[<span class="st">"Total Points"</span>] <span class="op">-</span> top5RookieAttackers[<span class="st">"Goals"</span>],</span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> top5RookieAttackers[<span class="st">"Player"</span>],</span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">'h'</span>,</span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>    name <span class="op">=</span> <span class="st">"Points from Assists"</span></span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a>miniQualRookieAttackerBar.update_layout(</span>
+<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a>    yaxis <span class="op">=</span> {<span class="st">'categoryorder'</span>: <span class="st">'total ascending'</span>},</span>
+<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a>    barmode <span class="op">=</span> <span class="st">"stack"</span></span>
+<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb42-22"><a href="#cb42-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-23"><a href="#cb42-23" aria-hidden="true" tabindex="-1"></a>miniQualRookieAttackerBar.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_33.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<p>Unlike the Hart Trophy, the top 5 point getters are more even with regards to points from goals vs points from assists. Nonetheless, I will still employ the adjusted 1.5x multiplier to the goal points to be consistent with the Hart award.</p>
+<div id="9e841f96" class="cell" data-execution_count="34">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>QualifiedRookieAttackers[<span class="st">"Assists"</span>] <span class="op">=</span> QualifiedRookieAttackers[<span class="st">"Total Points"</span>] <span class="op">-</span> QualifiedRookieAttackers[<span class="st">"Goals"</span>]</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>QualifiedRookieAttackers[<span class="st">"AdjustedPoints"</span>] <span class="op">=</span> (<span class="fl">1.5</span><span class="op">*</span>QualifiedRookieAttackers[<span class="st">"Goals"</span>]) <span class="op">+</span> QualifiedRookieAttackers[<span class="st">"Assists"</span>]</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>QualifiedRookieAttackers.sort_values(by<span class="op">=</span><span class="st">"AdjustedPoints"</span>, inplace <span class="op">=</span> <span class="va">True</span>, ascending <span class="op">=</span> <span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_22608/3736742597.py:1: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+
+/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_22608/3736742597.py:2: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+
+/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_22608/3736742597.py:3: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+</code></pre>
+</div>
+</div>
+<div id="b9418899" class="cell" data-execution_count="35">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>adjTop5RookieAttackers <span class="op">=</span> QualifiedRookieAttackers.head()</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>adjMiniQualRookieAttackerBar <span class="op">=</span> go.Figure()</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>adjMiniQualRookieAttackerBar.add_trace(go.Bar(</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="fl">1.5</span><span class="op">*</span>adjTop5RookieAttackers[<span class="st">"Goals"</span>],</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> adjTop5RookieAttackers[<span class="st">"Player"</span>],</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">'h'</span>,</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>    name <span class="op">=</span> <span class="st">"Points from Goals"</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>adjMiniQualRookieAttackerBar.add_trace(go.Bar(</span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> adjTop5RookieAttackers[<span class="st">"Assists"</span>],</span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> adjTop5RookieAttackers[<span class="st">"Player"</span>],</span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">'h'</span>,</span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>    name <span class="op">=</span> <span class="st">"Points from Assists"</span></span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a>adjMiniQualRookieAttackerBar.update_layout(</span>
+<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a>    yaxis <span class="op">=</span> {<span class="st">'categoryorder'</span>: <span class="st">'total ascending'</span>},</span>
+<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a>    barmode <span class="op">=</span> <span class="st">"stack"</span></span>
+<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a>adjMiniQualRookieAttackerBar.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_35.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<p>Now, we need to consider rookies at other positions. In this case, we will also look at the rookie goalies. With them, goals allowed will be used as the key factor, much like what was done for the non-rookies.</p>
+<div id="00429cf0" class="cell" data-execution_count="36">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>RookieGoalieSavePercent <span class="op">=</span> px.scatter(</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>    GoalieRookies, x <span class="op">=</span> <span class="st">'Saves'</span>, y <span class="op">=</span> <span class="st">'SV%'</span>, trendline <span class="op">=</span> <span class="st">'ols'</span>, hover_name <span class="op">=</span> <span class="st">"Player"</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>RookieGoalieSavePercent.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_36.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<div id="79552407" class="cell" data-execution_count="37">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>reducedGoalieRookies <span class="op">=</span> GoalieRookies[GoalieRookies[<span class="st">"GP"</span>] <span class="op">&gt;</span> (GoalieRookies[<span class="st">"GP"</span>].<span class="bu">max</span>() <span class="op">/</span> <span class="dv">2</span>)]</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>ReducedRookieGoalieSavePercent <span class="op">=</span> px.scatter(</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>    reducedGoalieRookies, x <span class="op">=</span> <span class="st">'Saves'</span>, y <span class="op">=</span> <span class="st">'SV%'</span>, trendline <span class="op">=</span> <span class="st">'ols'</span>, hover_name <span class="op">=</span> <span class="st">"Player"</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>ReducedRookieGoalieSavePercent.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_37.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<p>The regression line will need to be calculated for this one, much like in part 1.</p>
+<div id="42c684ad" class="cell" data-execution_count="38">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>reducedGoalieRookies[<span class="st">"predictedSV%"</span>] <span class="op">=</span> (<span class="fl">2.67334e-5</span> <span class="op">*</span> reducedGoalieRookies[<span class="st">"Saves"</span>]) <span class="op">+</span> <span class="fl">0.880078</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>reducedGoalieRookies[<span class="st">"predictedSaves"</span>] <span class="op">=</span> reducedGoalieRookies[<span class="st">"Shots Against"</span>] <span class="op">*</span> reducedGoalieRookies[<span class="st">"predictedSV%"</span>]</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>reducedGoalieRookies[<span class="st">"SavesAboveExpected"</span>] <span class="op">=</span> reducedGoalieRookies[<span class="st">"Saves"</span>] <span class="op">-</span> reducedGoalieRookies[<span class="st">"predictedSaves"</span>]</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>reducedGoalieRookies.sort_values(by<span class="op">=</span><span class="st">"SavesAboveExpected"</span>, inplace <span class="op">=</span> <span class="va">True</span>, ascending <span class="op">=</span> <span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_22608/2744717580.py:1: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+
+/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_22608/2744717580.py:2: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+
+/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_22608/2744717580.py:3: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+
+/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_22608/2744717580.py:5: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+</code></pre>
+</div>
+</div>
+<div id="722507f7" class="cell" data-execution_count="39">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>RookieGoalieBar <span class="op">=</span> px.bar(</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>    reducedGoalieRookies, x <span class="op">=</span> <span class="st">'SavesAboveExpected'</span>, y <span class="op">=</span> <span class="st">'Player'</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>RookieGoalieBar.update_yaxes(categoryorder <span class="op">=</span> <span class="st">'total ascending'</span>)</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>RookieGoalieBar.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_39.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<p>Comparing the rookie goalies to the rookie point-scorers is a bit tricky, as their values cannot be directly compared. Instead, we need to calculate how much each point-getter/goalie is above their mean, and determine how many standard deviations they are above said mean. This can then be used to compare between the two groups.</p>
+<p>A new column will be added to each group to store the standard deviations above the mean they are. For the attackers, the points above mean needs to be calculated as well.</p>
+<div id="92fd7aaf" class="cell" data-execution_count="40">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>reducedGoalieRookies[<span class="st">"SavesStandardDeviation"</span>] <span class="op">=</span> reducedGoalieRookies[<span class="st">"SavesAboveExpected"</span>]<span class="op">\</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">/</span> reducedGoalieRookies[<span class="st">"SavesAboveExpected"</span>].std()</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>QualifiedRookieAttackers[<span class="st">"PointsAboveMean"</span>] <span class="op">=</span> QualifiedRookieAttackers[<span class="st">"AdjustedPoints"</span>]<span class="op">\</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">-</span> QualifiedRookieAttackers[<span class="st">"AdjustedPoints"</span>].mean()</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>QualifiedRookieAttackers[<span class="st">"PointsSTD"</span>] <span class="op">=</span> QualifiedRookieAttackers[<span class="st">"PointsAboveMean"</span>]<span class="op">\</span></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">/</span> QualifiedRookieAttackers[<span class="st">"AdjustedPoints"</span>].std()</span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>combinedRookieBar <span class="op">=</span> go.Figure()</span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>combinedRookieBar.add_trace(go.Bar(</span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> QualifiedRookieAttackers[<span class="st">"PointsSTD"</span>],</span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> QualifiedRookieAttackers[<span class="st">"Player"</span>],</span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">'h'</span>,</span>
+<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>    name <span class="op">=</span> <span class="st">'Position Player'</span></span>
+<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a>combinedRookieBar.add_trace(go.Bar(</span>
+<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> reducedGoalieRookies[<span class="st">"SavesStandardDeviation"</span>],</span>
+<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> reducedGoalieRookies[<span class="st">"Player"</span>],</span>
+<span id="cb51-20"><a href="#cb51-20" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">'h'</span>,</span>
+<span id="cb51-21"><a href="#cb51-21" aria-hidden="true" tabindex="-1"></a>    name <span class="op">=</span> <span class="st">'Goalie'</span></span>
+<span id="cb51-22"><a href="#cb51-22" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb51-23"><a href="#cb51-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-24"><a href="#cb51-24" aria-hidden="true" tabindex="-1"></a>combinedRookieBar.update_layout(</span>
+<span id="cb51-25"><a href="#cb51-25" aria-hidden="true" tabindex="-1"></a>    yaxis <span class="op">=</span> {<span class="st">'categoryorder'</span> : <span class="st">'total ascending'</span>},</span>
+<span id="cb51-26"><a href="#cb51-26" aria-hidden="true" tabindex="-1"></a>    xaxis_title <span class="op">=</span> <span class="st">"Standard Deviations from the Mean"</span>,</span>
+<span id="cb51-27"><a href="#cb51-27" aria-hidden="true" tabindex="-1"></a>    height <span class="op">=</span> <span class="dv">1250</span></span>
+<span id="cb51-28"><a href="#cb51-28" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb51-29"><a href="#cb51-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-30"><a href="#cb51-30" aria-hidden="true" tabindex="-1"></a>combinedRookieBar.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_22608/191944199.py:1: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+
+/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_22608/191944199.py:4: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+
+/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_22608/191944199.py:6: SettingWithCopyWarning:
+
+
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="1270" src="iframe_figures/figure_40.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<p>Now, we look at the top 5 elements of this graph. We notice that Logan Thompson, a goalie, is ranked 4th among all rookies, and thus displaced the other attackers on this list. Thus the top 5 rookies on the Calder Memorial ballot I predict will be in this order: Kirill Marchenko, Wyatt Johnston, Marco Rossi, Logan Thompson, and Dylan Holloway.</p>
+</section>
+<section id="combining-the-results" class="level3">
+<h3 class="anchored" data-anchor-id="combining-the-results">Combining the results</h3>
+<p>This section will combine the results of all three awards into a single dataframe. Each top-five section will be its own dataframe consisting of the player’s name, award, and place.</p>
+<p>Each mini-dataframe will be combined into the larger dataframe one at a time.</p>
+<div id="ad250b06" class="cell" data-execution_count="41">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>Vezina <span class="op">=</span> {<span class="st">'Award'</span>: [<span class="st">"Vezina"</span>, <span class="st">"Vezina"</span>, <span class="st">"Vezina"</span>, <span class="st">"Vezina"</span>, <span class="st">"Vezina"</span>], <span class="op">\</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Place'</span>: [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>], <span class="op">\</span></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Player'</span>: [<span class="st">"Connor Hellebuyck"</span>, <span class="st">"Andrei Vasilevskiy"</span>, <span class="st">"Logan Thompson"</span>, <span class="st">"Jacob Markstrom"</span>, <span class="st">"Linus Ullmark"</span>]}</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>VezinaDF <span class="op">=</span> pd.DataFrame(Vezina)</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>JamesNorris <span class="op">=</span> {<span class="st">'Award'</span>: [<span class="st">"James Norris"</span>, <span class="st">"James Norris"</span>, <span class="st">"James Norris"</span>, <span class="st">"James Norris"</span>, <span class="st">"James Norris"</span>],<span class="op">\</span></span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>              <span class="st">'Place'</span>: [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>],<span class="op">\</span></span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>              <span class="st">'Player'</span>: [<span class="st">"Shayne Gotisbehere"</span>, <span class="st">"Evan Bouchard"</span>, <span class="st">"Sean Walker"</span>, <span class="st">"Quinn Hughes"</span>, <span class="st">"Nate Schmidt"</span>]}</span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>JamesNorrisDF <span class="op">=</span> pd.DataFrame(JamesNorris)</span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>allAwards <span class="op">=</span> pd.concat([VezinaDF, JamesNorrisDF], ignore_index <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a>LadyBing <span class="op">=</span> {<span class="st">'Award'</span>: [<span class="st">"Lady Bing"</span>, <span class="st">"Lady Bing"</span>, <span class="st">"Lady Bing"</span>, <span class="st">"Lady Bing"</span>, <span class="st">"Lady Bing"</span>],<span class="op">\</span></span>
+<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a>           <span class="st">'Place'</span>: [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>],<span class="op">\</span></span>
+<span id="cb53-14"><a href="#cb53-14" aria-hidden="true" tabindex="-1"></a>           <span class="st">'Player'</span>: [<span class="st">"Brayed Point"</span>, <span class="st">"William Karlsson"</span>, <span class="st">"Cole Schwindt"</span>, <span class="st">"Anze Kopitar"</span>, <span class="st">"Jimmy Vesey"</span>]}</span>
+<span id="cb53-15"><a href="#cb53-15" aria-hidden="true" tabindex="-1"></a>LadyBingDF <span class="op">=</span> pd.DataFrame(LadyBing)</span>
+<span id="cb53-16"><a href="#cb53-16" aria-hidden="true" tabindex="-1"></a>allAwards <span class="op">=</span> pd.concat([allAwards, LadyBingDF], ignore_index <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb53-17"><a href="#cb53-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-18"><a href="#cb53-18" aria-hidden="true" tabindex="-1"></a>FrankSelke <span class="op">=</span> {<span class="st">'Award'</span>: [<span class="st">"Frank J. Selke"</span>, <span class="st">"Frank J. Selke"</span>, <span class="st">"Frank J. Selke"</span>, <span class="st">"Frank J. Selke"</span>, <span class="st">"Frank J. Selke"</span>],<span class="op">\</span></span>
+<span id="cb53-19"><a href="#cb53-19" aria-hidden="true" tabindex="-1"></a>             <span class="st">'Place'</span>: [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>],<span class="op">\</span></span>
+<span id="cb53-20"><a href="#cb53-20" aria-hidden="true" tabindex="-1"></a>             <span class="st">'Player'</span>: [<span class="st">"Jordan Martinook"</span>, <span class="st">"Fabian Zetterlund"</span>, <span class="st">"Nino Niederreiter"</span>, <span class="st">"Connor McMichael"</span>, <span class="st">"Timo Meier"</span>]}</span>
+<span id="cb53-21"><a href="#cb53-21" aria-hidden="true" tabindex="-1"></a>FrankSelkeDF <span class="op">=</span> pd.DataFrame(FrankSelke)</span>
+<span id="cb53-22"><a href="#cb53-22" aria-hidden="true" tabindex="-1"></a>allAwards <span class="op">=</span> pd.concat([allAwards, FrankSelkeDF], ignore_index <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb53-23"><a href="#cb53-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-24"><a href="#cb53-24" aria-hidden="true" tabindex="-1"></a>Hart <span class="op">=</span> {<span class="st">'Award'</span>: [<span class="st">"Hart"</span>, <span class="st">"Hart"</span>, <span class="st">"Hart"</span>, <span class="st">"Hart"</span>, <span class="st">"Hart"</span>],<span class="op">\</span></span>
+<span id="cb53-25"><a href="#cb53-25" aria-hidden="true" tabindex="-1"></a>       <span class="st">'Place'</span>: [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>],<span class="op">\</span></span>
+<span id="cb53-26"><a href="#cb53-26" aria-hidden="true" tabindex="-1"></a>       <span class="st">'Player'</span>: [<span class="st">"Leon Draisaitl"</span>, <span class="st">"Nathan MacKinnon"</span>, <span class="st">"Nikita Kucherov"</span>, <span class="st">"David Pastrnak"</span>, <span class="st">"Kyle Connor"</span>]}</span>
+<span id="cb53-27"><a href="#cb53-27" aria-hidden="true" tabindex="-1"></a>HartDF <span class="op">=</span> pd.DataFrame(Hart)</span>
+<span id="cb53-28"><a href="#cb53-28" aria-hidden="true" tabindex="-1"></a>allAwards <span class="op">=</span> pd.concat([allAwards, HartDF], ignore_index <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb53-29"><a href="#cb53-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-30"><a href="#cb53-30" aria-hidden="true" tabindex="-1"></a>Calder <span class="op">=</span> {<span class="st">'Award'</span>: [<span class="st">"Calder"</span>, <span class="st">"Calder"</span>, <span class="st">"Calder"</span>, <span class="st">"Calder"</span>, <span class="st">"Calder"</span>],<span class="op">\</span></span>
+<span id="cb53-31"><a href="#cb53-31" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Place'</span>: [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>],</span>
+<span id="cb53-32"><a href="#cb53-32" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Player'</span>: [<span class="st">"Kirill Machenko"</span>, <span class="st">"Wyatt Johnston"</span>, <span class="st">"Marco Rossi"</span>, <span class="st">"Logan Thompson"</span>, <span class="st">"Dylan Holloway"</span>]}</span>
+<span id="cb53-33"><a href="#cb53-33" aria-hidden="true" tabindex="-1"></a>CalderDF <span class="op">=</span> pd.DataFrame(Calder)</span>
+<span id="cb53-34"><a href="#cb53-34" aria-hidden="true" tabindex="-1"></a>allAwards <span class="op">=</span> pd.concat([allAwards, CalderDF], ignore_index <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb53-35"><a href="#cb53-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-36"><a href="#cb53-36" aria-hidden="true" tabindex="-1"></a>allAwards</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="41">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Award</th>
+<th data-quarto-table-cell-role="th">Place</th>
+<th data-quarto-table-cell-role="th">Player</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Vezina</td>
+<td>1</td>
+<td>Connor Hellebuyck</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Vezina</td>
+<td>2</td>
+<td>Andrei Vasilevskiy</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Vezina</td>
+<td>3</td>
+<td>Logan Thompson</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Vezina</td>
+<td>4</td>
+<td>Jacob Markstrom</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Vezina</td>
+<td>5</td>
+<td>Linus Ullmark</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>James Norris</td>
+<td>1</td>
+<td>Shayne Gotisbehere</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>James Norris</td>
+<td>2</td>
+<td>Evan Bouchard</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>James Norris</td>
+<td>3</td>
+<td>Sean Walker</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>James Norris</td>
+<td>4</td>
+<td>Quinn Hughes</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>James Norris</td>
+<td>5</td>
+<td>Nate Schmidt</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">10</td>
+<td>Lady Bing</td>
+<td>1</td>
+<td>Brayed Point</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">11</td>
+<td>Lady Bing</td>
+<td>2</td>
+<td>William Karlsson</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">12</td>
+<td>Lady Bing</td>
+<td>3</td>
+<td>Cole Schwindt</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">13</td>
+<td>Lady Bing</td>
+<td>4</td>
+<td>Anze Kopitar</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">14</td>
+<td>Lady Bing</td>
+<td>5</td>
+<td>Jimmy Vesey</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">15</td>
+<td>Frank J. Selke</td>
+<td>1</td>
+<td>Jordan Martinook</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">16</td>
+<td>Frank J. Selke</td>
+<td>2</td>
+<td>Fabian Zetterlund</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">17</td>
+<td>Frank J. Selke</td>
+<td>3</td>
+<td>Nino Niederreiter</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">18</td>
+<td>Frank J. Selke</td>
+<td>4</td>
+<td>Connor McMichael</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">19</td>
+<td>Frank J. Selke</td>
+<td>5</td>
+<td>Timo Meier</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">20</td>
+<td>Hart</td>
+<td>1</td>
+<td>Leon Draisaitl</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">21</td>
+<td>Hart</td>
+<td>2</td>
+<td>Nathan MacKinnon</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">22</td>
+<td>Hart</td>
+<td>3</td>
+<td>Nikita Kucherov</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">23</td>
+<td>Hart</td>
+<td>4</td>
+<td>David Pastrnak</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">24</td>
+<td>Hart</td>
+<td>5</td>
+<td>Kyle Connor</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">25</td>
+<td>Calder</td>
+<td>1</td>
+<td>Kirill Machenko</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">26</td>
+<td>Calder</td>
+<td>2</td>
+<td>Wyatt Johnston</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">27</td>
+<td>Calder</td>
+<td>3</td>
+<td>Marco Rossi</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">28</td>
+<td>Calder</td>
+<td>4</td>
+<td>Logan Thompson</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">29</td>
+<td>Calder</td>
+<td>5</td>
+<td>Dylan Holloway</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
