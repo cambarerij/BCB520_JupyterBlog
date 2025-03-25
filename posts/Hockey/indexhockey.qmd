@@ -49,7 +49,7 @@ GoalieSavePercent = px.scatter(
 GoalieSavePercent.show()
 ```
 
-We want the goalie that has the highest save percentage to recieve the award. However, doing this calculation right now is not recommended, as doing it this way will allow a skater with 1 save in 1 opportunity (with a 100% save opportunity) to be considered for the award over someone who could be far more deserving; i.e., someone who played for much more games but has a ~91% save percentage instead. Thus, we need to remove some of the data. In this case, we remove the data from those who haven't played for half of the season up to that point.
+We want the goalie that has the highest save percentage to recieve the award. However, doing this calculation right now is not recommended, as doing it this way will allow a skater with 1 save in 1 opportunity (with a 100% save opportunity) to be considered for the award over someone who could be far more deserving; i.e., someone who played for much more games but has a \~91% save percentage instead. Thus, we need to remove some of the data. In this case, we remove the data from those who haven't played for half of the season up to that point.
 
 ```{python}
 reducedGoalie = Goalie[Goalie["GP"] > (Goalie["GP"].max() / 2)]
