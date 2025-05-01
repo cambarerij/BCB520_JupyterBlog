@@ -157,7 +157,6 @@ combinedDF.replace(to_replace = "Gotisbere", value = "Shayne Gostisbehere", inpl
 combinedDF.replace(to_replace = "Orlov", value = "Dmitry Orlov", inplace = True)
 ```
 
-
 Add point system for the ranks. A player gets 10 points for a 1st place showing on the ballot, 7 points for a 2nd, 5 for a third, 3 for a fourth, and one point for a 5th.
 
 ```{python}

@@ -1,0 +1,1278 @@
+---
+title: "Final Project: UI Expenditures and Requests by Cohort"
+author: "John Cambareri"
+date: "2025-05-01"
+categories: [news, code, analysis]
+image: "UI_Logo.png"
+jupyter: python3
+format:
+  html:
+    code-fold: true
+editor: visual
+---
+```{python}
+import pandas as pd
+import numpy as np
+import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+from datetime import datetime
+
+import plotly.io as pio
+pio.renderers.default = "iframe"
+```
+
+This project aims to look at the expenditure data of various UI professors, and analyze how much they were making and spending over time from 2018 to 2024. In addition, this project aims to see if their participation on a UI cohort significantly increases their research activity in this period.
+
+```{python}
+data = pd.DataFrame(pd.read_excel("long_PI_activity.xls"))
+```
+
+### Attempt 1: Simply Analyzing Total Requests
+
+The first attempt simply looked at the total requests each of the professors made over the relevant time period. The Principal Investigator (PI) and Co-Investigator (CoI) totals are summed with each other, and the Co-Principal Investigator (Co-PI) totals are plotted separately. This ran into several issues - first, this does not display how each faculty member's requests change over time, and second, the graph is unsorted.
+
+```{python}
+PIData = data.loc[data['ROLE'] == 'PI']
+CoPIData = data.loc[data['ROLE'] == 'CoPI']
+CoIData = data.loc[data['ROLE'] == 'CoI']
+
+combined = make_subplots(
+    rows = 1,
+    cols = 2,
+    shared_yaxes = True,
+    horizontal_spacing = 0.02
+)
+
+combined.add_trace(go.Bar(
+    x = PIData["TOTAL_COST"],
+    y = PIData["NAME"],
+    text = PIData["TOTAL_COST"],
+    textposition = "inside",
+    name = "Total Requested (As PI)",
+    orientation = 'h',
+    customdata = PIData["TITLE"],
+    hovertemplate = "Name: %{y} <br> Cost: %{x:$.2s} <br> Title: %{customdata}"
+), row = 1, col = 1)
+
+combined.add_trace(go.Bar(
+    x = CoIData["TOTAL_COST"],
+    y = CoIData["NAME"],
+    text = CoIData["TOTAL_COST"],
+    textposition = "inside",
+    name = "Total Requested (As CoI)",
+    orientation = 'h',
+    customdata = CoIData["TITLE"],
+    hovertemplate = "Name: %{y} <br> Cost: %{x:$.2s} <br> Title: %{customdata}" 
+), row = 1, col = 1)
+
+combined.update_yaxes(showgrid = True)
+combined.update_traces(texttemplate = '%{text:.2s}')
+
+combined.add_trace(go.Scatter(
+    x = CoPIData["TOTAL_COST"],
+    y = CoPIData["NAME"],
+    name = "Total Requested (As CoPI)",
+    mode = 'markers',
+    marker = dict(
+        size = CoPIData["TOTAL_COST"],
+        sizemode = 'area',
+        sizeref = 2.*max(CoPIData["TOTAL_COST"])/(60**2),
+        sizemin = 4
+    ),
+    customdata = CoPIData["TITLE"],
+    hovertemplate = "Name: %{y} <br> Cost: %{x:$.2s} <br> Title: %{customdata}" 
+), row = 1, col = 2)
+
+combined.update_layout(
+    height = 1250,
+    barmode = "stack",
+    yaxis = {'categoryorder' : 'total descending'},
+    title_text = "PI vs CoI vs CoPI"
+)
+
+combined.show()
+```
+
+### Attempt 2: Multi-line chart
+
+This next attempt created a multi-line chart to see the amount requested over time by each professor.
+
+First, we need to get the data in a format where the date can be easily extracted. This requires first separating the data first by whether they are a PI, a CoPI, or a CoI. Then, they're further separated depending on the year, and then all research projects done over that period are aggregated. Then, the yearly data is combined back.
+
+```{python}
+data["YEAR"] = data["SUBMISSION_DATE"].str.slice(0,4)
+data["YEAR"] = data["YEAR"].astype(int)
+
+PIData = data.loc[data['ROLE'] == 'PI']
+CoPIData = data.loc[data['ROLE'] == 'CoPI']
+CoIData = data.loc[data['ROLE'] == 'CoI']
+```
+
+```{python}
+PI2019 = PIData.loc[PIData['YEAR'] == 2019]
+CoPI2019 = CoPIData.loc[CoPIData['YEAR'] == 2019]
+CoI2019 = CoIData.loc[CoIData['YEAR'] == 2019]
+
+PI2020 = PIData.loc[PIData['YEAR'] == 2020]
+CoPI2020 = CoPIData.loc[CoPIData['YEAR'] == 2020]
+CoI2020 = CoIData.loc[CoIData['YEAR'] == 2020]
+
+PI2021 = PIData.loc[PIData['YEAR'] == 2021]
+CoPI2021 = CoPIData.loc[CoPIData['YEAR'] == 2021]
+CoI2021 = CoIData.loc[CoIData['YEAR'] == 2021]
+
+PI2022 = PIData.loc[PIData['YEAR'] == 2022]
+CoPI2022 = CoPIData.loc[CoPIData['YEAR'] == 2022]
+CoI2022 = CoIData.loc[CoIData['YEAR'] == 2022]
+
+PI2023 = PIData.loc[PIData['YEAR'] == 2023]
+CoPI2023 = CoPIData.loc[CoPIData['YEAR'] == 2023]
+CoI2023 = CoIData.loc[CoIData['YEAR'] == 2023]
+
+PI2024 = PIData.loc[PIData['YEAR'] == 2024]
+CoPI2024 = CoPIData.loc[CoPIData['YEAR'] == 2024]
+CoI2024 = CoIData.loc[CoIData['YEAR'] == 2024]
+
+PI2019Agg = PI2019.groupby("NAME").sum()
+PI2019Agg["YEAR"] = 2019
+PI2019Agg = PI2019Agg[["TOTAL_COST"]]
+PI2019Agg = PI2019Agg.rename(columns = {'TOTAL_COST': '2019 COST'})
+
+PI2020Agg = PI2020.groupby("NAME").sum()
+PI2020Agg["YEAR"] = 2020
+PI2020Agg = PI2020Agg[["TOTAL_COST"]]
+PI2020Agg = PI2020Agg.rename(columns = {'TOTAL_COST': '2020 COST'})
+
+PI2021Agg = PI2021.groupby("NAME").sum()
+PI2021Agg["YEAR"] = 2021
+PI2021Agg = PI2021Agg[["TOTAL_COST"]]
+PI2021Agg = PI2021Agg.rename(columns = {'TOTAL_COST': '2021 COST'})
+
+PI2022Agg = PI2022.groupby("NAME").sum()
+PI2022Agg["YEAR"] = 2022
+PI2022Agg = PI2022Agg[["TOTAL_COST"]]
+PI2022Agg = PI2022Agg.rename(columns = {'TOTAL_COST': '2022 COST'})
+
+PI2023Agg = PI2023.groupby("NAME").sum()
+PI2023Agg["YEAR"] = 2023
+PI2023Agg = PI2023Agg[["TOTAL_COST"]]
+PI2023Agg = PI2023Agg.rename(columns = {'TOTAL_COST': '2023 COST'})
+
+PI2024Agg = PI2024.groupby("NAME").sum()
+PI2024Agg["YEAR"] = 2024
+PI2024Agg = PI2024Agg[["TOTAL_COST"]]
+PI2024Agg = PI2024Agg.rename(columns = {'TOTAL_COST': '2024 COST'})
+
+CoPI2019Agg = CoPI2019.groupby("NAME").sum()
+CoPI2019Agg["YEAR"] = 2019
+CoPI2019Agg = CoPI2019Agg[["TOTAL_COST"]]
+CoPI2019Agg = CoPI2019Agg.rename(columns = {'TOTAL_COST': '2019 COST'})
+
+CoPI2020Agg = CoPI2020.groupby("NAME").sum()
+CoPI2020Agg["YEAR"] = 2020
+CoPI2020Agg = CoPI2020Agg[["TOTAL_COST"]]
+CoPI2020Agg = CoPI2020Agg.rename(columns = {'TOTAL_COST': '2020 COST'})
+
+CoPI2021Agg = CoPI2021.groupby("NAME").sum()
+CoPI2021Agg["YEAR"] = 2021
+CoPI2021Agg = CoPI2021Agg[["TOTAL_COST"]]
+CoPI2021Agg = CoPI2021Agg.rename(columns = {'TOTAL_COST': '2021 COST'})
+
+CoPI2022Agg = CoPI2022.groupby("NAME").sum()
+CoPI2022Agg["YEAR"] = 2022
+CoPI2022Agg = CoPI2022Agg[["TOTAL_COST"]]
+CoPI2022Agg = CoPI2022Agg.rename(columns = {'TOTAL_COST': '2022 COST'})
+
+CoPI2023Agg = CoPI2023.groupby("NAME").sum()
+CoPI2023Agg["YEAR"] = 2023
+CoPI2023Agg = CoPI2023Agg[["TOTAL_COST"]]
+CoPI2023Agg = CoPI2023Agg.rename(columns = {'TOTAL_COST': '2023 COST'})
+
+CoPI2024Agg = CoPI2024.groupby("NAME").sum()
+CoPI2024Agg["YEAR"] = 2024
+CoPI2024Agg = CoPI2024Agg[["TOTAL_COST"]]
+CoPI2024Agg = CoPI2024Agg.rename(columns = {'TOTAL_COST': '2024 COST'})
+
+
+CoI2019Agg = CoI2019.groupby("NAME").sum()
+CoI2019Agg["YEAR"] = 2019
+CoI2019Agg = CoI2019Agg[["TOTAL_COST"]]
+CoI2019Agg = CoI2019Agg.rename(columns = {'TOTAL_COST': '2019 COST'})
+
+CoI2020Agg = CoI2020.groupby("NAME").sum()
+CoI2020Agg["YEAR"] = 2020
+CoI2020Agg = CoI2020Agg[["TOTAL_COST"]]
+CoI2020Agg = CoI2020Agg.rename(columns = {'TOTAL_COST': '2020 COST'})
+
+CoI2021Agg = CoI2021.groupby("NAME").sum()
+CoI2021Agg["YEAR"] = 2021
+CoI2021Agg = CoI2021Agg[["TOTAL_COST"]]
+CoI2021Agg = CoI2021Agg.rename(columns = {'TOTAL_COST': '2021 COST'})
+
+CoI2022Agg = CoI2022.groupby("NAME").sum()
+CoI2022Agg["YEAR"] = 2022
+CoI2022Agg = CoI2022Agg[["TOTAL_COST"]]
+CoI2022Agg = CoI2022Agg.rename(columns = {'TOTAL_COST': '2022 COST'})
+
+CoI2023Agg = CoI2023.groupby("NAME").sum()
+CoI2023Agg["YEAR"] = 2023
+CoI2023Agg = CoI2023Agg[["TOTAL_COST"]]
+CoI2023Agg = CoI2023Agg.rename(columns = {'TOTAL_COST': '2023 COST'})
+
+CoI2024Agg = CoI2024.groupby("NAME").sum()
+CoI2024Agg["YEAR"] = 2024
+CoI2024Agg = CoI2024Agg[["TOTAL_COST"]]
+CoI2024Agg = CoI2024Agg.rename(columns = {'TOTAL_COST': '2024 COST'})
+```
+
+```{python}
+AggPI = pd.concat([PI2019Agg, PI2020Agg, PI2021Agg, PI2022Agg, PI2023Agg, PI2024Agg], axis = 1)
+AggPI = AggPI.fillna(0)
+
+AggCoPI = pd.concat([CoPI2019Agg, CoPI2020Agg, CoPI2021Agg, CoPI2022Agg, CoPI2023Agg, CoPI2024Agg], axis = 1)
+AggCoPI = AggCoPI.fillna(0)
+
+AggCoI = pd.concat([CoI2019Agg, CoI2020Agg, CoI2021Agg, CoI2022Agg, CoI2023Agg, CoI2024Agg], axis = 1)
+AggCoI = AggCoI.fillna(0)
+
+AggPI = AggPI.reset_index(drop = False)
+```
+
+The line charts are shown below. They don't really work effectively; first, because the space is too narrow to fit the entire graph, and second, the names of each of the faculty cannot be easily ascertained from these graphs alone. In addition, we can see the presence of some outliers that skew the data significantly.
+
+```{python}
+PILine = go.Figure(data = go.Parcoords(
+    line = dict(color = AggPI["NAME"].index),
+    dimensions = list([
+        dict(range = [0, 11e6], label = "2019 Requests", values = AggPI["2019 COST"]),
+        dict(range = [0, 11e6], label = "2020 Requests", values = AggPI["2020 COST"]),
+        dict(range = [0, 11e6], label = "2021 Requests", values = AggPI["2021 COST"]),
+        dict(range = [0, 11e6], label = "2022 Requests", values = AggPI["2022 COST"]),
+        dict(range = [0, 11e6], label = "2023 Requests", values = AggPI["2023 COST"]),
+        dict(range = [0, 11e6], label = "2024 Requests", values = AggPI["2024 COST"]),
+    ])
+))
+
+PILine.update_layout(
+    height = 1000,
+    title_text = "Requests over time, PI",
+    xaxis_title = "Year",
+    yaxis_title = "Requests"
+)
+
+PILine.show()
+```
+
+A similar graph can be created using the CoPIs.
+
+```{python}
+AggCoPI = AggCoPI.reset_index(drop = False)
+
+CoPILine = go.Figure(data = go.Parcoords(
+    line = dict(color = AggCoPI["NAME"].index),
+    dimensions = list([
+        dict(range = [0, 30e6], label = "2019 Requests", values = AggCoPI["2019 COST"]),
+        dict(range = [0, 30e6], label = "2020 Requests", values = AggCoPI["2020 COST"]),
+        dict(range = [0, 30e6], label = "2021 Requests", values = AggCoPI["2021 COST"]),
+        dict(range = [0, 30e6], label = "2022 Requests", values = AggCoPI["2022 COST"]),
+        dict(range = [0, 30e6], label = "2023 Requests", values = AggCoPI["2023 COST"]),
+        dict(range = [0, 30e6], label = "2024 Requests", values = AggCoPI["2024 COST"]),
+    ])
+))
+
+CoPILine.update_layout(
+    height = 1500,
+    title_text = "Requests over time, CoPI",
+    xaxis_title = "Year",
+    yaxis_title = "Requests"
+)
+
+CoPILine.show()
+```
+
+Finally, the same is done for the CoIs.
+
+```{python}
+AggCoI = AggCoI.reset_index(drop = False)
+
+CoILine = go.Figure(data = go.Parcoords(
+    line = dict(color = AggCoI["NAME"].index),
+    dimensions = list([
+        dict(range = [0, 11e6], label = "2019 Requests", values = AggCoI["2019 COST"]),
+        dict(range = [0, 11e6], label = "2020 Requests", values = AggCoI["2020 COST"]),
+        dict(range = [0, 11e6], label = "2021 Requests", values = AggCoI["2021 COST"]),
+        dict(range = [0, 11e6], label = "2022 Requests", values = AggCoI["2022 COST"]),
+        dict(range = [0, 11e6], label = "2023 Requests", values = AggCoI["2023 COST"]),
+        dict(range = [0, 11e6], label = "2024 Requests", values = AggCoI["2024 COST"]),
+    ])
+))
+
+CoILine.update_layout(
+    height = 1000,
+    title_text = "Requests over time, CoI",
+    xaxis_title = "Year",
+    yaxis_title = "Requests"
+)
+
+CoILine.show()
+```
+
+### Attempt 3: Aggregated Bar Charts
+
+Here, we create a set of graphs that show how much each professor requested that year.
+
+First, here's the graph of the PI's:
+
+```{python}
+PILineChart = go.Figure()
+
+PILineChart.add_traces(go.Bar(
+    x = AggPI["2019 COST"],
+    y = AggPI["NAME"],
+    text = AggPI["2019 COST"],
+    textposition = "inside",
+    name = "Total Requested (2019)",
+    orientation = 'h',
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Year: 2019"))
+
+PILineChart.add_traces(go.Bar(
+    x = AggPI["2020 COST"],
+    y = AggPI["NAME"],
+    text = AggPI["2020 COST"],
+    textposition = "inside",
+    name = "Total Requested (2020)",
+    orientation = 'h',
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Year: 2020"))
+
+PILineChart.add_traces(go.Bar(
+    x = AggPI["2021 COST"],
+    y = AggPI["NAME"],
+    text = AggPI["2021 COST"],
+    textposition = "inside",
+    name = "Total Requested (2021)",
+    orientation = 'h',
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Year: 2021"))
+
+PILineChart.add_traces(go.Bar(
+    x = AggPI["2022 COST"],
+    y = AggPI["NAME"],
+    text = AggPI["2022 COST"],
+    textposition = "inside",
+    name = "Total Requested (2022)",
+    orientation = 'h',
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Year: 2022"))
+
+PILineChart.add_traces(go.Bar(
+    x = AggPI["2023 COST"],
+    y = AggPI["NAME"],
+    text = AggPI["2023 COST"],
+    textposition = "inside",
+    name = "Total Requested (2023)",
+    orientation = 'h',
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Year: 2023"))
+
+PILineChart.add_traces(go.Bar(
+    x = AggPI["2024 COST"],
+    y = AggPI["NAME"],
+    text = AggPI["2024 COST"],
+    textposition = "inside",
+    name = "Total Requested (2024)",
+    orientation = 'h',
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Year: 2024"))
+    
+PILineChart.update_layout(
+    height = 1000,
+    barmode = "stack",
+    yaxis = {'categoryorder' : 'total ascending'}
+)
+
+PILineChart.show()
+```
+
+
+Next, the Co-PIs:
+
+```{python}
+CoPILineChart = go.Figure()
+
+CoPILineChart.add_traces(go.Bar(
+    x = AggCoPI["2019 COST"],
+    y = AggCoPI["NAME"],
+    text = AggCoPI["2019 COST"],
+    textposition = "inside",
+    name = "Total Requested (2019)",
+    orientation = 'h',
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Year: 2019"))
+
+CoPILineChart.add_traces(go.Bar(
+    x = AggCoPI["2020 COST"],
+    y = AggCoPI["NAME"],
+    text = AggCoPI["2020 COST"],
+    textposition = "inside",
+    name = "Total Requested (2020)",
+    orientation = 'h',
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Year: 2020"))
+
+CoPILineChart.add_traces(go.Bar(
+    x = AggCoPI["2021 COST"],
+    y = AggCoPI["NAME"],
+    text = AggCoPI["2021 COST"],
+    textposition = "inside",
+    name = "Total Requested (2021)",
+    orientation = 'h',
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Year: 2021"))
+
+CoPILineChart.add_traces(go.Bar(
+    x = AggCoPI["2022 COST"],
+    y = AggCoPI["NAME"],
+    text = AggCoPI["2022 COST"],
+    textposition = "inside",
+    name = "Total Requested (2022)",
+    orientation = 'h',
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Year: 2022"))
+
+CoPILineChart.add_traces(go.Bar(
+    x = AggCoPI["2023 COST"],
+    y = AggCoPI["NAME"],
+    text = AggCoPI["2023 COST"],
+    textposition = "inside",
+    name = "Total Requested (2023)",
+    orientation = 'h',
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Year: 2023"))
+
+CoPILineChart.add_traces(go.Bar(
+    x = AggCoPI["2024 COST"],
+    y = AggCoPI["NAME"],
+    text = AggCoPI["2024 COST"],
+    textposition = "inside",
+    name = "Total Requested (2024)",
+    orientation = 'h',
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Year: 2024"))
+    
+CoPILineChart.update_layout(
+    height = 1000,
+    barmode = "stack",
+    yaxis = {'categoryorder' : 'total ascending'}
+)
+
+CoPILineChart.show()
+```
+
+Finally, the CoIs.
+
+```{python}
+CoILineChart = go.Figure()
+
+CoILineChart.add_traces(go.Bar(
+    x = AggCoI["2019 COST"],
+    y = AggCoI["NAME"],
+    text = AggCoI["2019 COST"],
+    textposition = "inside",
+    name = "Total Requested (2019)",
+    orientation = 'h',
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Year: 2019"))
+
+CoILineChart.add_traces(go.Bar(
+    x = AggCoI["2020 COST"],
+    y = AggCoI["NAME"],
+    text = AggCoI["2020 COST"],
+    textposition = "inside",
+    name = "Total Requested (2020)",
+    orientation = 'h',
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Year: 2020"))
+
+CoILineChart.add_traces(go.Bar(
+    x = AggCoI["2021 COST"],
+    y = AggCoI["NAME"],
+    text = AggCoI["2021 COST"],
+    textposition = "inside",
+    name = "Total Requested (2021)",
+    orientation = 'h',
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Year: 2021"))
+
+CoILineChart.add_traces(go.Bar(
+    x = AggCoI["2022 COST"],
+    y = AggCoI["NAME"],
+    text = AggCoI["2022 COST"],
+    textposition = "inside",
+    name = "Total Requested (2022)",
+    orientation = 'h',
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Year: 2022"))
+
+CoILineChart.add_traces(go.Bar(
+    x = AggCoI["2023 COST"],
+    y = AggCoI["NAME"],
+    text = AggCoI["2023 COST"],
+    textposition = "inside",
+    name = "Total Requested (2023)",
+    orientation = 'h',
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Year: 2023"))
+
+CoILineChart.add_traces(go.Bar(
+    x = AggCoI["2024 COST"],
+    y = AggCoI["NAME"],
+    text = AggCoI["2024 COST"],
+    textposition = "inside",
+    name = "Total Requested (2024)",
+    orientation = 'h',
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Year: 2024"))
+    
+CoILineChart.update_layout(
+    height = 1000,
+    barmode = "stack",
+    yaxis = {'categoryorder' : 'total ascending'}
+)
+
+CoILineChart.show()
+```
+
+### Attempt 4: Heat Maps
+
+Now, heatmaps are used to show the total amount of the requests and how they change over time.
+
+```{python}
+participants = pd.DataFrame(pd.read_csv("UI_Participant_Cohort_Info.csv"))
+
+participants = participants.replace("Izabelle Teixeira", "Izabelle Molina de Almeida Teixeira")
+participants = participants.replace("Josh Bailey", "Joshua Bailey")
+participants = participants.replace("Nick Martonick", "Nickolai Martonick")
+participants = participants.replace("Matt Swenson", "Matthew Swenson")
+```
+
+This first attempt does a decent job, but there are still a few problems. First, there are number of outliers present that are causing the rest of the data to not be as easily ascertained; Yimin Chen is the main reason.
+
+```{python}
+AggPI["Year1Total"] = AggPI["2019 COST"]
+AggPI["Year2Total"] = AggPI["2020 COST"] + AggPI["Year1Total"]
+AggPI["Year3Total"] = AggPI["2021 COST"] + AggPI["Year2Total"]
+AggPI["Year4Total"] = AggPI["2022 COST"] + AggPI["Year3Total"]
+AggPI["Year5Total"] = AggPI["2023 COST"] + AggPI["Year4Total"]
+AggPI["Year6Total"] = AggPI["2024 COST"] + AggPI["Year5Total"]
+
+PICumulative = AggPI[["NAME", "Year1Total", "Year2Total", "Year3Total", "Year4Total", "Year5Total", "Year6Total"]]
+
+mask = PICumulative["Year1Total"] == 0
+c = ["Year1Total", "Year2Total", "Year3Total", "Year4Total", "Year5Total", "Year6Total"]
+PICumulative.loc[mask, c] = PICumulative.loc[mask, c].shift(-1, axis = 1)
+
+mask = PICumulative["Year1Total"] == 0
+PICumulative.loc[mask, c] = PICumulative.loc[mask, c].shift(-1, axis = 1)
+
+mask = PICumulative["Year1Total"] == 0
+PICumulative.loc[mask, c] = PICumulative.loc[mask, c].shift(-1, axis = 1)
+
+mask = PICumulative["Year1Total"] == 0
+PICumulative.loc[mask, c] = PICumulative.loc[mask, c].shift(-1, axis = 1)
+
+mask = PICumulative["Year1Total"] == 0
+PICumulative.loc[mask, c] = PICumulative.loc[mask, c].shift(-1, axis = 1)
+
+PICumulative.set_index("NAME", inplace = True)
+
+PIHeat = px.imshow(PICumulative, aspect = "auto")
+PIHeat.update_layout(height = 1500)
+PIHeat.show()
+```
+
+The CoPI and CoI charts show similar problems.
+
+```{python}
+AggCoPI["Year1Total"] = AggCoPI["2019 COST"]
+AggCoPI["Year2Total"] = AggCoPI["2020 COST"] + AggCoPI["Year1Total"]
+AggCoPI["Year3Total"] = AggCoPI["2021 COST"] + AggCoPI["Year2Total"]
+AggCoPI["Year4Total"] = AggCoPI["2022 COST"] + AggCoPI["Year3Total"]
+AggCoPI["Year5Total"] = AggCoPI["2023 COST"] + AggCoPI["Year4Total"]
+AggCoPI["Year6Total"] = AggCoPI["2024 COST"] + AggCoPI["Year5Total"]
+
+CoPICumulative = AggCoPI[["NAME", "Year1Total", "Year2Total", "Year3Total", "Year4Total", "Year5Total", "Year6Total"]]
+
+mask = CoPICumulative["Year1Total"] == 0
+c = ["Year1Total", "Year2Total", "Year3Total", "Year4Total", "Year5Total", "Year6Total"]
+CoPICumulative.loc[mask, c] = CoPICumulative.loc[mask, c].shift(-1, axis = 1)
+
+mask = CoPICumulative["Year1Total"] == 0
+CoPICumulative.loc[mask, c] = CoPICumulative.loc[mask, c].shift(-1, axis = 1)
+
+mask = CoPICumulative["Year1Total"] == 0
+CoPICumulative.loc[mask, c] = CoPICumulative.loc[mask, c].shift(-1, axis = 1)
+
+mask = CoPICumulative["Year1Total"] == 0
+CoPICumulative.loc[mask, c] = CoPICumulative.loc[mask, c].shift(-1, axis = 1)
+
+mask = CoPICumulative["Year1Total"] == 0
+CoPICumulative.loc[mask, c] = CoPICumulative.loc[mask, c].shift(-1, axis = 1)
+
+CoPICumulative.set_index("NAME", inplace = True)
+```
+
+```{python}
+AggCoI["Year1Total"] = AggCoI["2019 COST"]
+AggCoI["Year2Total"] = AggCoI["2020 COST"] + AggCoI["Year1Total"]
+AggCoI["Year3Total"] = AggCoI["2021 COST"] + AggCoI["Year2Total"]
+AggCoI["Year4Total"] = AggCoI["2022 COST"] + AggCoI["Year3Total"]
+AggCoI["Year5Total"] = AggCoI["2023 COST"] + AggCoI["Year4Total"]
+AggCoI["Year6Total"] = AggCoI["2024 COST"] + AggCoI["Year5Total"]
+
+CoICumulative = AggCoI[["NAME", "Year1Total", "Year2Total", "Year3Total", "Year4Total", "Year5Total", "Year6Total"]]
+
+mask = CoICumulative["Year1Total"] == 0
+c = ["Year1Total", "Year2Total", "Year3Total", "Year4Total", "Year5Total", "Year6Total"]
+CoICumulative.loc[mask, c] = CoICumulative.loc[mask, c].shift(-1, axis = 1)
+
+mask = CoICumulative["Year1Total"] == 0
+CoICumulative.loc[mask, c] = CoICumulative.loc[mask, c].shift(-1, axis = 1)
+
+mask = CoICumulative["Year1Total"] == 0
+CoICumulative.loc[mask, c] = CoICumulative.loc[mask, c].shift(-1, axis = 1)
+
+mask = CoICumulative["Year1Total"] == 0
+CoICumulative.loc[mask, c] = CoICumulative.loc[mask, c].shift(-1, axis = 1)
+
+mask = CoICumulative["Year1Total"] == 0
+CoICumulative.loc[mask, c] = CoICumulative.loc[mask, c].shift(-1, axis = 1)
+
+CoICumulative.set_index("NAME", inplace = True)
+```
+
+Here, we take the natural log of the dollar amounts to attempt to smooth out the resulting heatmap.
+
+```{python}
+CombinedPICumulative = pd.merge(PICumulative, participants, left_on = "NAME", right_on = "PI_NAME", how = 'left')
+CombinedPICumulative = CombinedPICumulative.sort_values(by = ["cohort", "PI_NAME"], ascending = [True, True])
+CombinedPICumulative.set_index("PI_NAME", inplace = True)
+
+logCombinedPI = CombinedPICumulative.copy()
+
+logCombinedPI["Year1Total"] = np.log(logCombinedPI["Year1Total"])
+logCombinedPI["Year2Total"] = np.log(logCombinedPI["Year2Total"])
+logCombinedPI["Year3Total"] = np.log(logCombinedPI["Year3Total"])
+logCombinedPI["Year4Total"] = np.log(logCombinedPI["Year4Total"])
+logCombinedPI["Year5Total"] = np.log(logCombinedPI["Year5Total"])
+logCombinedPI["Year6Total"] = np.log(logCombinedPI["Year6Total"])
+```
+There are also now lines separating the cohorts, and now the differences are much clearer.
+
+
+```{python}
+PIHeat = px.imshow(logCombinedPI[["Year1Total", "Year2Total", "Year3Total", "Year4Total", \
+                                 "Year5Total", "Year6Total"]],  aspect = "auto", \
+                                 labels = dict(x = "Total Requested Over Time", y = "Name and Cohort"),
+                                 title = "Amount Requested per Person (as PI)")
+PIHeat.update_layout(height = 1000)
+PIHeat.add_shape(type = "line", x0 = -0.5, y0 = 11.5, x1 = 5.5, y1 = 11.5,
+                line = dict(color = "black", width = 4))
+PIHeat.add_shape(type = "line", x0 = -0.5, y0 = 21.5, x1 = 5.5, y1 = 21.5,
+                line = dict(color = "black", width = 4))
+PIHeat.add_shape(type = "line", x0 = -0.5, y0 = 31.5, x1 = 5.5, y1 = 31.5,
+                line = dict(color = "black", width = 4))
+PIHeat.add_shape(type = "line", x0 = -0.5, y0 = 39.5, x1 = 5.5, y1 = 39.5,
+                line = dict(color = "black", width = 4))
+
+PIHeat.add_annotation(x = 5, y = 2, text = "2020", showarrow = False,
+                      font = dict(size = 20))
+PIHeat.add_annotation(x = 5, y = 12.5, text = "2021", showarrow = False,
+                      font = dict(size = 20))
+PIHeat.add_annotation(x = 5, y = 22.5, text = "2022", showarrow = False,
+                      font = dict(size = 20))
+PIHeat.add_annotation(x = 5, y = 32.5, text = "2023", showarrow = False,
+                      font = dict(size = 20))
+PIHeat.add_annotation(x = 5, y = 41.5, text = "2024", showarrow = False,
+                      font = dict(size = 20))
+PIHeat.show()
+```
+
+```{python}
+CombinedCoPICumulative = pd.merge(CoPICumulative, participants, left_on = "NAME", right_on = "PI_NAME", how = 'left')
+CombinedCoPICumulative = CombinedCoPICumulative.sort_values(by = ["cohort", "PI_NAME"], ascending = [True, True])
+CombinedCoPICumulative.set_index("PI_NAME", inplace = True)
+
+logCombinedCoPI = CombinedCoPICumulative.copy()
+
+logCombinedCoPI["Year1Total"] = np.log(logCombinedCoPI["Year1Total"])
+logCombinedCoPI["Year2Total"] = np.log(logCombinedCoPI["Year2Total"])
+logCombinedCoPI["Year3Total"] = np.log(logCombinedCoPI["Year3Total"])
+logCombinedCoPI["Year4Total"] = np.log(logCombinedCoPI["Year4Total"])
+logCombinedCoPI["Year5Total"] = np.log(logCombinedCoPI["Year5Total"])
+logCombinedCoPI["Year6Total"] = np.log(logCombinedCoPI["Year6Total"])
+```
+
+```{python}
+CoPIHeat = px.imshow(logCombinedCoPI[["Year1Total", "Year2Total", "Year3Total", "Year4Total", \
+                                 "Year5Total", "Year6Total"]], aspect = "auto", \
+                                 title = "Amount Requested per Person (as CoPI)", \
+                                 labels = dict(x = "Total Requested Over Time", y = "Name and Cohort"))
+CoPIHeat.update_layout(height = 1000)
+CoPIHeat.add_shape(type = "line", x0 = -0.5, y0 = 9.5, x1 = 5.5, y1 = 9.5,
+                line = dict(color = "black", width = 4))
+CoPIHeat.add_shape(type = "line", x0 = -0.5, y0 = 19.5, x1 = 5.5, y1 = 19.5,
+                line = dict(color = "black", width = 4))
+CoPIHeat.add_shape(type = "line", x0 = -0.5, y0 = 29.5, x1 = 5.5, y1 = 29.5,
+                line = dict(color = "black", width = 4))
+CoPIHeat.add_shape(type = "line", x0 = -0.5, y0 = 37.5, x1 = 5.5, y1 = 37.5,
+                line = dict(color = "black", width = 4))
+
+CoPIHeat.add_annotation(x = 5, y = 2, text = "2020", showarrow = False,
+                      font = dict(size = 20))
+CoPIHeat.add_annotation(x = 5, y = 10.5, text = "2021", showarrow = False,
+                      font = dict(size = 20))
+CoPIHeat.add_annotation(x = 5, y = 21, text = "2022", showarrow = False,
+                      font = dict(size = 20))
+CoPIHeat.add_annotation(x = 5, y = 30.5, text = "2023", showarrow = False,
+                      font = dict(size = 20))
+CoPIHeat.add_annotation(x = 5, y = 38, text = "2024", showarrow = False,
+                      font = dict(size = 20))
+
+CoPIHeat.show()
+```
+
+```{python}
+CombinedCoICumulative = pd.merge(CoICumulative, participants, left_on = "NAME", right_on = "PI_NAME", how = 'left')
+CombinedCoICumulative = CombinedCoICumulative.sort_values(by = ["cohort", "PI_NAME"], ascending = [True, True])
+CombinedCoICumulative.set_index("PI_NAME", inplace = True)
+
+logCombinedCoI = CombinedCoICumulative.copy()
+
+logCombinedCoI["Year1Total"] = np.log(logCombinedCoI["Year1Total"])
+logCombinedCoI["Year2Total"] = np.log(logCombinedCoI["Year2Total"])
+logCombinedCoI["Year3Total"] = np.log(logCombinedCoI["Year3Total"])
+logCombinedCoI["Year4Total"] = np.log(logCombinedCoI["Year4Total"])
+logCombinedCoI["Year5Total"] = np.log(logCombinedCoI["Year5Total"])
+logCombinedCoI["Year6Total"] = np.log(logCombinedCoI["Year6Total"])
+```
+
+```{python}
+CoIHeat = px.imshow(logCombinedCoI[["Year1Total", "Year2Total", "Year3Total", "Year4Total", \
+                                 "Year5Total", "Year6Total"]], aspect = "auto", \
+                                 title = "Amount Requested per Person (as CoI)", \
+                                 labels = dict(y = "Name and Cohort", x = "Total Requested Over Time"))
+CoIHeat.update_layout(height = 1000)
+CoIHeat.add_shape(type = "line", x0 = -0.5, y0 = 6.5, x1 = 5.5, y1 = 6.5,
+                line = dict(color = "black", width = 4))
+CoIHeat.add_shape(type = "line", x0 = -0.5, y0 = 13.5, x1 = 5.5, y1 = 13.5,
+                line = dict(color = "black", width = 4))
+CoIHeat.add_shape(type = "line", x0 = -0.5, y0 = 21.5, x1 = 5.5, y1 = 21.5,
+                line = dict(color = "black", width = 4))
+CoIHeat.add_shape(type = "line", x0 = -0.5, y0 = 28.5, x1 = 5.5, y1 = 28.5,
+                line = dict(color = "black", width = 4))
+
+CoIHeat.add_annotation(x = 5, y = 0.5, text = "2020", showarrow = False,
+                      font = dict(size = 20))
+CoIHeat.add_annotation(x = 5, y = 7.5, text = "2021", showarrow = False,
+                      font = dict(size = 20))
+CoIHeat.add_annotation(x = 5, y = 15, text = "2022", showarrow = False,
+                      font = dict(size = 20))
+CoIHeat.add_annotation(x = 5, y = 22.5, text = "2023", showarrow = False,
+                      font = dict(size = 20))
+CoIHeat.add_annotation(x = 5, y = 30, text = "2024", showarrow = False,
+                      font = dict(size = 20))
+
+CoIHeat.show()
+```
+
+However, there is still one more problem, in that this graph only shows the amount of money made since the faculty first started making money, not necessarily when they participated in the cohort. 
+
+```{python}
+PIOverTime = AggPI[["NAME", "Year1Total", "Year2Total", "Year3Total", "Year4Total", "Year5Total", "Year6Total"]]
+PIOverTime = pd.merge(PIOverTime, participants, left_on = "NAME", right_on = "PI_NAME", how = 'left')
+
+PIOverTime["5YearsBefore"] = 0.00
+PIOverTime["4YearsBefore"] = 0.00
+PIOverTime["3YearsBefore"] = 0.00
+PIOverTime["2YearsBefore"] = 0.00
+PIOverTime["1YearBefore"] = 0.00
+
+PIOverTime = PIOverTime[["NAME", "5YearsBefore", "4YearsBefore", "3YearsBefore", "2YearsBefore", \
+                         "1YearBefore", "Year1Total", "Year2Total", "Year3Total", "Year4Total", \
+                        "Year5Total", "Year6Total", "cohort"]]
+
+PIOverTime = PIOverTime.rename(columns = {"Year1Total": "Year 0",\
+                                         "Year2Total": "1YearAfter", "Year3Total": "2YearsAfter", \
+                                         "Year4Total": "3YearsAfter", "Year5Total": "4YearsAfter", \
+                                         "Year6Total": "5YearsAfter"})
+                                         
+mask = PIOverTime["cohort"] == 2020
+c = ["5YearsBefore", "4YearsBefore", "3YearsBefore", "2YearsBefore", "1YearBefore", "Year 0", \
+    "1YearAfter", "2YearsAfter", "3YearsAfter", "4YearsAfter", "5YearsAfter"]
+PIOverTime.loc[mask, c] = PIOverTime.loc[mask, c].shift(-1, axis = 1)
+
+mask = PIOverTime["cohort"] == 2021
+PIOverTime.loc[mask, c] = PIOverTime.loc[mask, c].shift(-2, axis = 1)
+
+mask = PIOverTime["cohort"] == 2022
+PIOverTime.loc[mask, c] = PIOverTime.loc[mask, c].shift(-3, axis = 1)
+
+mask = PIOverTime["cohort"] == 2023
+PIOverTime.loc[mask, c] = PIOverTime.loc[mask, c].shift(-4, axis = 1)
+
+mask = PIOverTime["cohort"] == 2024
+PIOverTime.loc[mask, c] = PIOverTime.loc[mask, c].shift(-5, axis = 1)
+
+logPIOverTime = PIOverTime.copy()
+
+logPIOverTime["5YearsBefore"] = np.log(logPIOverTime["5YearsBefore"])
+logPIOverTime["4YearsBefore"] = np.log(logPIOverTime["4YearsBefore"])
+logPIOverTime["3YearsBefore"] = np.log(logPIOverTime["3YearsBefore"])
+logPIOverTime["2YearsBefore"] = np.log(logPIOverTime["2YearsBefore"])
+logPIOverTime["1YearBefore"] = np.log(logPIOverTime["1YearBefore"])
+logPIOverTime["Year 0"] = np.log(logPIOverTime["Year 0"])
+logPIOverTime["1YearAfter"] = np.log(logPIOverTime["1YearAfter"])
+logPIOverTime["2YearsAfter"] = np.log(logPIOverTime["2YearsAfter"])
+logPIOverTime["3YearsAfter"] = np.log(logPIOverTime["3YearsAfter"])
+logPIOverTime["4YearsAfter"] = np.log(logPIOverTime["4YearsAfter"])
+logPIOverTime["5YearsAfter"] = np.log(logPIOverTime["5YearsAfter"])
+
+logPIOverTime = logPIOverTime.sort_values(by = ["cohort", "NAME"], ascending = [True, True])
+
+logPIOverTimeFinal = logPIOverTime.copy()
+logPIOverTimeFinal.drop(columns = ["5YearsAfter", "cohort"], axis = 1, inplace = True)
+
+logPIOverTimeFinal.set_index("NAME", inplace = True)
+```
+
+These final graphs do just that - by shifting the graph so that "Year 0" - marked by the dotted red line - is the year in which they participated in the cohort. Amounts to the left are requests made before they participated, and those to the right correspond to graphs after the cohort.
+
+```{python}
+PIHeat = px.imshow(logPIOverTimeFinal, aspect = "auto", title = "Amount Requested Relative to Cohort (as PI)", \
+  labels = dict(x = "Time Before or After Cohort", y = "Name and Cohort"))
+PIHeat.update_layout(height = 1000)
+PIHeat.add_shape(type = "line", x0 = -0.5, y0 = 11.5, x1 = 9.5, y1 = 11.5,
+                line = dict(color = "black", width = 4))
+PIHeat.add_shape(type = "line", x0 = -0.5, y0 = 21.5, x1 = 9.5, y1 = 21.5,
+                line = dict(color = "black", width = 4))
+PIHeat.add_shape(type = "line", x0 = -0.5, y0 = 31.5, x1 = 9.5, y1 = 31.5,
+                line = dict(color = "black", width = 4))
+PIHeat.add_shape(type = "line", x0 = -0.5, y0 = 39.5, x1 = 9.5, y1 = 39.5,
+                line = dict(color = "black", width = 4))
+
+PIHeat.add_shape(type = "line", x0 = 5, y0 = -0.5, x1 = 5, y1 = 47.5,
+                line = dict(color = "red", dash = "dash"))
+
+PIHeat.add_annotation(x = 1, y = 0.5, text = "2020", showarrow = False,
+                      font = dict(size = 20))
+PIHeat.add_annotation(x = 1, y = 12.5, text = "2021", showarrow = False,
+                      font = dict(size = 20))
+PIHeat.add_annotation(x = 1, y = 22.5, text = "2022", showarrow = False,
+                      font = dict(size = 20))
+PIHeat.add_annotation(x = 1, y = 32.5, text = "2023", showarrow = False,
+                      font = dict(size = 20))
+PIHeat.add_annotation(x = 1, y = 41, text = "2024", showarrow = False,
+                      font = dict(size = 20))
+PIHeat.show()
+```
+
+```{python}
+CoPIOverTime = AggCoPI[["NAME", "Year1Total", "Year2Total", "Year3Total", "Year4Total", "Year5Total", "Year6Total"]]
+CoPIOverTime = pd.merge(CoPIOverTime, participants, left_on = "NAME", right_on = "PI_NAME", how = 'left')
+
+CoPIOverTime["5YearsBefore"] = 0.00
+CoPIOverTime["4YearsBefore"] = 0.00
+CoPIOverTime["3YearsBefore"] = 0.00
+CoPIOverTime["2YearsBefore"] = 0.00
+CoPIOverTime["1YearBefore"] = 0.00
+
+CoPIOverTime = CoPIOverTime[["NAME", "5YearsBefore", "4YearsBefore", "3YearsBefore", "2YearsBefore", \
+                         "1YearBefore", "Year1Total", "Year2Total", "Year3Total", "Year4Total", \
+                        "Year5Total", "Year6Total", "cohort"]]
+
+CoPIOverTime = CoPIOverTime.rename(columns = {"Year1Total": "Year 0",\
+                                         "Year2Total": "1YearAfter", "Year3Total": "2YearsAfter", \
+                                         "Year4Total": "3YearsAfter", "Year5Total": "4YearsAfter", \
+                                         "Year6Total": "5YearsAfter"})
+
+mask = CoPIOverTime["cohort"] == 2020
+c = ["5YearsBefore", "4YearsBefore", "3YearsBefore", "2YearsBefore", "1YearBefore", "Year 0", \
+    "1YearAfter", "2YearsAfter", "3YearsAfter", "4YearsAfter", "5YearsAfter"]
+CoPIOverTime.loc[mask, c] = CoPIOverTime.loc[mask, c].shift(-1, axis = 1)
+
+mask = CoPIOverTime["cohort"] == 2021
+CoPIOverTime.loc[mask, c] = CoPIOverTime.loc[mask, c].shift(-2, axis = 1)
+
+mask = CoPIOverTime["cohort"] == 2022
+CoPIOverTime.loc[mask, c] = CoPIOverTime.loc[mask, c].shift(-3, axis = 1)
+
+mask = CoPIOverTime["cohort"] == 2023
+CoPIOverTime.loc[mask, c] = CoPIOverTime.loc[mask, c].shift(-4, axis = 1)
+
+mask = CoPIOverTime["cohort"] == 2024
+CoPIOverTime.loc[mask, c] = CoPIOverTime.loc[mask, c].shift(-5, axis = 1)
+
+logCoPIOverTime = CoPIOverTime.copy()
+
+logCoPIOverTime["5YearsBefore"] = np.log(logCoPIOverTime["5YearsBefore"])
+logCoPIOverTime["4YearsBefore"] = np.log(logCoPIOverTime["4YearsBefore"])
+logCoPIOverTime["3YearsBefore"] = np.log(logCoPIOverTime["3YearsBefore"])
+logCoPIOverTime["2YearsBefore"] = np.log(logCoPIOverTime["2YearsBefore"])
+logCoPIOverTime["1YearBefore"] = np.log(logCoPIOverTime["1YearBefore"])
+logCoPIOverTime["Year 0"] = np.log(logCoPIOverTime["Year 0"])
+logCoPIOverTime["1YearAfter"] = np.log(logCoPIOverTime["1YearAfter"])
+logCoPIOverTime["2YearsAfter"] = np.log(logCoPIOverTime["2YearsAfter"])
+logCoPIOverTime["3YearsAfter"] = np.log(logCoPIOverTime["3YearsAfter"])
+logCoPIOverTime["4YearsAfter"] = np.log(logCoPIOverTime["4YearsAfter"])
+logCoPIOverTime["5YearsAfter"] = np.log(logCoPIOverTime["5YearsAfter"])
+
+logCoPIOverTime = logCoPIOverTime.sort_values(by = ["cohort", "NAME"], ascending = [True, True])
+
+logCoPIOverTimeFinal = logCoPIOverTime.copy()
+logCoPIOverTimeFinal.drop(columns = ["5YearsAfter", "cohort"], axis = 1, inplace = True)
+
+logCoPIOverTimeFinal.set_index("NAME", inplace = True)
+```
+
+```{python}
+CoPIHeat = px.imshow(logCoPIOverTimeFinal, aspect = "auto", title = "Amount Requested Relative to Cohort (as CoPI)", \
+  labels = dict(x = "Time Before or After Cohort", y = "Name and Cohort"))
+CoPIHeat.update_layout(height = 1000)
+CoPIHeat.add_shape(type = "line", x0 = -0.5, y0 = 9.5, x1 = 9.5, y1 = 9.5,
+                line = dict(color = "black", width = 4))
+CoPIHeat.add_shape(type = "line", x0 = -0.5, y0 = 19.5, x1 = 9.5, y1 = 19.5,
+                line = dict(color = "black", width = 4))
+CoPIHeat.add_shape(type = "line", x0 = -0.5, y0 = 29.5, x1 = 9.5, y1 = 29.5,
+                line = dict(color = "black", width = 4))
+CoPIHeat.add_shape(type = "line", x0 = -0.5, y0 = 37.5, x1 = 9.5, y1 = 37.5,
+                line = dict(color = "black", width = 4))
+
+CoPIHeat.add_shape(type = "line", x0 = 5, y0 = -0.5, x1 = 5, y1 = 43.5,
+                line = dict(color = "red", dash = "dash"))
+
+CoPIHeat.add_annotation(x = 1, y = 0.5, text = "2020", showarrow = False,
+                      font = dict(size = 20))
+CoPIHeat.add_annotation(x = 1, y = 10.5, text = "2021", showarrow = False,
+                      font = dict(size = 20))
+CoPIHeat.add_annotation(x = 1, y = 20.5, text = "2022", showarrow = False,
+                      font = dict(size = 20))
+CoPIHeat.add_annotation(x = 1, y = 30.5, text = "2023", showarrow = False,
+                      font = dict(size = 20))
+CoPIHeat.add_annotation(x = 8, y = 38.5, text = "2024", showarrow = False,
+                      font = dict(size = 20))
+
+CoPIHeat.show()
+```
+
+```{python}
+CoIOverTime = AggCoI[["NAME", "Year1Total", "Year2Total", "Year3Total", "Year4Total", "Year5Total", "Year6Total"]]
+CoIOverTime = pd.merge(CoIOverTime, participants, left_on = "NAME", right_on = "PI_NAME", how = 'left')
+
+CoIOverTime["5YearsBefore"] = 0.00
+CoIOverTime["4YearsBefore"] = 0.00
+CoIOverTime["3YearsBefore"] = 0.00
+CoIOverTime["2YearsBefore"] = 0.00
+CoIOverTime["1YearBefore"] = 0.00
+
+CoIOverTime = CoIOverTime[["NAME", "5YearsBefore", "4YearsBefore", "3YearsBefore", "2YearsBefore", \
+                         "1YearBefore", "Year1Total", "Year2Total", "Year3Total", "Year4Total", \
+                        "Year5Total", "Year6Total", "cohort"]]
+
+CoIOverTime = CoIOverTime.rename(columns = {"Year1Total": "Year 0",\
+                                         "Year2Total": "1YearAfter", "Year3Total": "2YearsAfter", \
+                                         "Year4Total": "3YearsAfter", "Year5Total": "4YearsAfter", \
+                                         "Year6Total": "5YearsAfter"})
+
+mask = CoIOverTime["cohort"] == 2020
+c = ["5YearsBefore", "4YearsBefore", "3YearsBefore", "2YearsBefore", "1YearBefore", "Year 0", \
+    "1YearAfter", "2YearsAfter", "3YearsAfter", "4YearsAfter", "5YearsAfter"]
+CoIOverTime.loc[mask, c] = CoIOverTime.loc[mask, c].shift(-1, axis = 1)
+
+mask = CoIOverTime["cohort"] == 2021
+CoIOverTime.loc[mask, c] = CoIOverTime.loc[mask, c].shift(-2, axis = 1)
+
+mask = CoIOverTime["cohort"] == 2022
+CoIOverTime.loc[mask, c] = CoIOverTime.loc[mask, c].shift(-3, axis = 1)
+
+mask = CoIOverTime["cohort"] == 2023
+CoIOverTime.loc[mask, c] = CoIOverTime.loc[mask, c].shift(-4, axis = 1)
+
+mask = CoIOverTime["cohort"] == 2024
+CoIOverTime.loc[mask, c] = CoIOverTime.loc[mask, c].shift(-5, axis = 1)
+
+logCoIOverTime = CoIOverTime.copy()
+
+logCoIOverTime["5YearsBefore"] = np.log(logCoIOverTime["5YearsBefore"])
+logCoIOverTime["4YearsBefore"] = np.log(logCoIOverTime["4YearsBefore"])
+logCoIOverTime["3YearsBefore"] = np.log(logCoIOverTime["3YearsBefore"])
+logCoIOverTime["2YearsBefore"] = np.log(logCoIOverTime["2YearsBefore"])
+logCoIOverTime["1YearBefore"] = np.log(logCoIOverTime["1YearBefore"])
+logCoIOverTime["Year 0"] = np.log(logCoIOverTime["Year 0"])
+logCoIOverTime["1YearAfter"] = np.log(logCoIOverTime["1YearAfter"])
+logCoIOverTime["2YearsAfter"] = np.log(logCoIOverTime["2YearsAfter"])
+logCoIOverTime["3YearsAfter"] = np.log(logCoIOverTime["3YearsAfter"])
+logCoIOverTime["4YearsAfter"] = np.log(logCoIOverTime["4YearsAfter"])
+logCoIOverTime["5YearsAfter"] = np.log(logCoIOverTime["5YearsAfter"])
+
+logCoIOverTime = logCoIOverTime.sort_values(by = ["cohort", "NAME"], ascending = [True, True])
+
+logCoIOverTimeFinal = logCoIOverTime.copy()
+logCoIOverTimeFinal.drop(columns = ["5YearsAfter", "cohort"], axis = 1, inplace = True)
+
+logCoIOverTimeFinal.set_index("NAME", inplace = True)
+```
+
+```{python}
+CoIHeat = px.imshow(logCoIOverTimeFinal, aspect = "auto", title = "Amount Requested Relative to Cohort (as CoI)", \
+  labels = dict(x = "Time Before or After Cohort", y = "Name and Cohort"))
+CoIHeat.update_layout(height = 1000)
+CoIHeat.add_shape(type = "line", x0 = -0.5, y0 = 6.5, x1 = 9.5, y1 = 6.5,
+                line = dict(color = "black", width = 4))
+CoIHeat.add_shape(type = "line", x0 = -0.5, y0 = 13.5, x1 = 9.5, y1 = 13.5,
+                line = dict(color = "black", width = 4))
+CoIHeat.add_shape(type = "line", x0 = -0.5, y0 = 21.5, x1 = 9.5, y1 = 21.5,
+                line = dict(color = "black", width = 4))
+CoIHeat.add_shape(type = "line", x0 = -0.5, y0 = 28.5, x1 = 9.5, y1 = 28.5,
+                line = dict(color = "black", width = 4))
+
+CoIHeat.add_shape(type = "line", x0 = 5, y0 = -0.5, x1 = 5, y1 = 33.5,
+                line = dict(color = "red", dash = "dash"))
+
+CoIHeat.add_annotation(x = 1, y = 0.5, text = "2020", showarrow = False,
+                      font = dict(size = 20))
+CoIHeat.add_annotation(x = 1, y = 7.5, text = "2021", showarrow = False,
+                      font = dict(size = 20))
+CoIHeat.add_annotation(x = 1, y = 14.5, text = "2022", showarrow = False,
+                      font = dict(size = 20))
+CoIHeat.add_annotation(x = 1, y = 22.5, text = "2023", showarrow = False,
+                      font = dict(size = 20))
+CoIHeat.add_annotation(x = 8, y = 29.5, text = "2024", showarrow = False,
+                      font = dict(size = 20))
+
+CoIHeat.show()
+```
+
+### Expenditures
+
+Now, the same graphs are produced for the expenditure data.
+
+```{python}
+expenditures_df = pd.DataFrame(pd.read_csv("UTF-8PI_expenditure_activity_12_13_24.csv"))
+
+expenditures_df["ACTIVITY_YEAR"] = expenditures_df["ACTIVITY_DATE"].str.slice(0,4)
+expenditures_df["ACTIVITY_YEAR"] = expenditures_df["ACTIVITY_YEAR"].astype(int)
+
+expenditures_df["TRANSACTION_YEAR"] = expenditures_df["TRANSACTION_DATE"].str.slice(0,4)
+expenditures_df["TRANSACTION_YEAR"] = expenditures_df["TRANSACTION_YEAR"].astype(int)
+
+Exp2018 = expenditures_df.loc[expenditures_df["TRANSACTION_YEAR"] == 2018]
+Exp2019 = expenditures_df.loc[expenditures_df["TRANSACTION_YEAR"] == 2019]
+Exp2020 = expenditures_df.loc[expenditures_df["TRANSACTION_YEAR"] == 2020]
+Exp2021 = expenditures_df.loc[expenditures_df["TRANSACTION_YEAR"] == 2021]
+Exp2022 = expenditures_df.loc[expenditures_df["TRANSACTION_YEAR"] == 2022]
+Exp2023 = expenditures_df.loc[expenditures_df["TRANSACTION_YEAR"] == 2023]
+Exp2024 = expenditures_df.loc[expenditures_df["TRANSACTION_YEAR"] == 2024]
+
+Exp2018Agg = Exp2018.groupby("PI_NAME").sum()
+Exp2018Agg["TRANSACTION_YEAR"] = 2018
+Exp2018Agg["ACTIVITY_YEAR"] = 2018
+Exp2018Agg = Exp2018Agg[["AMOUNT"]]
+Exp2018Agg = Exp2018Agg.rename(columns = {"AMOUNT": "2018 Expenditures"})
+
+Exp2019Agg = Exp2019.groupby("PI_NAME").sum()
+Exp2019Agg["TRANSACTION_YEAR"] = 2019
+Exp2019Agg["ACTIVITY_YEAR"] = 2019
+Exp2019Agg = Exp2019Agg[["AMOUNT"]]
+Exp2019Agg = Exp2019Agg.rename(columns = {"AMOUNT": "2019 Expenditures"})
+
+Exp2020Agg = Exp2020.groupby("PI_NAME").sum()
+Exp2020Agg["TRANSACTION_YEAR"] = 2020
+Exp2020Agg["ACTIVITY_YEAR"] = 2020
+Exp2020Agg = Exp2020Agg[["AMOUNT"]]
+Exp2020Agg = Exp2020Agg.rename(columns = {"AMOUNT": "2020 Expenditures"})
+
+Exp2021Agg = Exp2021.groupby("PI_NAME").sum()
+Exp2021Agg["TRANSACTION_YEAR"] = 2021
+Exp2021Agg["ACTIVITY_YEAR"] = 2021
+Exp2021Agg = Exp2021Agg[["AMOUNT"]]
+Exp2021Agg = Exp2021Agg.rename(columns = {"AMOUNT": "2021 Expenditures"})
+
+Exp2022Agg = Exp2022.groupby("PI_NAME").sum()
+Exp2022Agg["TRANSACTION_YEAR"] = 2022
+Exp2022Agg["ACTIVITY_YEAR"] = 2022
+Exp2022Agg = Exp2022Agg[["AMOUNT"]]
+Exp2022Agg = Exp2022Agg.rename(columns = {"AMOUNT": "2022 Expenditures"})
+
+Exp2023Agg = Exp2023.groupby("PI_NAME").sum()
+Exp2023Agg["TRANSACTION_YEAR"] = 2023
+Exp2023Agg["ACTIVITY_YEAR"] = 2023
+Exp2023Agg = Exp2023Agg[["AMOUNT"]]
+Exp2023Agg = Exp2023Agg.rename(columns = {"AMOUNT": "2023 Expenditures"})
+
+Exp2024Agg = Exp2024.groupby("PI_NAME").sum()
+Exp2024Agg["TRANSACTION_YEAR"] = 2024
+Exp2024Agg["ACTIVITY_YEAR"] = 2024
+Exp2024Agg = Exp2024Agg[["AMOUNT"]]
+Exp2024Agg = Exp2024Agg.rename(columns = {"AMOUNT": "2024 Expenditures"})
+
+ExpAgg = pd.concat([Exp2018Agg, Exp2019Agg, Exp2020Agg, Exp2021Agg, Exp2022Agg, Exp2023Agg, Exp2024Agg], axis = 1)
+ExpAgg = ExpAgg.fillna(0)
+
+ExpAgg = ExpAgg.reset_index(drop = False)
+```
+
+```{python}
+AggChart = go.Figure()
+
+AggChart.add_traces(go.Bar(
+    x = ExpAgg["2018 Expenditures"],
+    y = ExpAgg["PI_NAME"],
+    text = ExpAgg["2018 Expenditures"],
+    textposition = "inside",
+    name = "2018 Expenditures",
+    orientation = 'h',
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Year: 2018"))
+
+AggChart.add_traces(go.Bar(
+    x = ExpAgg["2019 Expenditures"],
+    y = ExpAgg["PI_NAME"],
+    text = ExpAgg["2019 Expenditures"],
+    textposition = "inside",
+    name = "2019 Expenditures",
+    orientation = 'h',
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Year: 2019"))
+
+AggChart.add_traces(go.Bar(
+    x = ExpAgg["2020 Expenditures"],
+    y = ExpAgg["PI_NAME"],
+    text = ExpAgg["2020 Expenditures"],
+    textposition = "inside",
+    name = "2020 Expenditures",
+    orientation = 'h',
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Year: 2020"))
+
+AggChart.add_traces(go.Bar(
+    x = ExpAgg["2021 Expenditures"],
+    y = ExpAgg["PI_NAME"],
+    text = ExpAgg["2021 Expenditures"],
+    textposition = "inside",
+    name = "2021 Expenditures",
+    orientation = 'h',
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Year: 2021"))
+
+AggChart.add_traces(go.Bar(
+    x = ExpAgg["2022 Expenditures"],
+    y = ExpAgg["PI_NAME"],
+    text = ExpAgg["2022 Expenditures"],
+    textposition = "inside",
+    name = "2022 Expenditures",
+    orientation = 'h',
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Year: 2022"))
+
+AggChart.add_traces(go.Bar(
+    x = ExpAgg["2023 Expenditures"],
+    y = ExpAgg["PI_NAME"],
+    text = ExpAgg["2023 Expenditures"],
+    textposition = "inside",
+    name = "2023 Expenditures",
+    orientation = 'h',
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Year: 2023"))
+
+AggChart.add_traces(go.Bar(
+    x = ExpAgg["2024 Expenditures"],
+    y = ExpAgg["PI_NAME"],
+    text = ExpAgg["2024 Expenditures"],
+    textposition = "inside",
+    name = "2024 Expenditures",
+    orientation = 'h',
+    hovertemplate = "Name: %{y} <br> Amount: %{x:$.2s} <br> Year: 2024"))
+    
+AggChart.update_layout(
+    height = 1000,
+    barmode = "stack",
+    title = "Amount Spent by Year",
+    yaxis = {'categoryorder' : 'total ascending'}
+)
+
+AggChart.show()
+```
+
+```{python}
+ExpAgg["Year1Total"] = ExpAgg["2018 Expenditures"]
+ExpAgg["Year2Total"] = ExpAgg["2019 Expenditures"] + ExpAgg["Year1Total"]
+ExpAgg["Year3Total"] = ExpAgg["2020 Expenditures"] + ExpAgg["Year2Total"]
+ExpAgg["Year4Total"] = ExpAgg["2021 Expenditures"] + ExpAgg["Year3Total"]
+ExpAgg["Year5Total"] = ExpAgg["2022 Expenditures"] + ExpAgg["Year4Total"]
+ExpAgg["Year6Total"] = ExpAgg["2023 Expenditures"] + ExpAgg["Year5Total"]
+ExpAgg["Year7Total"] = ExpAgg["2024 Expenditures"] + ExpAgg["Year6Total"]
+
+Cumulative = ExpAgg[["PI_NAME", "Year1Total", "Year2Total", "Year3Total", "Year4Total", "Year5Total", "Year6Total", "Year7Total"]]
+
+CombinedCumulative = pd.merge(Cumulative, participants, on = "PI_NAME", how = "left")
+CombinedCumulative = CombinedCumulative.dropna()
+CombinedCumulative = CombinedCumulative.sort_values(by = ["cohort", "PI_NAME"], ascending = [True, True])
+
+logCombined = CombinedCumulative.copy()
+
+logCombined["Year1Total"] = np.log(logCombined["Year1Total"])
+logCombined["Year2Total"] = np.log(logCombined["Year2Total"])
+logCombined["Year3Total"] = np.log(logCombined["Year3Total"])
+logCombined["Year4Total"] = np.log(logCombined["Year4Total"])
+logCombined["Year5Total"] = np.log(logCombined["Year5Total"])
+logCombined["Year6Total"] = np.log(logCombined["Year6Total"])
+logCombined["Year7Total"] = np.log(logCombined["Year7Total"])
+
+logCombined["6YearsBefore"] = 0.00
+logCombined["5YearsBefore"] = 0.00
+logCombined["4YearsBefore"] = 0.00
+logCombined["3YearsBefore"] = 0.00
+logCombined["2YearsBefore"] = 0.00
+logCombined["1YearBefore"] = 0.00
+
+OverTime = logCombined[["PI_NAME", "6YearsBefore", "5YearsBefore", "4YearsBefore", "3YearsBefore", "2YearsBefore", \
+                         "1YearBefore", "Year1Total", "Year2Total", "Year3Total", "Year4Total", \
+                        "Year5Total", "Year6Total", "Year7Total", "cohort"]]
+                        
+OverTime = OverTime.rename(columns = {"Year1Total": "Year 0",\
+                          "Year2Total": "1YearAfter", "Year3Total": "2YearsAfter", \
+                          "Year4Total": "3YearsAfter", "Year5Total": "4YearsAfter", \
+                          "Year6Total": "5YearsAfter", "Year7Total": "6YearsAfter"})
+                          
+mask = OverTime["cohort"] == 2020
+c = ["6YearsBefore", "5YearsBefore", "4YearsBefore", "3YearsBefore", "2YearsBefore", "1YearBefore", \
+     "Year 0", "1YearAfter", "2YearsAfter", "3YearsAfter", "4YearsAfter", "5YearsAfter", "6YearsAfter"]
+OverTime.loc[mask, c] = OverTime.loc[mask, c].shift(-2, axis = 1)
+
+mask = OverTime["cohort"] == 2021
+OverTime.loc[mask, c] = OverTime.loc[mask, c].shift(-3, axis = 1)
+
+mask = OverTime["cohort"] == 2022
+OverTime.loc[mask, c] = OverTime.loc[mask, c].shift(-4, axis = 1)
+
+mask = OverTime["cohort"] == 2023
+OverTime.loc[mask, c] = OverTime.loc[mask, c].shift(-5, axis = 1)
+
+mask = OverTime["cohort"] == 2024
+OverTime.loc[mask, c] = OverTime.loc[mask, c].shift(-6, axis = 1)
+
+OverTimeFinal = OverTime.copy()
+OverTimeFinal.drop(columns = ["5YearsAfter", "6YearsAfter", "cohort"], axis = 1, inplace = True)
+
+OverTimeFinal.set_index("PI_NAME", inplace = True)
+OverTimeFinal = OverTimeFinal.replace(0, np.nan)
+```
+
+```{python}
+ExpHeat = px.imshow(OverTimeFinal, aspect = "auto", labels = dict(x = "Time before or after Cohort",
+                                                                  y = "Name and Cohort"))
+ExpHeat.update_layout(height = 1000,
+                      title = "Expenditures Over Time")
+ExpHeat.add_shape(type = "line", x0 = -0.5, y0 = 10.5, x1 = 10.5, y1 = 10.5,
+                line = dict(color = "black", width = 4))
+ExpHeat.add_shape(type = "line", x0 = -0.5, y0 = 18.5, x1 = 10.5, y1 = 18.5,
+                line = dict(color = "black", width = 4))
+ExpHeat.add_shape(type = "line", x0 = -0.5, y0 = 27.5, x1 = 10.5, y1 = 27.5,
+                line = dict(color = "black", width = 4))
+ExpHeat.add_shape(type = "line", x0 = -0.5, y0 = 33.5, x1 = 10.5, y1 = 33.5,
+                line = dict(color = "black", width = 4))
+
+ExpHeat.add_shape(type = "line", x0 = 6, y0 = -0.5, x1 = 6, y1 = 40.5,
+                line = dict(color = "red", dash = "dash"))
+
+ExpHeat.add_annotation(x = 1, y = 0.5, text = "2020", showarrow = False,
+                      font = dict(size = 20))
+ExpHeat.add_annotation(x = 1, y = 11.5, text = "2021", showarrow = False,
+                      font = dict(size = 20))
+ExpHeat.add_annotation(x = 1, y = 19.5, text = "2022", showarrow = False,
+                      font = dict(size = 20))
+ExpHeat.add_annotation(x = 1, y = 28.5, text = "2023", showarrow = False,
+                      font = dict(size = 20))
+ExpHeat.add_annotation(x = 9, y = 35, text = "2024", showarrow = False,
+                      font = dict(size = 20))
+ExpHeat.show()
+```
