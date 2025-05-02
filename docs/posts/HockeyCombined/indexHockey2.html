@@ -129,15 +129,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
     <a class="nav-link" href="../../about.html"> 
-<span class="menu-text">About</span></a>
+<span class="menu-text">About Myself</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/cambarerij"> <i class="bi bi-github" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com"> <i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://www.linkedin.com/in/john-l-cambareri/"> <i class="bi bi-linkedin" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -154,9 +154,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div class="quarto-title column-body">
       <h1 class="title">Assignment 5.5: The Hockey Awards Ballot</h1>
                                 <div class="quarto-categories">
-                <div class="quarto-category">news</div>
                 <div class="quarto-category">code</div>
                 <div class="quarto-category">analysis</div>
+                <div class="quarto-category">visualization</div>
               </div>
                   </div>
   </div>
@@ -193,23 +193,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<div id="fd69ef88" class="cell" data-execution_count="1">
+<p>In this assignment, I combine the results of every student in the BCB 520 class, and see who everyone thought the winners would be. Then, I use the NHL point system (10 points for 1st, 7 points for 2nd, 5 for 3rd, 3 for 4th, and 1 for 5th) and add up the total results to see who the class predicts will actually win the end of season awards for the 2024-2025 NHL season.</p>
+<div id="c3ab61e7" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">'ignore'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="50ef2074" class="cell" data-execution_count="2">
+<div id="48a0b6fb" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.io <span class="im">as</span> pio</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>pio.renderers.default <span class="op">=</span> <span class="st">"iframe"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="4e282e0d" class="cell" data-execution_count="3">
+<div id="9c921e4a" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Barrie <span class="op">=</span> pd.read_excel(<span class="st">'Barrie.xlsx'</span>)</span>
@@ -221,8 +225,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>John <span class="op">=</span> pd.read_csv(<span class="st">"JohnCambareriHockeyAwards.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Manually inputting the three other dataframes.</p>
-<div id="9e8d558d" class="cell" data-execution_count="4">
+<p>Not all the dataframes could be input easily. Here, I manually input the three other dataframes.</p>
+<div id="6da08d6a" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>unknown <span class="op">=</span> [[<span class="st">"Hart"</span>, <span class="st">"Ekholm"</span>, <span class="dv">1</span>], [<span class="st">"Hart"</span>, <span class="st">"Slavis"</span>, <span class="dv">2</span>], [<span class="st">"Hart"</span>, <span class="st">"Toews"</span>, <span class="dv">3</span>], [<span class="st">"Hart"</span>, <span class="st">"Gotisbere"</span>, <span class="dv">4</span>], [<span class="st">"Hart"</span>, <span class="st">"Orlov"</span>, <span class="dv">5</span>], <span class="op">\</span></span>
@@ -234,7 +238,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>unknownDF <span class="op">=</span> pd.DataFrame(unknown, columns <span class="op">=</span> [<span class="st">'Award'</span>, <span class="st">'Player'</span>, <span class="st">'Place'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="5b63a6f9" class="cell" data-execution_count="5">
+<div id="0028f909" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Marwa <span class="op">=</span> [[<span class="st">"Hart"</span>, <span class="st">"Nikita Kucherov"</span>, <span class="dv">1</span>], [<span class="st">"Hart"</span>, <span class="st">"Leon Draisaitl"</span>, <span class="dv">2</span>], [<span class="st">"Hart"</span>, <span class="st">"Nathan MacKinnon"</span>, <span class="dv">3</span>], [<span class="st">"Hart"</span>, <span class="st">"Kirill"</span>, <span class="dv">4</span>], [<span class="st">"Hart"</span>, <span class="st">"Connor McDavid"</span>, <span class="dv">5</span>],<span class="op">\</span></span>
@@ -247,7 +251,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>MarwaDF <span class="op">=</span> pd.DataFrame(Marwa, columns <span class="op">=</span> [<span class="st">'Award'</span>, <span class="st">'Player'</span>, <span class="st">'Place'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="8e893089" class="cell" data-execution_count="6">
+<div id="9226109a" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>Sharon <span class="op">=</span> [[<span class="st">"Hart"</span>, <span class="st">"Nathan MacKinnon"</span>, <span class="dv">1</span>], [<span class="st">"Hart"</span>, <span class="st">"Leon Draisaitl"</span>, <span class="dv">2</span>], [<span class="st">"Hart"</span>, <span class="st">"Nikita Kucherov"</span>, <span class="dv">3</span>], [<span class="st">"Hart"</span>, <span class="st">"Cale Makar"</span>, <span class="dv">4</span>], [<span class="st">"Hart"</span>, <span class="st">"Jack Eichel"</span>, <span class="dv">5</span>],<span class="op">\</span></span>
@@ -260,8 +264,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>SharonDF <span class="op">=</span> pd.DataFrame(Sharon, columns <span class="op">=</span> [<span class="st">"Award"</span>, <span class="st">"Player"</span>, <span class="st">"Rank"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Altering columns so that they all match</p>
-<div id="b6849920" class="cell" data-execution_count="7">
+<p>Here, I adjust the names of the columns so that they all match each other.</p>
+<div id="e16bebfe" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">5</span>):</span>
@@ -287,106 +291,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>Betsy <span class="op">=</span> Betsy.rename(columns <span class="op">=</span> {<span class="st">'Name'</span>: <span class="st">'Voter'</span>, <span class="st">'Nomination position'</span>: <span class="st">'Rank'</span>, <span class="st">'Player Name'</span>: <span class="st">'Player'</span>})</span>
 <span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>SharonDF[<span class="st">"Voter"</span>] <span class="op">=</span> <span class="st">"Sharon"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stderr">
-<pre><code>/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_7347/3894271760.py:2: FutureWarning:
-
-ChainedAssignmentError: behaviour will change in pandas 3.0!
-You are setting values through chained assignment. Currently this works in certain cases, but when using Copy-on-Write (which will become the default behaviour in pandas 3.0) this will never work to update the original DataFrame or Series, because the intermediate object on which we are setting values will behave as a copy.
-A typical example is when you are setting values in a column of a DataFrame, like:
-
-df["col"][row_indexer] = value
-
-Use `df.loc[row_indexer, "col"] = values` instead, to perform the assignment in a single step and ensure this keeps updating the original `df`.
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-
-
-/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_7347/3894271760.py:2: SettingWithCopyWarning:
-
-
-A value is trying to be set on a copy of a slice from a DataFrame
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-
-/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_7347/3894271760.py:2: FutureWarning:
-
-ChainedAssignmentError: behaviour will change in pandas 3.0!
-You are setting values through chained assignment. Currently this works in certain cases, but when using Copy-on-Write (which will become the default behaviour in pandas 3.0) this will never work to update the original DataFrame or Series, because the intermediate object on which we are setting values will behave as a copy.
-A typical example is when you are setting values in a column of a DataFrame, like:
-
-df["col"][row_indexer] = value
-
-Use `df.loc[row_indexer, "col"] = values` instead, to perform the assignment in a single step and ensure this keeps updating the original `df`.
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-
-
-/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_7347/3894271760.py:2: SettingWithCopyWarning:
-
-
-A value is trying to be set on a copy of a slice from a DataFrame
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-
-/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_7347/3894271760.py:2: FutureWarning:
-
-ChainedAssignmentError: behaviour will change in pandas 3.0!
-You are setting values through chained assignment. Currently this works in certain cases, but when using Copy-on-Write (which will become the default behaviour in pandas 3.0) this will never work to update the original DataFrame or Series, because the intermediate object on which we are setting values will behave as a copy.
-A typical example is when you are setting values in a column of a DataFrame, like:
-
-df["col"][row_indexer] = value
-
-Use `df.loc[row_indexer, "col"] = values` instead, to perform the assignment in a single step and ensure this keeps updating the original `df`.
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-
-
-/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_7347/3894271760.py:2: SettingWithCopyWarning:
-
-
-A value is trying to be set on a copy of a slice from a DataFrame
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-
-/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_7347/3894271760.py:2: FutureWarning:
-
-ChainedAssignmentError: behaviour will change in pandas 3.0!
-You are setting values through chained assignment. Currently this works in certain cases, but when using Copy-on-Write (which will become the default behaviour in pandas 3.0) this will never work to update the original DataFrame or Series, because the intermediate object on which we are setting values will behave as a copy.
-A typical example is when you are setting values in a column of a DataFrame, like:
-
-df["col"][row_indexer] = value
-
-Use `df.loc[row_indexer, "col"] = values` instead, to perform the assignment in a single step and ensure this keeps updating the original `df`.
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-
-
-/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_7347/3894271760.py:2: SettingWithCopyWarning:
-
-
-A value is trying to be set on a copy of a slice from a DataFrame
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-</code></pre>
-</div>
 </div>
 <p>Create a combined dataframe consisting of all 10 dataframes</p>
-<div id="bb17cd7d" class="cell" data-execution_count="8">
+<div id="d7f4ac62" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>combinedDF <span class="op">=</span> pd.concat([unknownDF, MarwaDF], ignore_index <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>combinedDF <span class="op">=</span> pd.concat([combinedDF, John], ignore_index <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>combinedDF <span class="op">=</span> pd.concat([combinedDF, Henry], ignore_index <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>combinedDF <span class="op">=</span> pd.concat([combinedDF, Claire], ignore_index <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>combinedDF <span class="op">=</span> pd.concat([combinedDF, Ian], ignore_index <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>combinedDF <span class="op">=</span> pd.concat([combinedDF, Betsy], ignore_index <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>combinedDF <span class="op">=</span> pd.concat([combinedDF, Barrie], ignore_index <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>combinedDF <span class="op">=</span> pd.concat([combinedDF, PriyaMelt], ignore_index <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>combinedDF <span class="op">=</span> pd.concat([combinedDF, SharonDF], ignore_index <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>combinedDF</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>combinedDF <span class="op">=</span> pd.concat([unknownDF, MarwaDF], ignore_index <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>combinedDF <span class="op">=</span> pd.concat([combinedDF, John], ignore_index <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>combinedDF <span class="op">=</span> pd.concat([combinedDF, Henry], ignore_index <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>combinedDF <span class="op">=</span> pd.concat([combinedDF, Claire], ignore_index <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>combinedDF <span class="op">=</span> pd.concat([combinedDF, Ian], ignore_index <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>combinedDF <span class="op">=</span> pd.concat([combinedDF, Betsy], ignore_index <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>combinedDF <span class="op">=</span> pd.concat([combinedDF, Barrie], ignore_index <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>combinedDF <span class="op">=</span> pd.concat([combinedDF, PriyaMelt], ignore_index <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>combinedDF <span class="op">=</span> pd.concat([combinedDF, SharonDF], ignore_index <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>combinedDF</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="8">
+<div class="cell-output cell-output-display" data-execution_count="66">
 <div>
 
 
@@ -486,10 +408,10 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 </div>
 </div>
 <p>If we look at this dataframe’s value counts, we can see that the “awards” column is all over the place with various misspellings and capitalization.</p>
-<div id="615bd221" class="cell" data-execution_count="9">
+<div id="d22d3144" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(combinedDF[<span class="st">"Award"</span>].value_counts())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(combinedDF[<span class="st">"Award"</span>].value_counts())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Award
@@ -518,36 +440,36 @@ LADY BING           5
 Name: count, dtype: int64</code></pre>
 </div>
 </div>
-<div id="151138f7" class="cell" data-execution_count="10">
+<div id="89188852" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"LADY BING"</span>, value <span class="op">=</span> <span class="st">"Lady Byng"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Lady Btng"</span>, value <span class="op">=</span> <span class="st">"Lady Byng"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Lady Bing"</span>, value <span class="op">=</span> <span class="st">"Lady Byng"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Byng"</span>, value <span class="op">=</span> <span class="st">"Lady Byng"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"FRANK J SELKE"</span>, value <span class="op">=</span> <span class="st">"Frank J. Selke"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Frank Selke"</span>, value <span class="op">=</span> <span class="st">"Frank J. Selke"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Frank J Selke"</span>, value <span class="op">=</span> <span class="st">"Frank J. Selke"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Selke"</span>, value <span class="op">=</span> <span class="st">"Frank J. Selke"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"CALDER"</span>, value <span class="op">=</span> <span class="st">"Calder"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Calder Memorial"</span>, value <span class="op">=</span> <span class="st">"Calder"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"HART"</span>, value <span class="op">=</span> <span class="st">"Hart"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Heart"</span>, value <span class="op">=</span> <span class="st">"Hart"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Hart Memorial"</span>, value <span class="op">=</span> <span class="st">"Hart"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"JAMES NORRIS"</span>, value <span class="op">=</span> <span class="st">"James Norris"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Norris"</span>, value <span class="op">=</span> <span class="st">"James Norris"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"VEZINA"</span>, value <span class="op">=</span> <span class="st">"Vezina"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"LADY BING"</span>, value <span class="op">=</span> <span class="st">"Lady Byng"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Lady Btng"</span>, value <span class="op">=</span> <span class="st">"Lady Byng"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Lady Bing"</span>, value <span class="op">=</span> <span class="st">"Lady Byng"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Byng"</span>, value <span class="op">=</span> <span class="st">"Lady Byng"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"FRANK J SELKE"</span>, value <span class="op">=</span> <span class="st">"Frank J. Selke"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Frank Selke"</span>, value <span class="op">=</span> <span class="st">"Frank J. Selke"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Frank J Selke"</span>, value <span class="op">=</span> <span class="st">"Frank J. Selke"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Selke"</span>, value <span class="op">=</span> <span class="st">"Frank J. Selke"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"CALDER"</span>, value <span class="op">=</span> <span class="st">"Calder"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Calder Memorial"</span>, value <span class="op">=</span> <span class="st">"Calder"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"HART"</span>, value <span class="op">=</span> <span class="st">"Hart"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Heart"</span>, value <span class="op">=</span> <span class="st">"Hart"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Hart Memorial"</span>, value <span class="op">=</span> <span class="st">"Hart"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"JAMES NORRIS"</span>, value <span class="op">=</span> <span class="st">"James Norris"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Norris"</span>, value <span class="op">=</span> <span class="st">"James Norris"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"VEZINA"</span>, value <span class="op">=</span> <span class="st">"Vezina"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="a76fe275" class="cell" data-execution_count="11">
+<div id="c0078c52" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(combinedDF[<span class="st">"Award"</span>].value_counts())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(combinedDF[<span class="st">"Award"</span>].value_counts())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Award
@@ -561,58 +483,58 @@ Name: count, dtype: int64</code></pre>
 </div>
 </div>
 <p>Add first names to some entries that only had last names</p>
-<div id="4d3dede0" class="cell" data-execution_count="12">
+<div id="273cd516" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Ekholm"</span>, value <span class="op">=</span> <span class="st">"Mattias Ekholm"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Slavis"</span>, value <span class="op">=</span> <span class="st">"Jaccob Slavin"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Toews"</span>, value <span class="op">=</span> <span class="st">"Devon Toews"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Gotisbere"</span>, value <span class="op">=</span> <span class="st">"Shayne Gostisbehere"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Orlov"</span>, value <span class="op">=</span> <span class="st">"Dmitry Orlov"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Ekholm"</span>, value <span class="op">=</span> <span class="st">"Mattias Ekholm"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Slavis"</span>, value <span class="op">=</span> <span class="st">"Jaccob Slavin"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Toews"</span>, value <span class="op">=</span> <span class="st">"Devon Toews"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Gotisbere"</span>, value <span class="op">=</span> <span class="st">"Shayne Gostisbehere"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Orlov"</span>, value <span class="op">=</span> <span class="st">"Dmitry Orlov"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Add point system for the ranks. A player gets 10 points for a 1st place showing on the ballot, 7 points for a 2nd, 5 for a third, 3 for a fourth, and one point for a 5th.</p>
-<div id="a8f8eb04" class="cell" data-execution_count="13">
+<div id="55da1bbd" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>conditions <span class="op">=</span> [</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    combinedDF[<span class="st">"Rank"</span>] <span class="op">==</span> <span class="dv">1</span>,</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    combinedDF[<span class="st">"Rank"</span>] <span class="op">==</span> <span class="dv">2</span>,</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    combinedDF[<span class="st">"Rank"</span>] <span class="op">==</span> <span class="dv">3</span>,</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    combinedDF[<span class="st">"Rank"</span>] <span class="op">==</span> <span class="dv">4</span>,</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    combinedDF[<span class="st">"Rank"</span>] <span class="op">==</span> <span class="dv">5</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>values <span class="op">=</span> [<span class="dv">10</span>, <span class="dv">7</span>, <span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">1</span>]</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>combinedDF[<span class="st">"AwardPoints"</span>] <span class="op">=</span> np.select(conditions, values, default <span class="op">=</span> <span class="dv">0</span>)</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>combinedDF[<span class="st">"AwardPoints"</span>] <span class="op">=</span> combinedDF[<span class="st">"AwardPoints"</span>].astype(<span class="bu">int</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>conditions <span class="op">=</span> [</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    combinedDF[<span class="st">"Rank"</span>] <span class="op">==</span> <span class="dv">1</span>,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    combinedDF[<span class="st">"Rank"</span>] <span class="op">==</span> <span class="dv">2</span>,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    combinedDF[<span class="st">"Rank"</span>] <span class="op">==</span> <span class="dv">3</span>,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    combinedDF[<span class="st">"Rank"</span>] <span class="op">==</span> <span class="dv">4</span>,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    combinedDF[<span class="st">"Rank"</span>] <span class="op">==</span> <span class="dv">5</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>values <span class="op">=</span> [<span class="dv">10</span>, <span class="dv">7</span>, <span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">1</span>]</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>combinedDF[<span class="st">"AwardPoints"</span>] <span class="op">=</span> np.select(conditions, values, default <span class="op">=</span> <span class="dv">0</span>)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>combinedDF[<span class="st">"AwardPoints"</span>] <span class="op">=</span> combinedDF[<span class="st">"AwardPoints"</span>].astype(<span class="bu">int</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Fix typos in player names</p>
-<div id="466d085c" class="cell" data-execution_count="14">
+<div id="045bd17f" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Shayne Gostisbere"</span>, value <span class="op">=</span> <span class="st">"Shayne Gostisbehere"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Shayne Godtisbehertr"</span>, value <span class="op">=</span> <span class="st">"Shayne Gostisbehere"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Shayne Gostisbeher"</span>, value <span class="op">=</span> <span class="st">"Shayne Gostisbehere"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Leon Draisaitl "</span>, value <span class="op">=</span> <span class="st">"Leon Draisaitl"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Conner Hellebuyck"</span>, value <span class="op">=</span> <span class="st">"Connor Hellebuyck"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Cale Maker"</span>, value <span class="op">=</span> <span class="st">"Cale Makar"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Shayne Gotisbehere"</span>, value <span class="op">=</span> <span class="st">"Shayne Gostisbehere"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Kirill Machenko"</span>, value <span class="op">=</span> <span class="st">"Kirill Marchenko"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Shayne Gostisbere"</span>, value <span class="op">=</span> <span class="st">"Shayne Gostisbehere"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Shayne Godtisbehertr"</span>, value <span class="op">=</span> <span class="st">"Shayne Gostisbehere"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Shayne Gostisbeher"</span>, value <span class="op">=</span> <span class="st">"Shayne Gostisbehere"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Leon Draisaitl "</span>, value <span class="op">=</span> <span class="st">"Leon Draisaitl"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Conner Hellebuyck"</span>, value <span class="op">=</span> <span class="st">"Connor Hellebuyck"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Cale Maker"</span>, value <span class="op">=</span> <span class="st">"Cale Makar"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Shayne Gotisbehere"</span>, value <span class="op">=</span> <span class="st">"Shayne Gostisbehere"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>combinedDF.replace(to_replace <span class="op">=</span> <span class="st">"Kirill Machenko"</span>, value <span class="op">=</span> <span class="st">"Kirill Marchenko"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Split dataframe into 6 different dataframes, one for each award.</p>
-<div id="dd4e50fe" class="cell" data-execution_count="15">
+<div id="13d1523d" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>Hart <span class="op">=</span> combinedDF[combinedDF[<span class="st">"Award"</span>] <span class="op">==</span> <span class="st">"Hart"</span>]</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>Vezina <span class="op">=</span> combinedDF[combinedDF[<span class="st">"Award"</span>] <span class="op">==</span> <span class="st">"Vezina"</span>]</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>Norris <span class="op">=</span> combinedDF[combinedDF[<span class="st">"Award"</span>] <span class="op">==</span> <span class="st">"James Norris"</span>]</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>Calder <span class="op">=</span> combinedDF[combinedDF[<span class="st">"Award"</span>] <span class="op">==</span> <span class="st">"Calder"</span>]</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>Selke <span class="op">=</span> combinedDF[combinedDF[<span class="st">"Award"</span>] <span class="op">==</span> <span class="st">"Frank J. Selke"</span>]</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>Byng <span class="op">=</span> combinedDF[combinedDF[<span class="st">"Award"</span>] <span class="op">==</span> <span class="st">"Lady Byng"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>Hart <span class="op">=</span> combinedDF[combinedDF[<span class="st">"Award"</span>] <span class="op">==</span> <span class="st">"Hart"</span>]</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>Vezina <span class="op">=</span> combinedDF[combinedDF[<span class="st">"Award"</span>] <span class="op">==</span> <span class="st">"Vezina"</span>]</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>Norris <span class="op">=</span> combinedDF[combinedDF[<span class="st">"Award"</span>] <span class="op">==</span> <span class="st">"James Norris"</span>]</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>Calder <span class="op">=</span> combinedDF[combinedDF[<span class="st">"Award"</span>] <span class="op">==</span> <span class="st">"Calder"</span>]</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>Selke <span class="op">=</span> combinedDF[combinedDF[<span class="st">"Award"</span>] <span class="op">==</span> <span class="st">"Frank J. Selke"</span>]</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>Byng <span class="op">=</span> combinedDF[combinedDF[<span class="st">"Award"</span>] <span class="op">==</span> <span class="st">"Lady Byng"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <section id="visualizing-the-ballot" class="level2">
@@ -620,220 +542,211 @@ Name: count, dtype: int64</code></pre>
 <p>Now we create bar charts that visualize how each skater performed.</p>
 <section id="hart" class="level3">
 <h3 class="anchored" data-anchor-id="hart">Hart</h3>
-<div id="cf673e68" class="cell" data-execution_count="16">
+<div id="11ac2186" class="cell" data-execution_count="16">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>HartBar <span class="op">=</span> go.Figure()</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>HartBar.add_trace(go.Bar(</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> Hart[<span class="st">"AwardPoints"</span>],</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> Hart[<span class="st">"Player"</span>],</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">'h'</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>))</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>HartBar.update_layout(</span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    height <span class="op">=</span> <span class="dv">1000</span>,</span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    yaxis <span class="op">=</span> {<span class="st">'categoryorder'</span> : <span class="st">'total ascending'</span>},</span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    title_text <span class="op">=</span> <span class="st">'Hart Memorial Trophy Voting Results'</span></span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>HartBar.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>HartBar <span class="op">=</span> go.Figure()</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>HartBar.add_trace(go.Bar(</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> Hart[<span class="st">"AwardPoints"</span>],</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> Hart[<span class="st">"Player"</span>],</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">'h'</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>HartBar.update_layout(</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    height <span class="op">=</span> <span class="dv">1000</span>,</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    yaxis <span class="op">=</span> {<span class="st">'categoryorder'</span> : <span class="st">'total ascending'</span>},</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    title_text <span class="op">=</span> <span class="st">'Hart Memorial Trophy Voting Results'</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>HartBar.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
-<iframe scrolling="no" width="100%" height="1020" src="iframe_figures/figure_16.html" frameborder="0" allowfullscreen=""></iframe>
+<iframe scrolling="no" width="100%" height="1020" src="iframe_figures/figure_74.html" frameborder="0" allowfullscreen=""></iframe>
 </div>
 </div>
 <p>Unfortunately, despite all efforts to clean the data, some duplicate names remain. Notably, each of the duplicates that occurred come from the ‘Barrie’ portion of the dataframe, so we can manually add the results of his ballot to the others to get the final result.</p>
 <p>In this case of the Hart Trophy, it does matter, since two 7 point ballots were not properly combined for Zach Werenski. The final score of 14 would be enough to take 5th place in this ballot over David Pastrnak. In addition, this provided an extra point for Nikita Kucherov, which places him in a tie for 3rd place with Shayne Gostisbehere. Nikita has one 1st and two 2nds among the voters, while Shayne has one 1st and only one 2nd, so Nikita will take third on a tiebreak.</p>
-<div id="ed1fc06c" class="cell" data-execution_count="17">
+<div id="53b60d5b" class="cell" data-execution_count="17">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>HartBallot <span class="op">=</span> pd.DataFrame({<span class="st">"Hart"</span>: [<span class="st">"Leon Draisaitl"</span>, <span class="st">"Nathan MacKinnon"</span>, <span class="st">"Nikita Kucherov"</span>, <span class="st">"Shayne Gostisbehere"</span>, <span class="st">"Zach Werenski"</span>]})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>HartBallot <span class="op">=</span> pd.DataFrame({<span class="st">"Hart"</span>: [<span class="st">"Leon Draisaitl"</span>, <span class="st">"Nathan MacKinnon"</span>, <span class="st">"Nikita Kucherov"</span>, <span class="st">"Shayne Gostisbehere"</span>, <span class="st">"Zach Werenski"</span>]})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
 <section id="vezina" class="level3">
 <h3 class="anchored" data-anchor-id="vezina">Vezina</h3>
-<div id="a93d3001" class="cell" data-execution_count="18">
+<div id="4242857b" class="cell" data-execution_count="18">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>VezinaBar <span class="op">=</span> go.Figure()</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>VezinaBar.add_trace(go.Bar(</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> Vezina[<span class="st">"AwardPoints"</span>],</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> Vezina[<span class="st">"Player"</span>],</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">'h'</span></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>))</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>VezinaBar.update_layout(</span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    height <span class="op">=</span> <span class="dv">1000</span>,</span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    yaxis <span class="op">=</span> {<span class="st">'categoryorder'</span> : <span class="st">'total ascending'</span>},</span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    title_text <span class="op">=</span> <span class="st">'Vezina Trophy Voting Results'</span></span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>VezinaBar.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>VezinaBar <span class="op">=</span> go.Figure()</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>VezinaBar.add_trace(go.Bar(</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> Vezina[<span class="st">"AwardPoints"</span>],</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> Vezina[<span class="st">"Player"</span>],</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">'h'</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>VezinaBar.update_layout(</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    height <span class="op">=</span> <span class="dv">1000</span>,</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    yaxis <span class="op">=</span> {<span class="st">'categoryorder'</span> : <span class="st">'total ascending'</span>},</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    title_text <span class="op">=</span> <span class="st">'Vezina Trophy Voting Results'</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>VezinaBar.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
-<iframe scrolling="no" width="100%" height="1020" src="iframe_figures/figure_18.html" frameborder="0" allowfullscreen=""></iframe>
+<iframe scrolling="no" width="100%" height="1020" src="iframe_figures/figure_76.html" frameborder="0" allowfullscreen=""></iframe>
 </div>
 </div>
 <p>Like before, we need to manually add Barrie’s results to the rest of the combined group. His Vezina ballot matches the overall results pretty well, so the order in this graph matches the overall ballot.</p>
-<div id="8dc49828" class="cell" data-execution_count="19">
+<div id="820ed8dd" class="cell" data-execution_count="19">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>VezinaBallot <span class="op">=</span> pd.DataFrame({<span class="st">"Vezina"</span>: [<span class="st">"Connor Hellebuyck"</span>, <span class="st">"Andrei Vasilevskiy"</span>, <span class="st">"Logan Thompson"</span>, <span class="st">"Mackenzie Blackwood"</span>, <span class="st">"Dustin Wolf"</span>]})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>VezinaBallot <span class="op">=</span> pd.DataFrame({<span class="st">"Vezina"</span>: [<span class="st">"Connor Hellebuyck"</span>, <span class="st">"Andrei Vasilevskiy"</span>, <span class="st">"Logan Thompson"</span>, <span class="st">"Mackenzie Blackwood"</span>, <span class="st">"Dustin Wolf"</span>]})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
 <section id="norris" class="level3">
 <h3 class="anchored" data-anchor-id="norris">Norris</h3>
-<div id="2bdaa3d4" class="cell" data-execution_count="20">
+<div id="dc9f5d13" class="cell" data-execution_count="20">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>NorrisBar <span class="op">=</span> go.Figure()</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>NorrisBar.add_trace(go.Bar(</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> Norris[<span class="st">"AwardPoints"</span>],</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> Norris[<span class="st">"Player"</span>],</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">'h'</span>,</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>))</span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>NorrisBar.update_layout(</span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    height <span class="op">=</span> <span class="dv">1000</span>,</span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    yaxis <span class="op">=</span> {<span class="st">'categoryorder'</span> : <span class="st">'total ascending'</span>},</span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>    title_text <span class="op">=</span> <span class="st">'Norris Memorial Trophy Voting Results'</span></span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>NorrisBar.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>NorrisBar <span class="op">=</span> go.Figure()</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>NorrisBar.add_trace(go.Bar(</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> Norris[<span class="st">"AwardPoints"</span>],</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> Norris[<span class="st">"Player"</span>],</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">'h'</span>,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>NorrisBar.update_layout(</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    height <span class="op">=</span> <span class="dv">1000</span>,</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    yaxis <span class="op">=</span> {<span class="st">'categoryorder'</span> : <span class="st">'total ascending'</span>},</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    title_text <span class="op">=</span> <span class="st">'Norris Memorial Trophy Voting Results'</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>NorrisBar.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
-<iframe scrolling="no" width="100%" height="1020" src="iframe_figures/figure_20.html" frameborder="0" allowfullscreen=""></iframe>
+<iframe scrolling="no" width="100%" height="1020" src="iframe_figures/figure_78.html" frameborder="0" allowfullscreen=""></iframe>
 </div>
 </div>
 <p>Here, Barrie’s ballot does significantly influence the results, boosting Quinn Hughes (now with 20 points) above Ian Cole (18) and Zach Werenski (15) &amp; Evan Bouchard (13) onto the ballot entirely.</p>
-<div id="7cbbca1e" class="cell" data-execution_count="21">
+<div id="b28b932d" class="cell" data-execution_count="21">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>NorrisBallot <span class="op">=</span> pd.DataFrame({<span class="st">"Norris"</span>: [<span class="st">"Cale Makar"</span>, <span class="st">"Quinn Hughes"</span>, <span class="st">"Ian Cole"</span>, <span class="st">"Zach Werenski"</span>, <span class="st">"Evan Bouchard"</span>]})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>NorrisBallot <span class="op">=</span> pd.DataFrame({<span class="st">"Norris"</span>: [<span class="st">"Cale Makar"</span>, <span class="st">"Quinn Hughes"</span>, <span class="st">"Ian Cole"</span>, <span class="st">"Zach Werenski"</span>, <span class="st">"Evan Bouchard"</span>]})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
 <section id="calder" class="level3">
 <h3 class="anchored" data-anchor-id="calder">Calder</h3>
-<div id="c8ddc52d" class="cell" data-execution_count="22">
+<div id="b0d19111" class="cell" data-execution_count="22">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>CalderBar <span class="op">=</span> go.Figure()</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>CalderBar.add_trace(go.Bar(</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> Calder[<span class="st">"AwardPoints"</span>],</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> Calder[<span class="st">"Player"</span>],</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">'h'</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>))</span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>CalderBar.update_layout(</span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    height <span class="op">=</span> <span class="dv">1000</span>,</span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    yaxis <span class="op">=</span> {<span class="st">'categoryorder'</span> : <span class="st">'total ascending'</span>},</span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>    title_text <span class="op">=</span> <span class="st">'Calder Memorial Trophy Voting Results'</span></span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>CalderBar.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>CalderBar <span class="op">=</span> go.Figure()</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>CalderBar.add_trace(go.Bar(</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> Calder[<span class="st">"AwardPoints"</span>],</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> Calder[<span class="st">"Player"</span>],</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">'h'</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>CalderBar.update_layout(</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    height <span class="op">=</span> <span class="dv">1000</span>,</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    yaxis <span class="op">=</span> {<span class="st">'categoryorder'</span> : <span class="st">'total ascending'</span>},</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    title_text <span class="op">=</span> <span class="st">'Calder Memorial Trophy Voting Results'</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>CalderBar.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
-<iframe scrolling="no" width="100%" height="1020" src="iframe_figures/figure_22.html" frameborder="0" allowfullscreen=""></iframe>
+<iframe scrolling="no" width="100%" height="1020" src="iframe_figures/figure_80.html" frameborder="0" allowfullscreen=""></iframe>
 </div>
 </div>
 <p>Barrie’s results did not affect this award. However, there is a 3-way tie for 5th place, and each recipient has only a single first-place vote. So all three are just placed on here as a tie.</p>
-<div id="d3b8cf19" class="cell" data-execution_count="23">
+<div id="4d1de818" class="cell" data-execution_count="23">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>CalderBallot <span class="op">=</span> pd.DataFrame({<span class="st">"Calder"</span>: [<span class="st">"Kirill Marchenko"</span>, <span class="st">"Wyatt Johnston"</span>, <span class="st">"Marco Rossi"</span>, <span class="st">"Dylan Holloway"</span>, <span class="st">"Nathan Cluman, Jake Sanders, Bobby Brink"</span>]})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>CalderBallot <span class="op">=</span> pd.DataFrame({<span class="st">"Calder"</span>: [<span class="st">"Kirill Marchenko"</span>, <span class="st">"Wyatt Johnston"</span>, <span class="st">"Marco Rossi"</span>, <span class="st">"Dylan Holloway"</span>, <span class="st">"Nathan Cluman, Jake Sanders, Bobby Brink"</span>]})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
 <section id="selke" class="level3">
 <h3 class="anchored" data-anchor-id="selke">Selke</h3>
-<div id="fd68e086" class="cell" data-execution_count="24">
+<div id="9eec962a" class="cell" data-execution_count="24">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>SelkeBar <span class="op">=</span> go.Figure()</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>SelkeBar.add_trace(go.Bar(</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> Selke[<span class="st">"AwardPoints"</span>],</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> Selke[<span class="st">"Player"</span>],</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">'h'</span></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>))</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>SelkeBar.update_layout(</span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    height <span class="op">=</span> <span class="dv">1000</span>,</span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>    yaxis <span class="op">=</span> {<span class="st">'categoryorder'</span> : <span class="st">'total ascending'</span>},</span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>    title_text <span class="op">=</span> <span class="st">'Frank J. selke Trophy Voting Results'</span></span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>SelkeBar.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>SelkeBar <span class="op">=</span> go.Figure()</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>SelkeBar.add_trace(go.Bar(</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> Selke[<span class="st">"AwardPoints"</span>],</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> Selke[<span class="st">"Player"</span>],</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">'h'</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>SelkeBar.update_layout(</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    height <span class="op">=</span> <span class="dv">1000</span>,</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    yaxis <span class="op">=</span> {<span class="st">'categoryorder'</span> : <span class="st">'total ascending'</span>},</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    title_text <span class="op">=</span> <span class="st">'Frank J. selke Trophy Voting Results'</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>SelkeBar.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
-<iframe scrolling="no" width="100%" height="1020" src="iframe_figures/figure_24.html" frameborder="0" allowfullscreen=""></iframe>
+<iframe scrolling="no" width="100%" height="1020" src="iframe_figures/figure_82.html" frameborder="0" allowfullscreen=""></iframe>
 </div>
 </div>
 <p>Barrie’s ballot has no impact here. Notably, Alex Tuch and Fabian Zetterlund tie for 4th place with 2 second-place ballots apiece, so no seperating these two.</p>
-<div id="72f09e28" class="cell" data-execution_count="25">
+<div id="44d47829" class="cell" data-execution_count="25">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>SelkeBallot <span class="op">=</span> pd.DataFrame({<span class="st">"Selke"</span>: [<span class="st">"Brandon Tanev"</span>, <span class="st">"Jackson Blake"</span>, <span class="st">"Nathan MacKinnon"</span>, <span class="st">"Alex Tuch"</span>, <span class="st">"Fabian Zetterlund"</span>]})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>SelkeBallot <span class="op">=</span> pd.DataFrame({<span class="st">"Selke"</span>: [<span class="st">"Brandon Tanev"</span>, <span class="st">"Jackson Blake"</span>, <span class="st">"Nathan MacKinnon"</span>, <span class="st">"Alex Tuch"</span>, <span class="st">"Fabian Zetterlund"</span>]})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
 <section id="byng" class="level3">
 <h3 class="anchored" data-anchor-id="byng">Byng</h3>
-<div id="4907716e" class="cell" data-execution_count="26">
+<div id="2a9d79c4" class="cell" data-execution_count="26">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>Byng.replace(to_replace <span class="op">=</span> <span class="st">"Brayed Point"</span>, value <span class="op">=</span> <span class="st">"Brayden Point"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>Byng.replace(to_replace <span class="op">=</span> <span class="st">"Brayed Point"</span>, value <span class="op">=</span> <span class="st">"Brayden Point"</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stderr">
-<pre><code>/var/folders/n9/jht44nbj6rn3nx3dzzf5kgdw0000gn/T/ipykernel_7347/974793628.py:1: SettingWithCopyWarning:
-
-
-A value is trying to be set on a copy of a slice from a DataFrame
-
-See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-</code></pre>
 </div>
-</div>
-<div id="a5222be4" class="cell" data-execution_count="27">
+<div id="d8c8ef44" class="cell" data-execution_count="27">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>ByngBar <span class="op">=</span> go.Figure()</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>ByngBar.add_trace(go.Bar(</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> Byng[<span class="st">"AwardPoints"</span>],</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> Byng[<span class="st">"Player"</span>],</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">'h'</span></span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>))</span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>ByngBar.update_layout(</span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>    height <span class="op">=</span> <span class="dv">1000</span>,</span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>    yaxis <span class="op">=</span> {<span class="st">'categoryorder'</span> : <span class="st">'total ascending'</span>},</span>
-<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>    title_text <span class="op">=</span> <span class="st">'Lady Byng Trophy Voting Results'</span></span>
-<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>ByngBar.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>ByngBar <span class="op">=</span> go.Figure()</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>ByngBar.add_trace(go.Bar(</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> Byng[<span class="st">"AwardPoints"</span>],</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> Byng[<span class="st">"Player"</span>],</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    orientation <span class="op">=</span> <span class="st">'h'</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>ByngBar.update_layout(</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    height <span class="op">=</span> <span class="dv">1000</span>,</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    yaxis <span class="op">=</span> {<span class="st">'categoryorder'</span> : <span class="st">'total ascending'</span>},</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    title_text <span class="op">=</span> <span class="st">'Lady Byng Trophy Voting Results'</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>ByngBar.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
-<iframe scrolling="no" width="100%" height="1020" src="iframe_figures/figure_27.html" frameborder="0" allowfullscreen=""></iframe>
+<iframe scrolling="no" width="100%" height="1020" src="iframe_figures/figure_85.html" frameborder="0" allowfullscreen=""></iframe>
 </div>
 </div>
 <p>Barrie’s ballot does affect this overall ballot, as Cale Makar (now with 23 points) takes second place, just behind Brayden Point (now with 25 points). However, theres now a massive logjam at 10 points, with numerous people with 1 first place vote, and three with two 2nd place votes. After some deliberation, the 2 second place votes get the tiebreaker here. One of them takes “6th place”.</p>
-<div id="ff8c9c39" class="cell" data-execution_count="28">
+<div id="db62439c" class="cell" data-execution_count="28">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>ByngBallot <span class="op">=</span> pd.DataFrame({<span class="st">'Byng'</span>: [<span class="st">"Brayden Point"</span>, <span class="st">"Cale Makar"</span>, <span class="st">"Jack Eichel"</span>, <span class="st">"Alex Vlasic"</span>, <span class="st">"Cole Schwindt, Martin Necas"</span>]})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>ByngBallot <span class="op">=</span> pd.DataFrame({<span class="st">'Byng'</span>: [<span class="st">"Brayden Point"</span>, <span class="st">"Cale Makar"</span>, <span class="st">"Jack Eichel"</span>, <span class="st">"Alex Vlasic"</span>, <span class="st">"Cole Schwindt, Martin Necas"</span>]})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
 <section id="final-ballot" class="level3">
 <h3 class="anchored" data-anchor-id="final-ballot">Final Ballot</h3>
 <p>Now we combine the ballots together into one final overall ballot.</p>
-<div id="0d560234" class="cell" data-execution_count="29">
+<div id="31b0fcf7" class="cell" data-execution_count="29">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>finalBallot <span class="op">=</span> pd.concat([HartBallot, VezinaBallot, NorrisBallot, CalderBallot, SelkeBallot, ByngBallot], axis <span class="op">=</span> <span class="dv">1</span>)</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(finalBallot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>finalBallot <span class="op">=</span> pd.concat([HartBallot, VezinaBallot, NorrisBallot, CalderBallot, SelkeBallot, ByngBallot], axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(finalBallot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>                  Hart               Vezina         Norris  \

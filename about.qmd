@@ -1,18 +1,40 @@
 ---
-title: "About"
-image: profile.jpg
+title: "About Myself"
+image: HD-wallpaper-movie-the-hitchhiker-s-guide-to-the-galaxy.jpg
 about:
   template: jolla
   links:
-    - icon: twitter
-      text: Twitter
-      href: https://twitter.com
     - icon: linkedin
-      text: LinkedIn
-      href: https://linkedin.com
+      text: My LinkedIn Account
+      href: https://www.linkedin.com/in/john-l-cambareri/
     - icon: github
-      text: Github
-      href: https://github.com
+      text: My Github
+      href: https://github.com/cambarerij
 ---
+![It's me!](1697759768489.jpeg)
 
-About this blog
+My name is John Cambareri, and I am a graduate student at the University of Idaho. I am currently working on a research project revolving around UI research grants and expenditures, and whether participation in a university cohort significantly increases their funding.
+
+If I am not currently working, I will usually be spending time playing video games, listening to music, or playing pinball. Alternatively, I could have either of my two cats, Sasha or Rex, on my lap.
+
+## Education
+### University of Idaho - Moscow, ID
+
+Master's Degree in Computer Science: January 2024 - Present (Expected May 2025)
+
+Graduate Certificate in Data Science - Expected May 2025
+
+Bachelor's Degree in Computer Science: January 2020 - December 2023
+
+
+### Embry-Riddle Aeronautical University - Prescott, AZ
+
+Bachelor's Degree in Meteorology - August 2008 - May 2012
+
+## Experience
+
+### Kootenai Health - Coeur d'Alene, ID
+
+Data Clerk, February 2015 - October 2023
+
+IT Intern, December 2013 - February 2015

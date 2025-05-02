@@ -2,7 +2,7 @@
 title: "Assignment 5.5: The Hockey Awards Ballot"
 author: "John Cambareri"
 date: "2025-03-25"
-categories: [news, code, analysis]
+categories: [code, analysis, visualization]
 image: "NHLLogo.png"
 jupyter: python3
 format:
@@ -10,12 +10,15 @@ format:
     code-fold: true
 editor: visual
 ---
-
+In this assignment, I combine the results of every student in the BCB 520 class, and see who everyone thought the winners would be. Then, I use the NHL point system (10 points for 1st, 7 points for 2nd, 5 for 3rd, 3 for 4th, and 1 for 5th) and add up the total results to see who the class predicts will actually win the end of season awards for the 2024-2025 NHL season.
 ```{python}
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 import plotly.express as px
+
+import warnings
+warnings.filterwarnings('ignore')
 ```
 
 ```{python}
@@ -33,7 +36,7 @@ Priya = pd.read_excel("NHL_Award_Ballet.xlsx")
 John = pd.read_csv("JohnCambareriHockeyAwards.csv")
 ```
 
-Manually inputting the three other dataframes.
+Not all the dataframes could be input easily. Here, I manually input the three other dataframes.
 
 ```{python}
 unknown = [["Hart", "Ekholm", 1], ["Hart", "Slavis", 2], ["Hart", "Toews", 3], ["Hart", "Gotisbere", 4], ["Hart", "Orlov", 5], \
@@ -69,7 +72,7 @@ SharonDF = pd.DataFrame(Sharon, columns = ["Award", "Player", "Rank"])
 
 ```
 
-Altering columns so that they all match
+Here, I adjust the names of the columns so that they all match each other.
 
 ```{python}
 for i in range(1, 5):

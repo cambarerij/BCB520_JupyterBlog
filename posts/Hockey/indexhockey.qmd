@@ -2,7 +2,7 @@
 title: "Assignment 5: The Hockey Awards"
 author: "John Cambareri"
 date: "2025-03-20"
-categories: [news, code, analysis]
+categories: [code, analysis, visualization]
 image: "NHLLogo.png"
 jupyter: python3
 format:
@@ -33,6 +33,9 @@ GoalieRookies = pd.read_csv("RookieGoalies.csv")
 ```{python}
 import plotly.io as pio
 pio.renderers.default = "iframe"
+
+import warnings
+warnings.filterwarnings('ignore')
 ```
 
 ### Award 1: Vezina Trophy

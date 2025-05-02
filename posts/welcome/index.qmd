@@ -1,12 +1,9 @@
 ---
-title: "Welcome To My Blog"
-author: "Tristan O'Malley"
+title: "Welcome To My Portfolio/Blog"
+author: "John Cambareri"
 date: "2025-02-15"
-categories: [news]
+categories: [news, introduction]
+image: "HD-wallpaper-movie-the-hitchhiker-s-guide-to-the-galaxy.jpg"
 ---
 
-This is the first post in a Quarto blog. Welcome!
-
-![](thumbnail.jpg)
-
-Since this post doesn't specify an explicit `image`, the first image in the post will be used in the listing page of posts.
+Welcome! This is where I will be posting all the work I've done for the BCB 520 Data Visualization course in the Spring 2025 semester.
