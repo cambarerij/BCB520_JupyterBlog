@@ -2,7 +2,7 @@
 title: "Final Project: UI Expenditures and Requests by Cohort"
 author: "John Cambareri"
 date: "2025-05-01"
-categories: [news, code, analysis]
+categories: [code, analysis, visualization]
 image: "UI_Logo.png"
 jupyter: python3
 format:
@@ -20,12 +20,16 @@ from datetime import datetime
 
 import plotly.io as pio
 pio.renderers.default = "iframe"
+
+import warnings
+warnings.filterwarnings('ignore')
 ```
 
 This project aims to look at the expenditure data of various UI professors, and analyze how much they were making and spending over time from 2018 to 2024. In addition, this project aims to see if their participation on a UI cohort significantly increases their research activity in this period.
 
 ```{python}
 data = pd.DataFrame(pd.read_excel("long_PI_activity.xls"))
+data
 ```
 
 ### Attempt 1: Simply Analyzing Total Requests
@@ -527,9 +531,17 @@ CoILineChart.update_layout(
 CoILineChart.show()
 ```
 
+In these three graphs, it can be seen that most of the faculty are bunched together, but there are a few outliers that significantly skew the data.
+
+For instance, in the PI graph, Yimin Chen requested far more money than anyone else as a PI. In fact, the $10.6 million he requested in 2021 alone was more than the total amount of all but two of the other professors.
+
+Similarly, Mark Kimsey's 2022 requests as a Co-PI are by far the most amount requested in any year. In the CoI graph, Aleksandar Vakanski's 2019 requests are the sole reason he's anywhere near the top of the CoI chart, let alone at #1.
+
 ### Attempt 4: Heat Maps
 
-Now, heatmaps are used to show the total amount of the requests and how they change over time.
+The next attempt is a heat map. This will be used to show how much each professor's requests increased over time. First, though, there is one more important bit of information that needs to be obtained, and that is each professor's cohort. Each of the professors was part of a cohort at UI between 2020 and 2024.
+
+Some elements of the cohort info need to be slightly adjusted because of naming inconsistencies.
 
 ```{python}
 participants = pd.DataFrame(pd.read_csv("UI_Participant_Cohort_Info.csv"))
@@ -538,9 +550,15 @@ participants = participants.replace("Izabelle Teixeira", "Izabelle Molina de Alm
 participants = participants.replace("Josh Bailey", "Joshua Bailey")
 participants = participants.replace("Nick Martonick", "Nickolai Martonick")
 participants = participants.replace("Matt Swenson", "Matthew Swenson")
+
+participants
 ```
 
-This first attempt does a decent job, but there are still a few problems. First, there are number of outliers present that are causing the rest of the data to not be as easily ascertained; Yimin Chen is the main reason.
+To make the heat map effective, the requests data needs to be rearranged. To show the total amount each professor has requested cumulatively over time, each year's data will need to be composed of not just that year's data, but the cumulative amount of all previous years. This is explained in the below code block as follows:
+
+Since the first year of requests is in 2019, Year 1 is just 2019's data. The total requests after Year 2 will then be 2020's data plus 2019's data. Year 3's total requests will therefore be the combined total of 2019, 2020 and 2021, and so on. The data will then need to be altered a little bit, since for some professors, they didn't start until well after 2019 - so their "Year 1" can be different from others. To fix this, the data will be shifted left, so that all "year 1"s are in the same column. For those that started later than 2019, the later years will be in the future for them. This will be presented as null values, and will show up as blank tiles on the visualizations to come.
+
+This first heat map will consist of the cumulative amount requested each professor has gotten over time since they started requesting. This attempt, shown below, showcases a glaring problem with this method at first - the outliers. These cause the rest of the data to not be as easily discernible from each other as they are too close to each other compared to the sky-high amounts of those like Yimin Chen.
 
 ```{python}
 AggPI["Year1Total"] = AggPI["2019 COST"]
@@ -571,7 +589,7 @@ PICumulative.loc[mask, c] = PICumulative.loc[mask, c].shift(-1, axis = 1)
 PICumulative.set_index("NAME", inplace = True)
 
 PIHeat = px.imshow(PICumulative, aspect = "auto")
-PIHeat.update_layout(height = 1500)
+PIHeat.update_layout(height = 1000)
 PIHeat.show()
 ```
 
@@ -604,6 +622,10 @@ mask = CoPICumulative["Year1Total"] == 0
 CoPICumulative.loc[mask, c] = CoPICumulative.loc[mask, c].shift(-1, axis = 1)
 
 CoPICumulative.set_index("NAME", inplace = True)
+
+CoPIHeat = px.imshow(CoPICumulative, aspect = "auto")
+CoPIHeat.update_layout(height = 1500)
+CoPIHeat.show()
 ```
 
 ```{python}
@@ -633,9 +655,13 @@ mask = CoICumulative["Year1Total"] == 0
 CoICumulative.loc[mask, c] = CoICumulative.loc[mask, c].shift(-1, axis = 1)
 
 CoICumulative.set_index("NAME", inplace = True)
+
+CoIHeat = px.imshow(CoICumulative, aspect = "auto")
+CoIHeat.update_layout(height = 1000)
+CoIHeat.show()
 ```
 
-Here, we take the natural log of the dollar amounts to attempt to smooth out the resulting heatmap.
+To fix the outlier problem, the natural log of all the dollar amounts is taken, in an attempt to smooth out the resulting heatmap.
 
 ```{python}
 CombinedPICumulative = pd.merge(PICumulative, participants, left_on = "NAME", right_on = "PI_NAME", how = 'left')
@@ -651,13 +677,15 @@ logCombinedPI["Year4Total"] = np.log(logCombinedPI["Year4Total"])
 logCombinedPI["Year5Total"] = np.log(logCombinedPI["Year5Total"])
 logCombinedPI["Year6Total"] = np.log(logCombinedPI["Year6Total"])
 ```
-There are also now lines separating the cohorts, and now the differences are much clearer.
+The cohort data is now implemented into the dataset as well, by left joining the requests datasets with the participant cohort dataset. The data is also now sorted first by cohort, and then alphabetically within the cohort.
+
+The logarithmic transformation has made the overall heat map much less purple than before.
 
 
 ```{python}
 PIHeat = px.imshow(logCombinedPI[["Year1Total", "Year2Total", "Year3Total", "Year4Total", \
                                  "Year5Total", "Year6Total"]],  aspect = "auto", \
-                                 labels = dict(x = "Total Requested Over Time", y = "Name and Cohort"),
+                                 labels = dict(x = "Total Requested Over Time", y = "Name and Cohort", color = "Log of Amount Requested"),
                                  title = "Amount Requested per Person (as PI)")
 PIHeat.update_layout(height = 1000)
 PIHeat.add_shape(type = "line", x0 = -0.5, y0 = 11.5, x1 = 5.5, y1 = 11.5,
@@ -682,6 +710,8 @@ PIHeat.add_annotation(x = 5, y = 41.5, text = "2024", showarrow = False,
 PIHeat.show()
 ```
 
+The same is done with the Co-PI dataframe; it is first joined with the participants, and then transformed with the natural log.
+
 ```{python}
 CombinedCoPICumulative = pd.merge(CoPICumulative, participants, left_on = "NAME", right_on = "PI_NAME", how = 'left')
 CombinedCoPICumulative = CombinedCoPICumulative.sort_values(by = ["cohort", "PI_NAME"], ascending = [True, True])
@@ -701,7 +731,7 @@ logCombinedCoPI["Year6Total"] = np.log(logCombinedCoPI["Year6Total"])
 CoPIHeat = px.imshow(logCombinedCoPI[["Year1Total", "Year2Total", "Year3Total", "Year4Total", \
                                  "Year5Total", "Year6Total"]], aspect = "auto", \
                                  title = "Amount Requested per Person (as CoPI)", \
-                                 labels = dict(x = "Total Requested Over Time", y = "Name and Cohort"))
+                                 labels = dict(x = "Total Requested Over Time", y = "Name and Cohort", color = "Log of Amount Requested"))
 CoPIHeat.update_layout(height = 1000)
 CoPIHeat.add_shape(type = "line", x0 = -0.5, y0 = 9.5, x1 = 5.5, y1 = 9.5,
                 line = dict(color = "black", width = 4))
@@ -726,6 +756,8 @@ CoPIHeat.add_annotation(x = 5, y = 38, text = "2024", showarrow = False,
 CoPIHeat.show()
 ```
 
+The same thing happens to the CoI data.
+
 ```{python}
 CombinedCoICumulative = pd.merge(CoICumulative, participants, left_on = "NAME", right_on = "PI_NAME", how = 'left')
 CombinedCoICumulative = CombinedCoICumulative.sort_values(by = ["cohort", "PI_NAME"], ascending = [True, True])
@@ -745,7 +777,7 @@ logCombinedCoI["Year6Total"] = np.log(logCombinedCoI["Year6Total"])
 CoIHeat = px.imshow(logCombinedCoI[["Year1Total", "Year2Total", "Year3Total", "Year4Total", \
                                  "Year5Total", "Year6Total"]], aspect = "auto", \
                                  title = "Amount Requested per Person (as CoI)", \
-                                 labels = dict(y = "Name and Cohort", x = "Total Requested Over Time"))
+                                 labels = dict(y = "Name and Cohort", x = "Total Requested Over Time", color = "Log of Amount Requested"))
 CoIHeat.update_layout(height = 1000)
 CoIHeat.add_shape(type = "line", x0 = -0.5, y0 = 6.5, x1 = 5.5, y1 = 6.5,
                 line = dict(color = "black", width = 4))
@@ -770,7 +802,9 @@ CoIHeat.add_annotation(x = 5, y = 30, text = "2024", showarrow = False,
 CoIHeat.show()
 ```
 
-However, there is still one more problem, in that this graph only shows the amount of money made since the faculty first started making money, not necessarily when they participated in the cohort. 
+While these heat maps do a much better job of showcasing the differences between each different faculty member, there is still one more problem regarding the visualiation. While this graph shows the amount of money requested since the faculty first started making money, it does not showcase the amount of money they requested before and after they participated in the cohort.
+
+To fix this, the datasets will need to be shifted differently - this time based on when each professor's cohort was.
 
 ```{python}
 PIOverTime = AggPI[["NAME", "Year1Total", "Year2Total", "Year3Total", "Year4Total", "Year5Total", "Year6Total"]]
@@ -830,11 +864,11 @@ logPIOverTimeFinal.drop(columns = ["5YearsAfter", "cohort"], axis = 1, inplace =
 logPIOverTimeFinal.set_index("NAME", inplace = True)
 ```
 
-These final graphs do just that - by shifting the graph so that "Year 0" - marked by the dotted red line - is the year in which they participated in the cohort. Amounts to the left are requests made before they participated, and those to the right correspond to graphs after the cohort.
+These final visualizations showcase just this, with "Year 0" - marked by the dotted red line - being the year in which they participated in the cohort. Amounts to the left of the dotted line are requests made before they participated, and those to the right correspond to requests after the cohort.
 
 ```{python}
 PIHeat = px.imshow(logPIOverTimeFinal, aspect = "auto", title = "Amount Requested Relative to Cohort (as PI)", \
-  labels = dict(x = "Time Before or After Cohort", y = "Name and Cohort"))
+  labels = dict(x = "Time Before or After Cohort", y = "Name and Cohort", color = "Log of Amount Requested"))
 PIHeat.update_layout(height = 1000)
 PIHeat.add_shape(type = "line", x0 = -0.5, y0 = 11.5, x1 = 9.5, y1 = 11.5,
                 line = dict(color = "black", width = 4))
@@ -860,6 +894,8 @@ PIHeat.add_annotation(x = 1, y = 41, text = "2024", showarrow = False,
                       font = dict(size = 20))
 PIHeat.show()
 ```
+
+The same can be done with the Co-PI and CoI data.
 
 ```{python}
 CoPIOverTime = AggCoPI[["NAME", "Year1Total", "Year2Total", "Year3Total", "Year4Total", "Year5Total", "Year6Total"]]
@@ -921,7 +957,7 @@ logCoPIOverTimeFinal.set_index("NAME", inplace = True)
 
 ```{python}
 CoPIHeat = px.imshow(logCoPIOverTimeFinal, aspect = "auto", title = "Amount Requested Relative to Cohort (as CoPI)", \
-  labels = dict(x = "Time Before or After Cohort", y = "Name and Cohort"))
+  labels = dict(x = "Time Before or After Cohort", y = "Name and Cohort", color = "Log of Amount Requested"))
 CoPIHeat.update_layout(height = 1000)
 CoPIHeat.add_shape(type = "line", x0 = -0.5, y0 = 9.5, x1 = 9.5, y1 = 9.5,
                 line = dict(color = "black", width = 4))
@@ -1009,7 +1045,7 @@ logCoIOverTimeFinal.set_index("NAME", inplace = True)
 
 ```{python}
 CoIHeat = px.imshow(logCoIOverTimeFinal, aspect = "auto", title = "Amount Requested Relative to Cohort (as CoI)", \
-  labels = dict(x = "Time Before or After Cohort", y = "Name and Cohort"))
+  labels = dict(x = "Time Before or After Cohort", y = "Name and Cohort", color = "Log of Amount Requested"))
 CoIHeat.update_layout(height = 1000)
 CoIHeat.add_shape(type = "line", x0 = -0.5, y0 = 6.5, x1 = 9.5, y1 = 6.5,
                 line = dict(color = "black", width = 4))
@@ -1039,11 +1075,18 @@ CoIHeat.show()
 
 ### Expenditures
 
-Now, the same graphs are produced for the expenditure data.
+Now, the same visualizations are produced for the expenditure data.
 
 ```{python}
 expenditures_df = pd.DataFrame(pd.read_csv("UTF-8PI_expenditure_activity_12_13_24.csv"))
+expenditures_df
+```
 
+Like the requests data, the expenditures data need to be separated by year, aggregated for each of the professors, and then combined back into one. There are a few differences between the methods used this time, though.
+
+First, there is no separation of role in the expenditure dataset, so unlike the requests, this one does not need to be divided into PI, Co-PI and CoI. Second, there are two data columns, Activity Date, and Transaction Date. Since the two dates are not always the same, one of the two needs to be chosen to be used as the "date" column. In this case, the transaction date is chosen. Third, this dataset includes some 2018 data unlike the requests dataset, so an extra column for 2018 data will need to be used.
+
+```{python}
 expenditures_df["ACTIVITY_YEAR"] = expenditures_df["ACTIVITY_DATE"].str.slice(0,4)
 expenditures_df["ACTIVITY_YEAR"] = expenditures_df["ACTIVITY_YEAR"].astype(int)
 
@@ -1105,6 +1148,10 @@ ExpAgg = ExpAgg.fillna(0)
 
 ExpAgg = ExpAgg.reset_index(drop = False)
 ```
+
+The first visualization using the expenditures data will be the bar chart by year. This will be done to see if there are any relevant outliers just like the requests data.
+
+The visualiation shows that Annie Roe appears to be the major outlier this time around.
 
 ```{python}
 AggChart = go.Figure()
@@ -1182,6 +1229,8 @@ AggChart.update_layout(
 AggChart.show()
 ```
 
+Next, a heat map is used with the expenditure data. Extra columns were used to fit the extra aggregations of the data this time.
+
 ```{python}
 ExpAgg["Year1Total"] = ExpAgg["2018 Expenditures"]
 ExpAgg["Year2Total"] = ExpAgg["2019 Expenditures"] + ExpAgg["Year1Total"]
@@ -1249,7 +1298,8 @@ OverTimeFinal = OverTimeFinal.replace(0, np.nan)
 
 ```{python}
 ExpHeat = px.imshow(OverTimeFinal, aspect = "auto", labels = dict(x = "Time before or after Cohort",
-                                                                  y = "Name and Cohort"))
+                                                                  y = "Name and Cohort",
+                                                                  color = "Log of Amount Spent"))
 ExpHeat.update_layout(height = 1000,
                       title = "Expenditures Over Time")
 ExpHeat.add_shape(type = "line", x0 = -0.5, y0 = 10.5, x1 = 10.5, y1 = 10.5,
@@ -1268,7 +1318,7 @@ ExpHeat.add_annotation(x = 1, y = 0.5, text = "2020", showarrow = False,
                       font = dict(size = 20))
 ExpHeat.add_annotation(x = 1, y = 11.5, text = "2021", showarrow = False,
                       font = dict(size = 20))
-ExpHeat.add_annotation(x = 1, y = 19.5, text = "2022", showarrow = False,
+ExpHeat.add_annotation(x = 1, y = 20, text = "2022", showarrow = False,
                       font = dict(size = 20))
 ExpHeat.add_annotation(x = 1, y = 28.5, text = "2023", showarrow = False,
                       font = dict(size = 20))
@@ -1276,3 +1326,48 @@ ExpHeat.add_annotation(x = 9, y = 35, text = "2024", showarrow = False,
                       font = dict(size = 20))
 ExpHeat.show()
 ```
+
+Even with the logarithmic transformation, Annie Roe still influcences the data significantly. Therefore, one more heat map will be made, this time with Annie completely taken out of the equation.
+
+```{python}
+NoAnnieRoe = OverTimeFinal.copy()
+NoAnnieRoe.drop("Annie Roe", inplace = True)
+```
+
+Comparing the two heat maps reveals that not much changed with Annie Roe's removal.
+
+```{python}
+ExpHeat = px.imshow(NoAnnieRoe, aspect = "auto", labels = dict(x = "Time before or after Cohort",
+                                                                  y = "Name and Cohort"))
+ExpHeat.update_layout(height = 1000,
+                      title = "Expenditures Over Time (Without Annie Roe)")
+ExpHeat.add_shape(type = "line", x0 = -0.5, y0 = 10.5, x1 = 10.5, y1 = 10.5,
+                line = dict(color = "black", width = 4))
+ExpHeat.add_shape(type = "line", x0 = -0.5, y0 = 18.5, x1 = 10.5, y1 = 18.5,
+                line = dict(color = "black", width = 4))
+ExpHeat.add_shape(type = "line", x0 = -0.5, y0 = 27.5, x1 = 10.5, y1 = 27.5,
+                line = dict(color = "black", width = 4))
+ExpHeat.add_shape(type = "line", x0 = -0.5, y0 = 33.5, x1 = 10.5, y1 = 33.5,
+                line = dict(color = "black", width = 4))
+
+ExpHeat.add_shape(type = "line", x0 = 6, y0 = -0.5, x1 = 6, y1 = 39.5,
+                line = dict(color = "red", dash = "dash"))
+
+ExpHeat.add_annotation(x = 1, y = 0.5, text = "2020", showarrow = False,
+                      font = dict(size = 20))
+ExpHeat.add_annotation(x = 1, y = 11.5, text = "2021", showarrow = False,
+                      font = dict(size = 20))
+ExpHeat.add_annotation(x = 1, y = 19.5, text = "2022", showarrow = False,
+                      font = dict(size = 20))
+ExpHeat.add_annotation(x = 1, y = 28.5, text = "2023", showarrow = False,
+                      font = dict(size = 20))
+ExpHeat.add_annotation(x = 1, y = 35, text = "2024", showarrow = False,
+                      font = dict(size = 20))
+ExpHeat.show()
+```
+
+In all of these heatmaps, we see that in the later cohorts, a consistent blank wall is seen on the right sight of those cohorts. For instance, the 2021 cohorts all have null values at "4 Years After", the 2022 cohors have null values at "4 Years After" and "3 Years After", and so on. This is because the data stops after 2024.
+
+This poses a bit of a dilemma in answering the overall question on whether the cohort was effective. We only have meaningful data on the earlier cohorts since there isn't enough data after the conclusion of the later cohorts.
+
+That being said, with a few exceptions, such as Yimin Chen and Michael Maughan, there does not seem to be significant increases in expenditures nor requests for a vast majority of UI faculty.
